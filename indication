@@ -17,3 +17,17 @@
 	mise en gris (r+g+b/3)
 	b&w(moyenne des pixel, en dessous blanc au dessus noir)
 	rien
+
+commande à generer :
+    -./luncher.sh => instal tous le bordel
+    - ./monapp => lance l'éditeur d'image
+    - open paht/imagename
+         > créer un objet c image contenant :
+            int id(numéro de fenetre)
+            objet sdl
+            char * imagename
+            int longeur
+            int largeur
+          > ouvrir une interface graphque dans laquelle se trouve une image
+
+          ! si l'image est déja ouverte alors ne fait rien
