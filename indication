@@ -1,0 +1,19 @@
+-documentation sdl
+-installation linux
+-parser
+-ouverture d'un ou plusieur fichiers sur plusieur fenetre (open fefj fezf fz) => liste chainé nom fenetre data suivant
+-fermeture avec la fenetre ou nom de l'image (close fer fze fz 5)
+-sauvagarder le fichier ( save fezf => modifier le nom : affnom [o/n] => proposer nom + format et supp la version precedent)
+-symétrie vertical / horizontal (symv nomfenetre symh nomfenetre)
+-roatation 90° (rotate nfenetre 5/-8)
+-zone de dessin (zonedraw nfenetre w h) => ajouter ou supprimer des pixel
+-redimentionner un image (redim nfenetre w h) => voir les fonctions disponible
+-select region (select nfenetre x y w h) => choix :
+	couper(apel remplsage(background color)
+	remplisage (rgb)
+	modifier zone (autre x y)
+	remplissage tolérence (r g b tolerence)
+	negatif (pixel par pixel prendre coouleur oposé)
+	mise en gris (r+g+b/3)
+	b&w(moyenne des pixel, en dessous blanc au dessus noir)
+	rien
