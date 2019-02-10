@@ -4,7 +4,7 @@ project(raster_graphics_editor C)
 set(CMAKE_C_STANDARD 11)
 find_package(SDL2 REQUIRED)
 
-add_executable(raster_graphics_editor main.c)
+add_executable(raster_graphics_editor src/main.c)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 
