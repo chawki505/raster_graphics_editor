@@ -1,0 +1,3 @@
+
+tuto resolve problem cmake: leading or trailing whitespace (policy CMP0004)
+https://stackoverflow.com/questions/45730098/cmake-leading-or-trailing-whitespace-policy-cmp0004
