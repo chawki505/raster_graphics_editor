@@ -1,3 +1,7 @@
 
-tuto resolve problem cmake: leading or trailing whitespace (policy CMP0004)
+tuto resolve problem cmake leading or trailing whitespace (policy CMP0004) :
 https://stackoverflow.com/questions/45730098/cmake-leading-or-trailing-whitespace-policy-cmp0004
+
+
+tuto sdl:
+https://alexandre-laurent.developpez.com/tutoriels/sdl-2/creer-premieres-fenetres/
