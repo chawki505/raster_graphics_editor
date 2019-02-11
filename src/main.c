@@ -45,6 +45,8 @@ int main(int argc, char *argv[]) {
 
 
 
+
+
             //cas erreur creation du spirit
         } else {
             fprintf(stdout, "Échec de chargement du sprite (%s)\n", SDL_GetError());
@@ -55,6 +57,7 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "Erreur de création de la fenêtre: %s\n", SDL_GetError());
     }
 
+    SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
 
     SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
 
