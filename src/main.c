@@ -25,10 +25,32 @@ int main(int argc, char *argv[]) {
                                480,
                                SDL_WINDOW_SHOWN);
 
+    //cas creation de la fenetre
     if (pWindow) {
-        SDL_Delay(3000); /* Attendre trois secondes, que l'utilisateur voie la fenêtre */
 
-        SDL_DestroyWindow(pWindow);
+        SDL_Surface *pSprite = NULL;
+        pSprite = SDL_LoadBMP("../img/image.bmp"); //load bitmap image
+
+
+        //cas creation de la spirit
+        if (pSprite) {
+
+            SDL_Rect dest = {640 / 2 - pSprite->w / 2, 480 / 2 - pSprite->h / 2, 0, 0};
+            SDL_BlitSurface(pSprite, NULL, SDL_GetWindowSurface(pWindow), &dest); // Copie du sprite
+
+            SDL_UpdateWindowSurface(pWindow); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
+            SDL_Delay(3000); /* Attendre trois secondes, que l'utilisateur voit la fenêtre */
+
+            SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
+
+
+
+            //cas erreur creation du spirit
+        } else {
+            fprintf(stdout, "Échec de chargement du sprite (%s)\n", SDL_GetError());
+        }
+
+        //cas erreur creation de la fenetre
     } else {
         fprintf(stderr, "Erreur de création de la fenêtre: %s\n", SDL_GetError());
     }
@@ -37,5 +59,5 @@ int main(int argc, char *argv[]) {
     SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
 
 
-    return 0;
+    return EXIT_SUCCESS;
 }
