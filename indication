@@ -23,6 +23,9 @@ commande à generer :
 
     - ./monapp => lance l'éditeur d'image
 
+    - exit
+        > quite le programme
+
     - open path/imagename path/imagename path/imagename path/imagename
          > créer un objet c image contenant :
             int id(numéro de fenetre)
@@ -42,7 +45,8 @@ commande à generer :
     - close id/imagename id/imagename id/imagename id/imagename
         > ferme l'interface graphique correspondant objet ayant l'id ou le imagename corespondant
         > lors de la fermeture proposer a l'utilisateur de sauvegarder le contenu de la fenetre => voir fonction save
-        ! si l'id ou imagename ne correspond a rien et previent utilisateur
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
+
 
     - close all [instant]
         > meme principe que précedement
@@ -55,7 +59,7 @@ commande à generer :
             (2) utilisateur doit choisir un nouveau chemin (par default le précédent)
                                         un nom d'image (par default le précédent)
                                         un type de format (par default le précédent)
-        ! si l'id ou imagename ne correspond a rien et previent utilisateur
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
 
     - save all [instant]
         > meme principe que précedement
@@ -64,8 +68,50 @@ commande à generer :
 
     - symv id/imagename
         > effectue une symétrie verticale de l'image pixel par pixel
-        ! si l'id ou imagename ne correspond a rien et previent utilisateur
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
 
     - symh id/imagename
-            > effectue une symétrie horizontal de l'image pixel par pixel
-            ! si l'id ou imagename ne correspond a rien et previent utilisateur
+        > effectue une symétrie horizontal de l'image pixel par pixel
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
+
+    - rotate id/imagename nbRotation
+        > effectue nbRotation fois rotations sur id/imagename
+        > si nbRotation > 0 rotation vers la droite
+        > si nbRotation < 0 rotation vers la gauche
+        > si nbRotation = 0, ne fait rien et quitte la fonction
+        > simplifier nbRatation a modulo 4 ou recursivite jusqu'a 0
+        > penser à modifier les données de l'objet image à l'echelle
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
+
+    - drawzone id/imagename longeur largeur
+        > ajoute / enleve des pixel
+        > penser à modifier les données de l'objet image à l'echelle
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
+
+    - resize id/imagename longeur largeur
+        > penser à modifier les données de l'objet image à l'echelle
+        > voir les fonctionnalité diponible sur sdl2
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
+
+    - select id/imagename origineX origineY longeur largeur
+        > recupere une region de l'image
+        > propose a l'utilisateur de :
+            - cut [color/rgb]
+                > remplace la zone par du noir
+                > si option alors remplace par color ou melange rgb
+            - copy origineX origineY
+                > copy la région dans une autre région
+            - fill color/rgb
+             > rempli la zonne avec color ou melange rgb
+            - switch color1/rgb1 color2/rgb2 [tolerence(0-255)]
+             > remplace dans la zone la color1 par color2
+             > si option tolérence et premier argument rgb1
+                remplace dans la zone la color1, et les pixel quasi similaire par rapport a tolérence, par color2
+
+
+
+
+
+
+
+
