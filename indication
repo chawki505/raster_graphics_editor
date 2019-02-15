@@ -1,23 +1,3 @@
--documentation sdl
--installation linux
--parser
--ouverture d'un ou plusieur fichiers sur plusieur fenetre (open fefj fezf fz) => liste chainé nom fenetre data suivant
--fermeture avec la fenetre ou nom de l'image (close fer fze fz 5)
--sauvagarder le fichier ( save fezf => modifier le nom : affnom [o/n] => proposer nom + format et supp la version precedent)
--symétrie vertical / horizontal (symv nomfenetre symh nomfenetre)
--roatation 90° (rotate nfenetre 5/-8)
--zone de dessin (zonedraw nfenetre w h) => ajouter ou supprimer des pixel
--redimentionner un image (redim nfenetre w h) => voir les fonctions disponible
--select region (select nfenetre x y w h) => choix :
-	couper(apel remplsage(background color)
-	remplisage (rgb)
-	modifier zone (autre x y)
-	remplissage tolérence (r g b tolerence)
-	negatif (pixel par pixel prendre coouleur oposé)
-	mise en gris (r+g+b/3)
-	b&w(moyenne des pixel, en dessous blanc au dessus noir)
-	rien
-
 commande à generer :
     -./luncher.sh => instal tous le bordel
 
@@ -102,15 +82,34 @@ commande à generer :
             - copy origineX origineY
                 > copy la région dans une autre région
             - fill color/rgb
-             > rempli la zonne avec color ou melange rgb
+                > rempli la zonne avec color ou melange rgb
             - switch color1/rgb1 color2/rgb2 [tolerence(0-255)]
-             > remplace dans la zone la color1 par color2
-             > si option tolérence et premier argument rgb1
-                remplace dans la zone la color1, et les pixel quasi similaire par rapport a tolérence, par color2
+                > remplace dans la zone la color1 par color2
+                > si option tolérence et premier argument rgb1
+                    remplace dans la zone la color1, et les pixel quasi similaire par rapport a tolérence, par color2
+            - negmod
+                > mise en négatif pixel à pixel (255−r,255−v,255−b)
+            - greymod
+                > mise en gris pixel à pixel (255−r,255−v,255−b)
+            - bwmode [rev]
+                > prend la moyenne des couleur de la région
+                > si en desous de la moyenne, noir
+                > si au dessus de la moyenne, blanc
+                > si option alors inversion des regle
+            - exit
+                > quite la région
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
 
+    - select id/imagename
+        > selection toute l'image t désactive la fonction copy
+        ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur
 
+    - pick id/imagename x y
+        > recupere la couleur du pixel xy en rgb
 
-
+    - help [nom de fonction]
+        > écrit de l'aide inspiré de ce fichier
+        > si option uniquement la fonction ciblé
 
 
 
