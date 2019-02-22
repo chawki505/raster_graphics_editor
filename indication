@@ -8,13 +8,11 @@ commande à generer :
 
     - open path/imagename path/imagename path/imagename path/imagename
          > créer un objet c image contenant :
-            int id(numéro de fenetre)
-            objet sdl
-            char * path/imagename
+            int id
+            SDL_window mafenetre
+            char * path
             char * imagename (privé du .xxx )
             char * format
-            int longeur
-            int largeur
             image * suivant
           > ouvrir une interface graphque dans laquelle se trouve une image
           > le titre de la fenetre sera le numéro d'id suivi du nom de l'ima
