@@ -3,7 +3,7 @@
 #include "traitement_image.h"
 #include "traitement_fenetre.h"
 
-#include "struct_image.c"
+#include "my_struct_images.h"
 
 int main(int argc, char *argv[]) {
 
@@ -27,7 +27,8 @@ int main(int argc, char *argv[]) {
     char *ligne = lecture_commande();
     printf("==> votre commande : %s\n", ligne);
 
-    structImage * mystruct = createStruct(ligne);
+    structImage *mystruct = createStruct(ligne);
+
     printStruct(mystruct);
     /*
    Creatation d'une fenetre
