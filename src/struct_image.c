@@ -2,7 +2,7 @@
 // Created by antony on 22/02/19.
 //
 
-#include <SDL_video.h>
+#include "includes.h"
 
 typedef enum {
     jpg = 0,
