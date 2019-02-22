@@ -12,4 +12,5 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 
+
 #endif //RASTER_GRAPHICS_EDITOR_INCLUDES_H
