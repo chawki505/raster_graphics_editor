@@ -9,5 +9,7 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image);
 
 void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_image);
 
+void open_image(char *path_image);
+
 
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

@@ -4,6 +4,7 @@
 
 #include "includes.h"
 #include "parsing.h"
+#include "traitement_image.h"
 
 /*supprime les espaces dans le debut de la chaine si existe*/
 void traitement_espaces_debut(char *chaine_a_traiter) {
@@ -34,6 +35,24 @@ char *lecture_commande() {
 
 /* traite la ligne saisi par l'utilisateur */
 void traitement_ligne(char *ligne_a_traiter) {
+
+    traitement_espaces_debut(ligne_a_traiter);
+    traitement_espaces_fin(ligne_a_traiter);
+
+    char *tmp = strdup(ligne_a_traiter);
+
+    if (strncmp(tmp, "open", 4) == 0 && strlen(tmp) > 5) {
+
+        open_image(tmp + 5);
+
+
+    } else if (strncmp(tmp, "exit", 4) == 0) {
+        exit(EXIT_SUCCESS);
+
+    } else {
+
+        fprintf(stderr, "Commande : %s inconnue ou incomplete\n", tmp);
+    }
 
 
 }

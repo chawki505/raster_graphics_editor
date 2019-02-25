@@ -2,9 +2,78 @@
 // Created by chawki on 15/02/19.
 //
 
-#include <stdbool.h>
 #include "includes.h"
+#include "traitement_fenetre.h"
 #include "traitement_image.h"
+
+
+/* return le format de l'image passer en parametre*/
+char *get_format_image(char *image_name) {
+
+    if (image_name == NULL) {
+        return NULL;
+    }
+
+    //duplique le nom de l'image dans un tmp
+    char *tmp = strdup(image_name);
+
+    //creer un pointeur sur le .
+    char *format = strstr(tmp, ".");
+
+    //si null ==> image name faux
+    if (format == NULL) {
+        return NULL;
+    }
+
+    //return extention sans le . du debut
+    return (format + 1);
+}
+
+
+/* fonction pour ouvrire une image et l'afficher dans une fenetre*/
+void open_image(char *path_image) {
+
+    char *tmp = strdup(path_image);
+
+    tmp = strstr(tmp, "/");
+
+    char *nom_image = tmp;
+    while (tmp != NULL) {
+        nom_image = tmp + 1;
+        tmp = strstr(tmp + 1, "/");
+    }
+
+    char *format = get_format_image(nom_image);
+
+    if (format) {
+
+        /*
+      Creatation d'une fenetre
+      */
+        SDL_Window *pWindow = create_window();
+
+        if (pWindow) {
+            if (strncmp(format, "png", 3) == 0)
+                print_image_other_type(pWindow, path_image, IMG_INIT_PNG);//Afficher une image dans la fenetre
+            else if (strncmp(format, "jpg", 3) == 0)
+                print_image_other_type(pWindow, path_image, IMG_INIT_JPG);//Afficher une image dans la fenetre
+            else if (strncmp(format, "bmp", 3) == 0)
+                print_image_bmp_type(pWindow, path_image);//Afficher une image dans la fenetre
+
+            else {
+                fprintf(stdout, "Échec : format image non pris en charge !\n");
+            }
+
+            SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
+        }
+
+    } else {
+        fprintf(stderr, "format image non correcte\n");
+
+    }
+
+
+}
 
 
 /* fonction pour afficher une image dans une fenetre (version png et jpg) */
