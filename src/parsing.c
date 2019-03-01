@@ -45,12 +45,17 @@ void traitement_ligne(char *ligne_a_traiter) {
 
         open_image(tmp + 5);
 
+    } else if (strncmp(tmp, "print", 5) == 0) {
+
+
+        print_image((int) strtol(tmp + 6, NULL, 10));
+
 
     } else if (strncmp(tmp, "exit", 4) == 0) {
+        SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         exit(EXIT_SUCCESS);
 
     } else {
-
         fprintf(stderr, "Commande : %s inconnue ou incomplete\n", tmp);
     }
 

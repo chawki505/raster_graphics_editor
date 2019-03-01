@@ -1,9 +1,5 @@
 #include "includes.h"
 #include "parsing.h"
-#include "traitement_image.h"
-#include "traitement_fenetre.h"
-
-#include "my_struct_images.h"
 
 int main(int argc, char *argv[]) {
 
@@ -27,14 +23,7 @@ int main(int argc, char *argv[]) {
     while (1) {
         char *ligne = lecture_commande();
         printf("==> votre commande : %s\n", ligne);
-
         traitement_ligne(ligne);
-
     }
 
-
-    SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
-
-
-    return EXIT_SUCCESS;
 }
