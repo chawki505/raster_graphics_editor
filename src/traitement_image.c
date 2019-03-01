@@ -5,6 +5,7 @@
 #include "includes.h"
 #include "traitement_fenetre.h"
 #include "traitement_image.h"
+#include "my_struct_images.h"
 
 
 /* return le format de l'image passer en parametre*/
@@ -47,18 +48,35 @@ void open_image(char *path_image) {
 
     if (format) {
 
+        structImage *myimage = createStruct2(path_image, nom_image, format);
+        if (myimage) {
+            add_image(myimage);
+            fprintf(stdout, "image open %s \n", myimage->name);
+        }
+    } else {
+        fprintf(stderr, "format image non correcte\n");
+    }
+}
+
+/* print image in window if exist*/
+void print_image(int id) {
+
+    structImage *image = get_image(id);
+
+    if (image) {
+
         /*
-      Creatation d'une fenetre
-      */
+     Creatation d'une fenetre
+     */
         SDL_Window *pWindow = create_window();
 
         if (pWindow) {
-            if (strncmp(format, "png", 3) == 0)
-                print_image_other_type(pWindow, path_image, IMG_INIT_PNG);//Afficher une image dans la fenetre
-            else if (strncmp(format, "jpg", 3) == 0)
-                print_image_other_type(pWindow, path_image, IMG_INIT_JPG);//Afficher une image dans la fenetre
-            else if (strncmp(format, "bmp", 3) == 0)
-                print_image_bmp_type(pWindow, path_image);//Afficher une image dans la fenetre
+            if (strncmp(image->format, "png", 3) == 0)
+                print_image_other_type(pWindow, image->path, IMG_INIT_PNG);//Afficher une image dans la fenetre
+            else if (strncmp(image->format, "jpg", 3) == 0)
+                print_image_other_type(pWindow, image->path, IMG_INIT_JPG);//Afficher une image dans la fenetre
+            else if (strncmp(image->format, "bmp", 3) == 0)
+                print_image_bmp_type(pWindow, image->path);//Afficher une image dans la fenetre
 
             else {
                 fprintf(stdout, "Échec : format image non pris en charge !\n");
@@ -66,9 +84,6 @@ void open_image(char *path_image) {
 
             SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
         }
-
-    } else {
-        fprintf(stderr, "format image non correcte\n");
 
     }
 
@@ -83,7 +98,11 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
     IMG_Init(type_image);//init SDL_image
     SDL_Event event; //var pour la gestion des evenement
     bool quit = false; // var bool pour quitter la boucle
+
+
     SDL_Surface *pSprite = NULL; // var sprite pour charger l'image
+
+
     pSprite = IMG_Load(path_image); //load bitmap image chargement de l'image
 
     //cas creation de la spirit

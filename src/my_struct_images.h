@@ -6,8 +6,6 @@
 #define GRAPHICS_EDITOR_MY_STRUCT_IMAGES_H
 
 
-#include "includes.h"
-
 typedef enum {
     jpg = 0,
     png = 1,
@@ -17,17 +15,26 @@ typedef enum {
 
 typedef struct structImage {
     int id;
-    SDL_Window *pWindow;
+    SDL_Surface *spirite;
     char *path;
-    char *imageName;
-    char *imageType;
+    char *name;
+    char *format;
     struct structImage *next;
 } structImage;
 
 
+structImage *my_images;
+
+
 structImage *createStruct(char *pathImage);
 
+structImage *createStruct2(char *path, char *name, char *format);
+
 void printStruct(structImage *myStruct);
+
+void add_image(structImage *mystruc);
+
+structImage *get_image(int id);
 
 
 #endif //GRAPHICS_EDITOR_MY_STRUCT_IMAGES_H
