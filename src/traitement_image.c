@@ -48,7 +48,7 @@ void open_image(char *path_image) {
 
     if (format) {
 
-        structImage *myimage = createStruct2(path_image, nom_image, format);
+        structImage *myimage = createStruct(path_image, nom_image, format);
         if (myimage) {
             add_image(myimage);
             fprintf(stdout, "image open %s \n", myimage->name);

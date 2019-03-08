@@ -26,9 +26,7 @@ typedef struct structImage {
 structImage *my_images;
 
 
-structImage *createStruct(char *pathImage);
-
-structImage *createStruct2(char *path, char *name, char *format);
+structImage *createStruct(char *path, char *name, char *format);
 
 void printStruct(structImage *myStruct);
 

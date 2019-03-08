@@ -5,3 +5,4 @@ https://stackoverflow.com/questions/45730098/cmake-leading-or-trailing-whitespac
 
 tuto sdl:
 https://alexandre-laurent.developpez.com/tutoriels/sdl-2/creer-premieres-fenetres/
+https://zestedesavoir.com/tutoriels/1014/utiliser-la-sdl-en-langage-c/les-textures-et-les-images/
