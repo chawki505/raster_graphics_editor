@@ -93,6 +93,9 @@ void add_image(structImage *mystruc) {
                 compteur++;
                 liste = liste->next;
             }
+            if (compteur == 1) {
+                compteur++;
+            }
 
             mystruc->id = compteur;
             liste->next = mystruc;
