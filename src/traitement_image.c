@@ -86,8 +86,17 @@ void print_image(int id) {
         }
 
     }
+}
 
+/* fonction pour sauvguarder une image au format png */
+void save_image(int id) {
+    structImage *image = get_image(id);
 
+    if (image && IMG_SavePNG(image->spirite, "my_image.png") == 0) {
+        fprintf(stdout, "Image (%s) enregistrer ", image->name);
+    } else {
+        fprintf(stderr, "Erreur de sauvgarde\n");
+    }
 }
 
 
@@ -107,8 +116,6 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
 
     //cas creation de la spirit
     if (pSprite) {
-
-
         while (!quit) {
             SDL_WaitEvent(&event);
 
@@ -135,8 +142,6 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
     }
 
     IMG_Quit();
-
-
 
     /*
     //IMG_Init(IMG_INIT_JPG);
@@ -208,6 +213,7 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
     } else {
         fprintf(stdout, "Échec de chargement du sprite (%s)\n", SDL_GetError());
     }
-
 }
+
+
 

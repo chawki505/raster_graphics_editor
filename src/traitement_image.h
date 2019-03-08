@@ -14,5 +14,7 @@ void open_image(char *path_image);
 
 void print_image(int id);
 
+void save_image(int id);
+
 
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

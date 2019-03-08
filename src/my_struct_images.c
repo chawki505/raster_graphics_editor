@@ -14,10 +14,18 @@ structImage *createStruct(char *path, char *name, char *format) {
         return NULL;
     }
 
+
+    IMG_Init(IMG_INIT_JPG);//init SDL_image
+    SDL_Surface *pSprite = NULL; // var sprite pour charger l'image
+    pSprite = IMG_Load(path); //load bitmap image chargement de l'image
+    IMG_Quit();
+
+
     myStruct->id = 1;
     myStruct->path = path;
     myStruct->name = name;
     myStruct->format = format;
+    myStruct->spirite = pSprite;
     myStruct->next = NULL;
 
 
