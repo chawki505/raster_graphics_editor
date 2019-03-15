@@ -14,5 +14,9 @@ void open_image(char *path_image);
 
 void print_image(int id);
 
+Uint32 getPixel(SDL_Surface *surface, int x, int y);
+
+void getPixelColor(SDL_Surface *surface, int x, int y,Uint8 *r, Uint8 *g, Uint8 *b);
+
 
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

@@ -16,7 +16,6 @@ int main(int argc, char *argv[]) {
     La SDL est chargée.
     */
 
-
     /*
    Lecture de la commande
    */

@@ -1,6 +1,7 @@
 //
 // Created by chawki on 15/02/19.
 //
+#include <inttypes.h>
 
 #include "includes.h"
 #include "traitement_fenetre.h"
@@ -62,6 +63,7 @@ void open_image(char *path_image) {
 void print_image(int id) {
 
     structImage *image = get_image(id);
+
 
     if (image) {
 
@@ -137,51 +139,17 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
     IMG_Quit();
 
 
-
-    /*
-    //IMG_Init(IMG_INIT_JPG);
-
-    bool quit = false;
-    SDL_Event event;
-
-    SDL_Renderer *renderer = SDL_CreateRenderer(pWindow, -1, 0);
-    SDL_Surface *image = SDL_LoadBMP("../img/image.bmp");
-    //SDL_Surface *image = IMG_Load("../img/image2.jpg");
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, image);
-
-    while (!quit) {
-        SDL_WaitEvent(&event);
-
-        switch (event.type) {
-            case SDL_QUIT:
-                quit = true;
-                break;
-        }
-
-        //SDL_Rect dstrect = { 5, 5, 320, 240 };
-        //SDL_RenderCopy(renderer, texture, NULL, &dstrect);
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-    }
-
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(image);
-    SDL_DestroyRenderer(renderer);
-
-    //IMG_Quit();
-    */
-
 }
 
 
 /* fonction pour afficher une image dans une fenetre (version bmp) */
 void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
-
+    Uint8 r,g,b;
     SDL_Event event;
     bool quit = false;
     SDL_Surface *pSprite = NULL;
     pSprite = SDL_LoadBMP(path_image); //load bitmap image
-
+    getPixelColor(pSprite,0,0,&r,&g,&b);
     //cas creation de la spirit
     if (pSprite) {
         while (!quit) {
@@ -208,6 +176,49 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
     } else {
         fprintf(stdout, "Échec de chargement du sprite (%s)\n", SDL_GetError());
     }
+
+}
+
+
+Uint32 getPixel(SDL_Surface *surface, int x, int y) {
+    /*nbOctetsParPixel représente le nombre d'octets utilisés pour stocker un pixel.
+    En multipliant ce nombre d'octets par 8 (un octet = 8 bits), on obtient la profondeur de couleur
+    de l'image : 8, 16, 24 ou 32 bits.*/
+    int nbOctetsParPixel = surface->format->BytesPerPixel;
+    /* Ici p est l'adresse du pixel que l'on veut connaitre */
+    /*surface->pixels contient l'adresse du premier pixel de l'image*/
+    Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+
+    /*Gestion différente suivant le nombre d'octets par pixel de l'image*/
+    switch (nbOctetsParPixel) {
+        case 1:
+            return *p;
+
+        case 2:
+            return *(Uint16 *) p;
+
+        case 3:
+            /*Suivant l'architecture de la machine*/
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+                return p[0] << 16 | p[1] << 8 | p[2];
+            else
+                return p[0] | p[1] << 8 | p[2] << 16;
+
+        case 4:
+            return *(Uint32 *) p;
+
+            /*Ne devrait pas arriver, mais évite les erreurs*/
+        default:
+            return 0;
+    }
+}
+
+void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b) {
+    Uint32 pixel = getPixel(surface,x,y);
+    SDL_LockSurface(surface);
+    SDL_GetRGB(pixel,surface->format,r,g,b);
+    printf("r:%08X \ng:%08X\nb:%08X\n", (unsigned int) r, (unsigned int)g,(unsigned int) b);
+    SDL_UnlockSurface(surface);
 
 }
 
