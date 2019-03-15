@@ -1,6 +1,7 @@
-#Journal de bord du projet
+# Journal de bord du projet
 
-##Date : 08/02/2019
+## Date : 08/02/2019
+
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Init du dépôt github                                               | X   |
@@ -12,7 +13,8 @@
 
 
 
-##Date : 15/02/2019
+## Date : 15/02/2019
+
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Installation et configuration de SDL2 sur nos machines             | X   |
@@ -22,52 +24,57 @@
 
 
 
-##Date : 22/02/2019
+## Date : 22/02/2019
+
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Debut d'implementation des fonctionalité du projet                 | X   |
-| Mise en place du CLI                 	                             | X   |
+| Mise en place du CLI                 	                     | X   |
 | Parseur de commande saisi par l'utilisateur                        | X   |
 | Creation d'une structure pour l'image                              | X   |
 
 
 
-##Date : 01/03/2019
+## Date : 01/03/2019
+
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Fonction chargement image                                          | X   |
 | Fonction affichage image                                           | X   |
 | Fonction enregistre image                                          | X   |
-| Fonction changement couleur de l'image                              |    |
-| Fonction changement rotation image                              |    |
+| Fonction changement couleur de l'image                             |     |
+| Fonction changement rotation image                                 |     |
 
 
 
 
 
 
-##Date : 15/03/2019
+## Date : 15/03/2019
+
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
-| amelioaration Fonction chargement image                                          | X   |
-| amelioaration  Fonction affichage image                                           | X   |
-| amelioaration Fonction enregistre image                                          | X   |
-| Fonction changement couleur de l'image                              |    |
-| Fonction changement rotation image                              |    |
+| amelioaration Fonction chargement image                            | X   |
+| amelioaration  Fonction affichage image                            | X   |
+| amelioaration Fonction enregistre image                            | X   |
+| Fonction changement couleur de l'image                             |     |
+| Fonction changement rotation image                                 |     |
 
 
 
 
-##Date : 22/03/2019
+## Date : 22/03/2019
+
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
-|                                        |   |
+|                                                                    |     |
 
 
 
-##Date : 29/03/2019
+## Date : 29/03/2019
+
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
-|                                        |   |
+|                                                                    |     |
             
 
