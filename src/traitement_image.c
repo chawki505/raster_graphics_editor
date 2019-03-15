@@ -144,12 +144,12 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
 
 /* fonction pour afficher une image dans une fenetre (version bmp) */
 void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
-    Uint8 r,g,b;
+    Uint8 r, g, b;
     SDL_Event event;
     bool quit = false;
     SDL_Surface *pSprite = NULL;
     pSprite = SDL_LoadBMP(path_image); //load bitmap image
-    getPixelColor(pSprite,0,0,&r,&g,&b);
+    getPixelColor(pSprite, 100, 100, &r, &g, &b);
     //cas creation de la spirit
     if (pSprite) {
         while (!quit) {
@@ -214,10 +214,10 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y) {
 }
 
 void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b) {
-    Uint32 pixel = getPixel(surface,x,y);
+    Uint32 pixel = getPixel(surface, x, y);
     SDL_LockSurface(surface);
-    SDL_GetRGB(pixel,surface->format,r,g,b);
-    printf("r:%08X \ng:%08X\nb:%08X\n", (unsigned int) r, (unsigned int)g,(unsigned int) b);
+    SDL_GetRGB(pixel, surface->format, r, g, b);
+    printf("r:%d \ng:%d\nb:%d\n", (unsigned int) *r, (unsigned int) *g, (unsigned int) *b);
     SDL_UnlockSurface(surface);
 
 }
