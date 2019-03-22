@@ -2,9 +2,9 @@
 // Created by chawki on 15/02/19.
 //
 
-#include "includes.h"
+#include "../includes.h"
 #include "parsing.h"
-#include "traitement_image.h"
+#include "../gestion/traitement_image/traitement_image.h"
 
 /*supprime les espaces dans le debut de la chaine si existe*/
 void traitement_espaces_debut(char *chaine_a_traiter) {

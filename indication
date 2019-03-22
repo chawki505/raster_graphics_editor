@@ -34,7 +34,7 @@ commande à generer :
     - save id/imagename id/imagename id/imagename id/imagename
         > propose à l'utilisateur de sauvegarde directement l'image (1) ou alors de proposer un nouveau chemim(2)
             (1) le fichier est suprimer puis recree
-            (2) utilisateur doit choisir un nouveau chemin (par default le précédent)
+            (2) utilisateur doit choisir u n nouveau chemin (par default le précédent)
                                         un nom d'image (par default le précédent)
                                         un type de format (par default le précédent)
         ! si l'id ou imagename ne correspond a rien, ne fait rien et previent utilisateur

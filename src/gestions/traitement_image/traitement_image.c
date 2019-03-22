@@ -2,10 +2,10 @@
 // Created by chawki on 15/02/19.
 //
 
-#include "includes.h"
-#include "traitement_fenetre.h"
+#include "../../includes.h"
+#include "../traitement_fenetre/traitement_fenetre.h"
 #include "traitement_image.h"
-#include "my_struct_images.h"
+#include "../my_struct_images/my_struct_images.h"
 
 
 /* return le format de l'image passer en parametre*/
@@ -96,7 +96,7 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
 
 
     IMG_Init(type_image);//init SDL_image
-    SDL_Event event; //var pour la gestion des evenement
+    SDL_Event event; //var pour la gestions des evenement
     bool quit = false; // var bool pour quitter la boucle
 
 
