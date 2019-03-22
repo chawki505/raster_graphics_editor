@@ -138,38 +138,6 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
 
 
 
-    /*
-    //IMG_Init(IMG_INIT_JPG);
-
-    bool quit = false;
-    SDL_Event event;
-
-    SDL_Renderer *renderer = SDL_CreateRenderer(pWindow, -1, 0);
-    SDL_Surface *image = SDL_LoadBMP("../img/image.bmp");
-    //SDL_Surface *image = IMG_Load("../img/image2.jpg");
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, image);
-
-    while (!quit) {
-        SDL_WaitEvent(&event);
-
-        switch (event.type) {
-            case SDL_QUIT:
-                quit = true;
-                break;
-        }
-
-        //SDL_Rect dstrect = { 5, 5, 320, 240 };
-        //SDL_RenderCopy(renderer, texture, NULL, &dstrect);
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
-        SDL_RenderPresent(renderer);
-    }
-
-    SDL_DestroyTexture(texture);
-    SDL_FreeSurface(image);
-    SDL_DestroyRenderer(renderer);
-
-    //IMG_Quit();
-    */
 
 }
 
