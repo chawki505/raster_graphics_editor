@@ -55,6 +55,8 @@ void traitement_ligne(char *ligne_a_traiter) {
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         exit(EXIT_SUCCESS);
 
+    } else if (strncmp(tmp, "rotation", 8) == 0) {
+        rotation_image((int) strtol(tmp + 9, NULL, 10));
     } else {
         fprintf(stderr, "Commande : %s inconnue ou incomplete\n", tmp);
     }
