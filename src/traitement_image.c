@@ -56,6 +56,8 @@ void open_image(char *path_image) {
     } else {
         fprintf(stderr, "format image non correcte\n");
     }
+
+    symetrie_image(1);
 }
 
 /* print image in window if exist*/
@@ -179,3 +181,69 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
 
 }
 
+
+/* fonction pour la rotation de l'image par un multiple de 90 */
+void symetrie_image(int id) {
+    structImage *image = get_image(id);
+    SDL_Surface *pSprite = NULL;
+    pSprite = IMG_Load(image->path);
+    if (strncmp(image->format, "png", 3) == 0)
+        IMG_Init(IMG_INIT_PNG);
+    else if (strncmp(image->format, "jpg", 3) == 0)
+        IMG_Init(IMG_INIT_JPG);
+    else if (strncmp(image->format, "bmp", 3) == 0)
+        pSprite = SDL_LoadBMP(image->path);
+    else {
+        fprintf(stdout, "Échec : format image non pris en charge !\n");
+    }
+    SDL_Event event;
+    bool quit = false;
+    SDL_Renderer *renderer = NULL;
+    SDL_Texture *t = NULL;
+    int w_img = pSprite->w * 600 / pSprite->h;
+    int h_img = 600;
+    char *tmp = readline("Saisir 1 pour la symétries verticale et 2 pour la symétries horizontale:");
+    int option = (int) strtol(tmp, NULL, 10);
+    SDL_Rect box = (SDL_Rect) {0, 0, w_img, h_img};// SDL_Point point={pSprite->w/2, pSprite->h/2};
+    SDL_Point point = {w_img / 2, h_img / 2};
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
+    switch (option) {
+        case 1:
+            flip = SDL_FLIP_VERTICAL;
+            break;
+        case 2:
+            flip = SDL_FLIP_HORIZONTAL;
+            break;
+        default:
+            printf("erreur d'option\n");
+            return;
+    }
+    SDL_Window *pWindow = SDL_CreateWindow(
+            "Image",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            w_img,
+            h_img,
+            SDL_WINDOW_OPENGL
+    );
+    //cas creation de la spirit
+    if (pSprite) {
+        while (!quit) {
+            SDL_WaitEvent(&event);
+            switch (event.type) {
+                case SDL_QUIT:
+                    quit = true;
+                    break;
+            }
+            renderer = SDL_CreateRenderer(pWindow, -1, 0);
+            t = SDL_CreateTextureFromSurface(renderer, pSprite);
+            SDL_RenderCopyEx(renderer, t, NULL, &box, 0, &point, flip);
+            SDL_RenderPresent(renderer);
+            SDL_UpdateWindowSurface(pWindow);
+        }
+        SDL_FreeSurface(pSprite);
+    }
+
+    IMG_Quit();
+    SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
+}

@@ -50,7 +50,6 @@ void traitement_ligne(char *ligne_a_traiter) {
 
         print_image((int) strtol(tmp + 6, NULL, 10));
 
-
     } else if (strncmp(tmp, "exit", 4) == 0) {
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         exit(EXIT_SUCCESS);
