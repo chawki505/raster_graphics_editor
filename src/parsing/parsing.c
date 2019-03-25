@@ -4,7 +4,7 @@
 
 #include "../includes.h"
 #include "parsing.h"
-#include "../gestion/traitement_image/traitement_image.h"
+#include "../gestions/traitement_image/traitement_image.h"
 
 /*supprime les espaces dans le debut de la chaine si existe*/
 void traitement_espaces_debut(char *chaine_a_traiter) {

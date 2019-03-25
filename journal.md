@@ -61,9 +61,10 @@
 ##Date : 22/03/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
-|                                        |   |
-
-
+| Fonction changement couleur de l'image                              |    |
+| Fonction changement rotation image                              |  X  |
+| Fonction symetrie                              | X   |
+| Diagramme de dep                              |    |
 
 ##Date : 29/03/2019
 | Prévu                                                              | Fait|
