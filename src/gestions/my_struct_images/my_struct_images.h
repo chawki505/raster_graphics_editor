@@ -15,7 +15,7 @@ typedef enum {
 
 typedef struct structImage {
     int id;
-    SDL_Surface *spirite;
+    SDL_Surface *sprite;
     char *path;
     char *name;
     char *format;
@@ -26,7 +26,10 @@ typedef struct structImage {
 structImage *my_images;
 
 
-structImage *createStruct(char *path, char *name, char *format);
+structImage *createStruct_other_format(char *path, char *name, char *format, int type_image);
+
+structImage *createStruct_bmp_format(char *path, char *name, char *format);
+
 
 void printStruct(structImage *myStruct);
 

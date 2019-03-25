@@ -9,6 +9,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include <unistd.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 #include <readline/readline.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

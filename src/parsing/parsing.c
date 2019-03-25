@@ -41,14 +41,13 @@ void traitement_ligne(char *ligne_a_traiter) {
 
     char *tmp = strdup(ligne_a_traiter);
 
-    if (strncmp(tmp, "open", 4) == 0 && strlen(tmp) > 5) {
+    if (strncmp(tmp, "load", 4) == 0 && strlen(tmp) > 5) {
 
-        open_image(tmp + 5);
+        load_image(tmp + 5);
 
-    } else if (strncmp(tmp, "print", 5) == 0) {
+    } else if (strncmp(tmp, "display", 7) == 0) {
 
-
-        print_image((int) strtol(tmp + 6, NULL, 10));
+        display_image((int) strtol(tmp + 8, NULL, 10));
 
 
     } else if (strncmp(tmp, "exit", 4) == 0) {

@@ -6,22 +6,44 @@
 #include "my_struct_images.h"
 
 
-structImage *createStruct(char *path, char *name, char *format) {
+void init_value_struct(char *path, char *name, char *format, structImage *myStruct);
+
+structImage *createStruct_other_format(char *path, char *name, char *format, int type_image) {
     structImage *myStruct = malloc(sizeof(structImage));
 
     if (myStruct == NULL) {
-        perror("promblème allocation");
+        perror("promblème allocation image struct\n");
         return NULL;
     }
 
+    IMG_Init(type_image);//init SDL_image
+    init_value_struct(path, name, format, myStruct);
+    myStruct->sprite = IMG_Load(path); //load other format image
+
+    return myStruct;
+}
+
+
+structImage *createStruct_bmp_format(char *path, char *name, char *format) {
+    structImage *myStruct = malloc(sizeof(structImage));
+
+    if (myStruct == NULL) {
+        perror("promblème allocation image struct\n");
+        return NULL;
+    }
+
+    init_value_struct(path, name, format, myStruct);
+    myStruct->sprite = SDL_LoadBMP(path); //load bitmap image
+
+    return myStruct;
+}
+
+void init_value_struct(char *path, char *name, char *format, structImage *myStruct) {
     myStruct->id = 1;
     myStruct->path = path;
     myStruct->name = name;
     myStruct->format = format;
     myStruct->next = NULL;
-
-
-    return myStruct;
 }
 
 /* insertion image vers la fin*/
