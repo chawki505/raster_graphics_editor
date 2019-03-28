@@ -1,6 +1,6 @@
-#Journal de bord du projet
+# Journal de bord du projet
 
-##Date : 08/02/2019
+## Date : 08/02/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Init du dépôt github                                               | X   |
@@ -12,7 +12,7 @@
 
 
 
-##Date : 15/02/2019
+## Date : 15/02/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Installation et configuration de SDL2 sur nos machines             | X   |
@@ -22,7 +22,7 @@
 
 
 
-##Date : 22/02/2019
+## Date : 22/02/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Debut d'implementation des fonctionalité du projet                 | X   |
@@ -32,7 +32,7 @@
 
 
 
-##Date : 01/03/2019
+## Date : 01/03/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Fonction chargement image                                          | X   |
@@ -46,7 +46,7 @@
 
 
 
-##Date : 15/03/2019
+## Date : 15/03/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | amelioaration Fonction chargement image                                          | X   |
@@ -58,7 +58,7 @@
 
 
 
-##Date : 22/03/2019
+## Date : 22/03/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
 | Fonction changement couleur de l'image                              |    |
@@ -66,9 +66,16 @@
 | Fonction symetrie                              | X   |
 | Diagramme de dep                              |    |
 
-##Date : 29/03/2019
+## Date : 29/03/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
-|                                        |   |
+| Diagramme de dep                                       |   |
+| Fonction changement couleur de l'image                              |    |
+| Fonction redimention image                              |    |
+| replace Cmake with Makefile (create Makefile)                            |    |
+
+
+
+
             
 

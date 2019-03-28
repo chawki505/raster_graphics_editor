@@ -3,7 +3,6 @@
 //
 
 
-#include "../../includes.h"
 #include "../traitement_fenetre/traitement_fenetre.h"
 #include "../my_struct_images/my_struct_images.h"
 
@@ -123,4 +122,111 @@ void display_image(int id) {
     } else {
         fprintf(stdout, "Échec de chargement de l'image (id non existant)\n");
     }
+}
+
+
+/* fonction pour sauvguarder une image au format png */
+void save_image(int id) {
+    structImage *image = get_image(id);
+
+    if (image && IMG_SavePNG(image->sprite, "my_image_save.png") == 0) {
+        fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
+    } else {
+        fprintf(stderr, "Erreur de sauvgarde\n");
+    }
+}
+
+//TODO: a modifier !
+/* fonction pour la rotation de l'image par un multiple de 90 */
+void rotation_image(int id) {
+
+    structImage *image = get_image(id);
+
+
+    if (image == NULL) {
+        perror("Aucune image chargé pour la rotation\n");
+        return;
+    }
+
+    SDL_Surface *pSprite = image->sprite;
+
+
+    SDL_Event event;
+
+    bool quit = false;
+
+    SDL_Renderer *renderer = NULL;
+    SDL_Texture *t = NULL;
+
+    int w_img = 0;
+    int h_img = 0;
+
+    char *tmp = readline("\nSaisir l'angle de rotation:");
+
+    int angle = (int) strtol(tmp, NULL, 10);
+
+    SDL_Rect box;
+    SDL_Point point;
+
+    switch (angle) {
+        case -180:
+        case 180:
+        case 360:
+        case -360:
+            w_img = pSprite->w * 600 / pSprite->h;
+            h_img = 600;//we define window's width always be 600px
+            box = (SDL_Rect) {0, 0, w_img, h_img};// SDL_Point point={pSprite->w/2, pSprite->h/2};
+            point = (SDL_Point) {w_img / 2, h_img / 2};
+            break;
+
+        case -90:
+        case 90:
+        case -270:
+        case 270:
+            h_img = pSprite->w * 600 / pSprite->h;
+            w_img = 600;//we define window's width always be 600px
+            box = (SDL_Rect) {h_img / 2 - (h_img - w_img / 2),
+                              -h_img / 2 + (h_img - w_img / 2),
+                              h_img,
+                              w_img};// SDL_Point point={pSprite->w/2, pSprite->h/2};
+            point = (SDL_Point) {h_img / 2,
+                                 w_img / 2};
+            break;
+        default:
+            printf("erreur d'angle\n");
+            return;
+    }
+
+
+    SDL_Window *pWindow = SDL_CreateWindow(
+            "Image",
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            w_img,
+            h_img,
+            SDL_WINDOW_OPENGL
+    );
+
+    //cas creation de la spirit
+    while (!quit) {
+
+        SDL_WaitEvent(&event);
+        switch (event.type) {
+            case SDL_QUIT:
+                quit = true;
+                break;
+        }
+
+        renderer = SDL_CreateRenderer(pWindow, -1, 0);
+
+        t = SDL_CreateTextureFromSurface(renderer, pSprite);
+
+        SDL_RenderCopyEx(renderer, t, NULL, &box, angle, &point, SDL_FLIP_NONE);
+
+        SDL_RenderPresent(renderer);
+        SDL_UpdateWindowSurface(pWindow);
+    }
+
+    free(pSprite);
+    SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
 }

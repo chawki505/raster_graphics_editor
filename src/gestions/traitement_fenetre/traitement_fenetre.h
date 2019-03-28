@@ -5,6 +5,8 @@
 #ifndef GRAPHICS_EDITOR_TRAITEMENT_FENETRE_H
 #define GRAPHICS_EDITOR_TRAITEMENT_FENETRE_H
 
+#include "../../includes.h"
+
 
 SDL_Window *create_window();
 

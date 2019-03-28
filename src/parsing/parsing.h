@@ -6,6 +6,9 @@
 #define RASTER_GRAPHICS_EDITOR_PARSING_H
 
 
+#include "../includes.h"
+
+
 char *lecture_commande();
 
 void traitement_espaces_debut(char *chaine_a_traiter);

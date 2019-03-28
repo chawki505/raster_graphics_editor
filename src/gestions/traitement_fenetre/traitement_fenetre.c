@@ -2,7 +2,6 @@
 // Created by chawki on 20/02/19.
 //
 
-#include "../../includes.h"
 #include "traitement_fenetre.h"
 
 

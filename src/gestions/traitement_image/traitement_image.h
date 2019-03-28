@@ -5,10 +5,15 @@
 #ifndef RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H
 #define RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H
 
+#include "../../includes.h"
+
 
 void load_image(char *path_image);
 
 void display_image(int id);
 
+void save_image(int id);
+
+void rotation_image(int id);
 
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

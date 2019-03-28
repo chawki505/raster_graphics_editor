@@ -2,9 +2,10 @@
 // Created by chawki on 15/02/19.
 //
 
-#include "../includes.h"
 #include "parsing.h"
 #include "../gestions/traitement_image/traitement_image.h"
+
+extern void clear();
 
 /*supprime les espaces dans le debut de la chaine si existe*/
 void traitement_espaces_debut(char *chaine_a_traiter) {
@@ -27,9 +28,20 @@ void traitement_espaces_fin(char *chaine_a_traiter) {
 char *lecture_commande() {
     char *tmp = NULL;
 
-    tmp = readline("Graphics editor> ");
+    tmp = readline("\nGraphics editor> ");
 
     return tmp;
+}
+
+
+void clear() {
+#if defined(__linux__) || defined(__unix__) || defined(__APPLE__)
+    system("clear");
+#endif
+
+#if defined(_WIN32) || defined(_WIN64)
+    system("cls");
+#endif
 }
 
 
@@ -49,7 +61,15 @@ void traitement_ligne(char *ligne_a_traiter) {
 
         display_image((int) strtol(tmp + 8, NULL, 10));
 
+    } else if (strncmp(tmp, "rotation", 8) == 0) {
+        rotation_image((int) strtol(tmp + 9, NULL, 10));
 
+    } else if (strncmp(tmp, "save", 4) == 0) {
+
+        save_image(atoi(tmp + 5));
+
+    } else if (strncmp(tmp, "clear", 5) == 0) {
+        clear();
     } else if (strncmp(tmp, "exit", 4) == 0) {
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         exit(EXIT_SUCCESS);

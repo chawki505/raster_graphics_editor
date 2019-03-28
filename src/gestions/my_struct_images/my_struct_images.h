@@ -5,6 +5,8 @@
 #ifndef GRAPHICS_EDITOR_MY_STRUCT_IMAGES_H
 #define GRAPHICS_EDITOR_MY_STRUCT_IMAGES_H
 
+#include "../../includes.h"
+
 
 typedef enum {
     jpg = 0,
