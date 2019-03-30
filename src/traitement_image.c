@@ -144,14 +144,43 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
 
 /* fonction pour afficher une image dans une fenetre (version bmp) */
 void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
-    Uint8 r, g, b;
+    Uint8 r=0, g=0, b=0, a=0;
     SDL_Event event;
     bool quit = false;
     SDL_Surface *pSprite = NULL;
     pSprite = SDL_LoadBMP(path_image); //load bitmap image
-    getPixelColor(pSprite, 100, 100, &r, &g, &b);
+
+
     //cas creation de la spirit
     if (pSprite) {
+        /*for (int i = 0; i < pSprite->w; ++i) {
+            for (int j = 0; j < pSprite->h; ++j) {
+                printf("axe %d / %d :", i, j);
+                SDL_LockSurface(pSprite);
+                getPixelColor(pSprite, i, j, &r, &g, &b, &a);
+                SDL_UnlockSurface(pSprite);
+            }
+        }*/
+        SDL_LockSurface(pSprite);
+        Uint32 pixel = SDL_MapRGBA(pSprite->format, 0, 0, 255, 255);
+        SDL_GetRGBA(pixel, pSprite->format, &r, &g, &b, &a);
+        printf("pixel:%d\trouge:%d\tvert:%d\tbleu:%d\ttransparence:%d\n", (unsigned int) pixel, (unsigned int) r,
+               (unsigned int) g, (unsigned int) b, (unsigned int) a);
+        for (int i = 0; i < pSprite->w; ++i) {
+            for (int j = 0; j < pSprite->h; ++j) {
+                setPixelColor(pSprite,i,j,pixel);
+            }
+        }
+
+
+        SDL_UnlockSurface(pSprite);
+        SDL_Surface *surface = SDL_GetWindowSurface(pWindow);
+        int w, h;
+        SDL_GetWindowSize(pWindow, &w, &h);
+        SDL_Rect dest = {w / 2 - pSprite->w / 2, h / 2 - pSprite->h / 2, 0, 0};
+        SDL_BlitSurface(pSprite, NULL, surface, &dest); // Copie du sprite
+
+        SDL_UpdateWindowSurface(pWindow); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
         while (!quit) {
             SDL_WaitEvent(&event);
 
@@ -160,36 +189,19 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
                     quit = true;
                     break;
             }
-
-            SDL_Surface *surface = SDL_GetWindowSurface(pWindow);
-            int w, h;
-            SDL_GetWindowSize(pWindow, &w, &h);
-            SDL_Rect dest = {w / 2 - pSprite->w / 2, h / 2 - pSprite->h / 2, 0, 0};
-            SDL_BlitSurface(pSprite, NULL, surface, &dest); // Copie du sprite
-
-            SDL_UpdateWindowSurface(pWindow); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
         }
-
-        SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
-
         //cas erreur creation du spirit
     } else {
         fprintf(stdout, "Échec de chargement du sprite (%s)\n", SDL_GetError());
     }
 
+    SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
 }
 
 
 Uint32 getPixel(SDL_Surface *surface, int x, int y) {
-    /*nbOctetsParPixel représente le nombre d'octets utilisés pour stocker un pixel.
-    En multipliant ce nombre d'octets par 8 (un octet = 8 bits), on obtient la profondeur de couleur
-    de l'image : 8, 16, 24 ou 32 bits.*/
     int nbOctetsParPixel = surface->format->BytesPerPixel;
-    /* Ici p est l'adresse du pixel que l'on veut connaitre */
-    /*surface->pixels contient l'adresse du premier pixel de l'image*/
     Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
-
-    /*Gestion différente suivant le nombre d'octets par pixel de l'image*/
     switch (nbOctetsParPixel) {
         case 1:
             return *p;
@@ -198,7 +210,6 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y) {
             return *(Uint16 *) p;
 
         case 3:
-            /*Suivant l'architecture de la machine*/
             if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
                 return p[0] << 16 | p[1] << 8 | p[2];
             else
@@ -206,19 +217,50 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y) {
 
         case 4:
             return *(Uint32 *) p;
-
-            /*Ne devrait pas arriver, mais évite les erreurs*/
         default:
             return 0;
     }
 }
 
-void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b) {
+void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a) {
     Uint32 pixel = getPixel(surface, x, y);
-    SDL_LockSurface(surface);
-    SDL_GetRGB(pixel, surface->format, r, g, b);
-    printf("r:%d \ng:%d\nb:%d\n", (unsigned int) *r, (unsigned int) *g, (unsigned int) *b);
-    SDL_UnlockSurface(surface);
+    SDL_GetRGBA(pixel, surface->format, r, g, b, a);
+    printf("pixel:%d\trouge:%d\tvert:%d\tbleu:%d\ttransparence:%d\n", (unsigned int) pixel, (unsigned int) *r,
+           (unsigned int) *g, (unsigned int) *b, (unsigned int) *a);
+}
 
+void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel)
+{
+    int nbOctetsParPixel = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+    switch(nbOctetsParPixel)
+    {
+        case 1:
+            *p = pixel;
+            break;
+
+        case 2:
+            *(Uint16 *)p = pixel;
+            break;
+
+        case 3:
+            if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
+            {
+                p[0] = (pixel >> 16) & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = pixel & 0xff;
+            }
+            else
+            {
+                p[0] = pixel & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = (pixel >> 16) & 0xff;
+            }
+            break;
+
+        case 4:
+            *(Uint32 *)p = pixel;
+            break;
+    }
 }
 
