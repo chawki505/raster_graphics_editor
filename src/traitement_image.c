@@ -153,21 +153,17 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
 
     //cas creation de la spirit
     if (pSprite) {
-        /*for (int i = 0; i < pSprite->w; ++i) {
-            for (int j = 0; j < pSprite->h; ++j) {
-                printf("axe %d / %d :", i, j);
-                SDL_LockSurface(pSprite);
-                getPixelColor(pSprite, i, j, &r, &g, &b, &a);
-                SDL_UnlockSurface(pSprite);
-            }
-        }*/
         SDL_LockSurface(pSprite);
         Uint32 pixel = SDL_MapRGBA(pSprite->format, 0, 0, 255, 255);
         SDL_GetRGBA(pixel, pSprite->format, &r, &g, &b, &a);
-        printf("pixel:%d\trouge:%d\tvert:%d\tbleu:%d\ttransparence:%d\n", (unsigned int) pixel, (unsigned int) r,
-               (unsigned int) g, (unsigned int) b, (unsigned int) a);
+        /*printf("pixel:%d\trouge:%d\tvert:%d\tbleu:%d\ttransparence:%d\n", (unsigned int) pixel, (unsigned int) r,
+               (unsigned int) g, (unsigned int) b, (unsigned int) a);*/
         for (int i = 0; i < pSprite->w; ++i) {
             for (int j = 0; j < pSprite->h; ++j) {
+                getPixelColor(pSprite,i,j,&r, &g, &b, &a);
+                Uint8 grey = (r+g+b)/3;
+                pixel = SDL_MapRGBA(pSprite->format, grey, grey, grey, grey);
+                //pixel = SDL_MapRGBA(pSprite->format, 255-r, 255-g, 255-b, a);
                 setPixelColor(pSprite,i,j,pixel);
             }
         }
@@ -225,8 +221,8 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y) {
 void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a) {
     Uint32 pixel = getPixel(surface, x, y);
     SDL_GetRGBA(pixel, surface->format, r, g, b, a);
-    printf("pixel:%d\trouge:%d\tvert:%d\tbleu:%d\ttransparence:%d\n", (unsigned int) pixel, (unsigned int) *r,
-           (unsigned int) *g, (unsigned int) *b, (unsigned int) *a);
+    /*printf("pixel:%d\trouge:%d\tvert:%d\tbleu:%d\ttransparence:%d\n", (unsigned int) pixel, (unsigned int) *r,
+           (unsigned int) *g, (unsigned int) *b, (unsigned int) *a);*/
 }
 
 void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel)
