@@ -78,3 +78,11 @@ Supprimerait cmake-build-debug/raster_graphics_editor.cbp
 /.idea/
 /cmake-build-debug/
 cmake-build-debug/
+/.vscode/
+.vscode/
+src/Makefile
+src/gestions/Makefile
+src/gestions/my_struct_images/Makefile
+src/gestions/traitement_fenetre/Makefile
+src/gestions/traitement_image/Makefile
+src/parsing/Makefile
