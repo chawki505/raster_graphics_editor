@@ -24,7 +24,7 @@ int main(int argc, char *argv[]) {
         char *ligne = lecture_commande();
         printf("==> votre commande : %s\n", ligne);
         traitement_ligne(ligne);
-
+        free(ligne);
     }
 
 }

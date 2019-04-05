@@ -26,11 +26,7 @@ void traitement_espaces_fin(char *chaine_a_traiter) {
 
 /* lecture des ligne saisi */
 char *lecture_commande() {
-    char *tmp = NULL;
-
-    tmp = readline("\nGraphics editor> ");
-
-    return tmp;
+    return readline("\nGraphics editor> ");
 }
 
 
@@ -77,6 +73,9 @@ void traitement_ligne(char *ligne_a_traiter) {
     } else {
         fprintf(stderr, "Commande : %s inconnue ou incomplete\n", tmp);
     }
+
+
+    free(tmp);
 
 
 }

@@ -112,6 +112,7 @@ void display_image(int id) {
                 }
 
                 //SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
+                free(pSprite);
 
                 //cas erreur creation du spirit
             } else {

@@ -20,12 +20,15 @@ SDL_Window *create_window() {
 
     //cas creation de la fenetre
     if (pWindow) {
+        return pWindow;
+
         //cas erreur creation de la fenetre
     } else {
         fprintf(stderr, "Erreur de création de la fenêtre: %s\n", SDL_GetError());
+        free(pWindow);
+        return NULL;
     }
 
-    return pWindow;
 }
 
 
