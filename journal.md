@@ -69,7 +69,17 @@
 ## Date : 29/03/2019
 | Prévu                                                              | Fait|
 | -------------------------------------------------------------------|:---:|
-| Diagramme de dep                                       |   |
+| Diagramme de dep                                       |  X |
+| Fonction changement couleur de l'image                              |    |
+| Fonction redimention image                              |    |
+| replace Cmake with Makefile (create Makefile)                            |    |
+
+
+
+
+## Date : 05/04/2019
+| Prévu                                                              | Fait|
+| -------------------------------------------------------------------|:---:|
 | Fonction changement couleur de l'image                              |    |
 | Fonction redimention image                              |    |
 | replace Cmake with Makefile (create Makefile)                            |    |
