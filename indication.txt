@@ -88,7 +88,7 @@ commande à generer :
             - negmod
                 > mise en négatif pixel à pixel (255−r,255−v,255−b)
             - greymod
-                > mise en gris pixel à pixel (255−r,255−v,255−b)
+                > mise en gris pixel à pixel (r+g+b/3 pour chaque couleur)
             - bwmode [rev]
                 > prend la moyenne des couleur de la région
                 > si en desous de la moyenne, noir
