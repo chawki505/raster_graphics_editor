@@ -144,7 +144,7 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
 
 /* fonction pour afficher une image dans une fenetre (version bmp) */
 void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
-    Uint8 r=0, g=0, b=0, a=0;
+    Uint8 r = 0, g = 0, b = 0, a = 0;
     SDL_Event event;
     bool quit = false;
     SDL_Surface *pSprite = NULL;
@@ -160,11 +160,11 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
                (unsigned int) g, (unsigned int) b, (unsigned int) a);*/
         for (int i = 0; i < pSprite->w; ++i) {
             for (int j = 0; j < pSprite->h; ++j) {
-                getPixelColor(pSprite,i,j,&r, &g, &b, &a);
-                Uint8 grey = (r+g+b)/3;
+                getPixelColor(pSprite, i, j, &r, &g, &b, &a);
+                Uint8 grey = (r + g + b) / 3;
                 pixel = SDL_MapRGBA(pSprite->format, grey, grey, grey, grey);
                 //pixel = SDL_MapRGBA(pSprite->format, 255-r, 255-g, 255-b, a);
-                setPixelColor(pSprite,i,j,pixel);
+                setPixelColor(pSprite, i, j, pixel);
             }
         }
 
@@ -225,29 +225,24 @@ void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8
            (unsigned int) *g, (unsigned int) *b, (unsigned int) *a);*/
 }
 
-void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel)
-{
+void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel) {
     int nbOctetsParPixel = surface->format->BytesPerPixel;
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
-    switch(nbOctetsParPixel)
-    {
+    Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+    switch (nbOctetsParPixel) {
         case 1:
             *p = pixel;
             break;
 
         case 2:
-            *(Uint16 *)p = pixel;
+            *(Uint16 *) p = pixel;
             break;
 
         case 3:
-            if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-            {
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
                 p[0] = (pixel >> 16) & 0xff;
                 p[1] = (pixel >> 8) & 0xff;
                 p[2] = pixel & 0xff;
-            }
-            else
-            {
+            } else {
                 p[0] = pixel & 0xff;
                 p[1] = (pixel >> 8) & 0xff;
                 p[2] = (pixel >> 16) & 0xff;
@@ -255,7 +250,7 @@ void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel)
             break;
 
         case 4:
-            *(Uint32 *)p = pixel;
+            *(Uint32 *) p = pixel;
             break;
     }
 }

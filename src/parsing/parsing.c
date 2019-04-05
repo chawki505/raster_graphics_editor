@@ -71,7 +71,7 @@ void traitement_ligne(char *ligne_a_traiter) {
         exit(EXIT_SUCCESS);
 
     } else {
-        fprintf(stderr, "Commande : %s inconnue ou incomplete\n", tmp);
+        fprintf(stderr, "\nCommande : %s inconnue ou incomplete\n", tmp);
     }
 
 

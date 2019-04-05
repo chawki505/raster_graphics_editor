@@ -76,3 +76,5 @@ Supprimerait cmake-build-debug/Makefile
 Supprimerait cmake-build-debug/cmake_install.cmake
 Supprimerait cmake-build-debug/raster_graphics_editor.cbp
 /.idea/
+/cmake-build-debug/
+cmake-build-debug/
