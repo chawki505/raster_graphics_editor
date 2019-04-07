@@ -20,4 +20,19 @@ void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8
 
 void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel);
 
+void greyColor(SDL_Surface *surface, int ox, int oy, int fx, int fy);
+
+void negatifColor(SDL_Surface *surface, int ox, int oy, int fx, int fy);
+
+void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy);
+
+void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t, int sr, int sg, int sb, int nr, int ng, int nb);
+
+void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int ng, int nb);
+
+void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nx, int ny);
+
+
+
+
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

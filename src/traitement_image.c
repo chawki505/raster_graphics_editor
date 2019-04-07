@@ -144,7 +144,6 @@ void print_image_other_type(SDL_Window *pWindow, char *path_image, int type_imag
 
 /* fonction pour afficher une image dans une fenetre (version bmp) */
 void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
-    Uint8 r=0, g=0, b=0, a=0;
     SDL_Event event;
     bool quit = false;
     SDL_Surface *pSprite = NULL;
@@ -153,21 +152,12 @@ void print_image_bmp_type(SDL_Window *pWindow, char *path_image) {
 
     //cas creation de la spirit
     if (pSprite) {
-        SDL_LockSurface(pSprite);
-        Uint32 pixel = SDL_MapRGBA(pSprite->format, 0, 0, 255, 255);
-        SDL_GetRGBA(pixel, pSprite->format, &r, &g, &b, &a);
-        /*printf("pixel:%d\trouge:%d\tvert:%d\tbleu:%d\ttransparence:%d\n", (unsigned int) pixel, (unsigned int) r,
-               (unsigned int) g, (unsigned int) b, (unsigned int) a);*/
-        for (int i = 0; i < pSprite->w; ++i) {
-            for (int j = 0; j < pSprite->h; ++j) {
-                getPixelColor(pSprite,i,j,&r, &g, &b, &a);
-                Uint8 grey = (r+g+b)/3;
-                pixel = SDL_MapRGBA(pSprite->format, grey, grey, grey, grey);
-                //pixel = SDL_MapRGBA(pSprite->format, 255-r, 255-g, 255-b, a);
-                setPixelColor(pSprite,i,j,pixel);
-            }
-        }
-
+        //greyColor(pSprite,0,0,pSprite->w,pSprite->h);
+        //negatifColor(pSprite,0,0,pSprite->w,pSprite->h);
+        //blackAndWhiteColor(pSprite,0,0,pSprite->w,pSprite->h);
+        //switchColor(pSprite,0,0,pSprite->w,pSprite->h,50,110,70,30,0,255,0);
+        //fillColor(pSprite,0,0,pSprite->w,pSprite->h,255,0,255);
+        copyAndPasteColor(pSprite,0,0,pSprite->w/2,pSprite->h/2,100,100);
 
         SDL_UnlockSurface(pSprite);
         SDL_Surface *surface = SDL_GetWindowSurface(pWindow);
@@ -225,29 +215,24 @@ void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8
            (unsigned int) *g, (unsigned int) *b, (unsigned int) *a);*/
 }
 
-void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel)
-{
+void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel) {
     int nbOctetsParPixel = surface->format->BytesPerPixel;
-    Uint8 *p = (Uint8 *)surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
-    switch(nbOctetsParPixel)
-    {
+    Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+    switch (nbOctetsParPixel) {
         case 1:
             *p = pixel;
             break;
 
         case 2:
-            *(Uint16 *)p = pixel;
+            *(Uint16 *) p = pixel;
             break;
 
         case 3:
-            if(SDL_BYTEORDER == SDL_BIG_ENDIAN)
-            {
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
                 p[0] = (pixel >> 16) & 0xff;
                 p[1] = (pixel >> 8) & 0xff;
                 p[2] = pixel & 0xff;
-            }
-            else
-            {
+            } else {
                 p[0] = pixel & 0xff;
                 p[1] = (pixel >> 8) & 0xff;
                 p[2] = (pixel >> 16) & 0xff;
@@ -255,8 +240,114 @@ void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel)
             break;
 
         case 4:
-            *(Uint32 *)p = pixel;
+            *(Uint32 *) p = pixel;
             break;
+    }
+}
+
+void greyColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            Uint8 grey = (r + g + b) / 3;
+            pixel = SDL_MapRGBA(surface->format, grey, grey, grey, 255);// grey mod
+            setPixelColor(surface, i, j, pixel);
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void negatifColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, 255 - r, 255 - g, 255 - b, a);
+            setPixelColor(surface, i, j, pixel);
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int dimX = fx - ox, dimY = fy - oy;
+    Uint8 saveColor[dimX][dimY];
+    int somme = 0;
+    Uint8 moyenne = 0;
+    SDL_LockSurface(surface);
+    for (int i = 0; i < dimX; ++i) {
+        for (int j = 0; j < dimY; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            Uint8 grey = (r + g + b) / 3;
+            saveColor[i][j] = grey;
+            somme = somme + grey;
+        }
+    }
+    moyenne = somme / (dimX * dimY);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            if (saveColor[i - ox][j - oy] <= moyenne) {
+                pixel = SDL_MapRGBA(surface->format, 0, 0, 0, 255);
+                setPixelColor(surface, i, j, pixel);
+            } else {
+                pixel = SDL_MapRGBA(surface->format, 255, 255, 255, 255);
+                setPixelColor(surface, i, j, pixel);
+            }
+
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t,
+                int sr, int sg, int sb, int nr, int ng, int nb) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            if (sr - t <= r && r <= sr + t
+                && sg - t <= g && g <= sg + t
+                && sb - t <= b && b <= sb + t) {
+                pixel = SDL_MapRGBA(surface->format, nr, ng, nb, 255);
+                setPixelColor(surface, i, j, pixel);
+            }
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int ng, int nb) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, nr, ng, nb, 255);
+            setPixelColor(surface, i, j, pixel);
+        }
+    }
+}
+
+void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nx, int ny) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
+            setPixelColor(surface, i+nx, j+ny, pixel);
+        }
     }
 }
 
