@@ -112,7 +112,7 @@ void display_image(int id) {
                 }
 
                 //SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
-                free(pSprite);
+                //free(pSprite);
 
                 //cas erreur creation du spirit
             } else {
@@ -228,6 +228,236 @@ void rotation_image(int id) {
         SDL_UpdateWindowSurface(pWindow);
     }
 
-    free(pSprite);
+    //free(pSprite);
     SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
+}
+
+Uint32 getPixel(SDL_Surface *surface, int x, int y) {
+    int nbOctetsParPixel = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+    switch (nbOctetsParPixel) {
+        case 1:
+            return *p;
+
+        case 2:
+            return *(Uint16 *) p;
+
+        case 3:
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
+                return p[0] << 16 | p[1] << 8 | p[2];
+            else
+                return p[0] | p[1] << 8 | p[2] << 16;
+
+        case 4:
+            return *(Uint32 *) p;
+        default:
+            return 0;
+    }
+}
+
+void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a) {
+    Uint32 pixel = getPixel(surface, x, y);
+    SDL_GetRGBA(pixel, surface->format, r, g, b, a);
+}
+
+void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel) {
+    int nbOctetsParPixel = surface->format->BytesPerPixel;
+    Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+    switch (nbOctetsParPixel) {
+        case 1:
+            *p = pixel;
+            break;
+
+        case 2:
+            *(Uint16 *) p = pixel;
+            break;
+
+        case 3:
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+                p[0] = (pixel >> 16) & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = pixel & 0xff;
+            } else {
+                p[0] = pixel & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = (pixel >> 16) & 0xff;
+            }
+            break;
+
+        case 4:
+            *(Uint32 *) p = pixel;
+            break;
+    }
+}
+
+void greyColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            Uint8 grey = (r + g + b) / 3;
+            pixel = SDL_MapRGBA(surface->format, grey, grey, grey, 255);// grey mod
+            setPixelColor(surface, i, j, pixel);
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void negatifColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, 255 - r, 255 - g, 255 - b, a);
+            setPixelColor(surface, i, j, pixel);
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int dimX = fx - ox, dimY = fy - oy;
+    Uint8 saveColor[dimX][dimY];
+    int somme = 0;
+    Uint8 moyenne = 0;
+    SDL_LockSurface(surface);
+    for (int i = 0; i < dimX; ++i) {
+        for (int j = 0; j < dimY; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            Uint8 grey = (r + g + b) / 3;
+            saveColor[i][j] = grey;
+            somme = somme + grey;
+        }
+    }
+    moyenne = somme / (dimX * dimY);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            if (saveColor[i - ox][j - oy] <= moyenne) {
+                pixel = SDL_MapRGBA(surface->format, 0, 0, 0, 255);
+                setPixelColor(surface, i, j, pixel);
+            } else {
+                pixel = SDL_MapRGBA(surface->format, 255, 255, 255, 255);
+                setPixelColor(surface, i, j, pixel);
+            }
+
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t,
+                 int sr, int sg, int sb, int nr, int ng, int nb) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            if (sr - t <= r && r <= sr + t
+                && sg - t <= g && g <= sg + t
+                && sb - t <= b && b <= sb + t) {
+                pixel = SDL_MapRGBA(surface->format, nr, ng, nb, 255);
+                setPixelColor(surface, i, j, pixel);
+            }
+        }
+    }
+    SDL_UnlockSurface(surface);
+}
+
+void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int ng, int nb) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, nr, ng, nb, 255);
+            setPixelColor(surface, i, j, pixel);
+        }
+    }
+}
+
+void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nx, int ny) {
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    SDL_LockSurface(surface);
+    for (int i = ox; i < fx; ++i) {
+        for (int j = oy; j < fy; ++j) {
+            getPixelColor(surface, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
+            setPixelColor(surface, i+nx, j+ny, pixel);
+        }
+    }
+}
+
+void selectRegion(int id){
+    structImage *image = get_image(id);
+    int ox,oy,fx,fy;
+    printf("Saisir le point x d'origine :");
+    scanf("%d",&ox);
+    printf("Saisir le point y d'origine :");
+    scanf("%d",&oy);
+    printf("Saisir le point x de fin :");
+    scanf("%d",&fx);
+    printf("Saisir le point y de fin :");
+    scanf("%d",&fy);
+    char *ligne="";
+    char *tmp=NULL;
+    do{
+        if(strlen(ligne)==0){
+            printf("Initialisation");
+        }else if(strncmp(tmp, "cut", 3) == 0){
+           fillColor(image->sprite,ox,oy,fx,fy,0,0,0);
+        }else if(strncmp(tmp, "fill", 4) == 0){
+            int r,g,b;
+            printf("niveau de rouge [0-255] :");
+            scanf("%d",&r);
+            printf("niveau de vert [0-255] :");
+            scanf("%d",&g);
+            printf("niveau de bleu [0-255] :");
+            scanf("%d",&b);
+            fillColor(image->sprite,ox,oy,fx,fy,r,g,b);
+        }else if(strncmp(tmp, "copy", 4) == 0){
+            int nx,ny;
+            printf("Saisir le point x d'origine de la copie:");
+            scanf("%d",&nx);
+            printf("Saisir le point y d'origine de la copie:");
+            scanf("%d",&ny);
+            copyAndPasteColor(image->sprite,ox,oy,fx,fy,nx,ny);
+        }else if(strncmp(tmp, "grey", 4) == 0){
+            greyColor(image->sprite,ox,oy,fx,fy);
+        }else if(strncmp(tmp, "bw", 2) == 0){
+            blackAndWhiteColor(image->sprite,ox,oy,fx,fy);
+        }else if(strncmp(tmp, "switch", 6) == 0) {
+            int sr, sg, sb, nr, ng, nb, t;
+            printf("niveau de rouge recherché [0-255] :");
+            scanf("%d", &sr);
+            printf("niveau de vert recherché [0-255] :");
+            scanf("%d", &sg);
+            printf("niveau de bleu recherché [0-255] :");
+            scanf("%d", &sb);
+            printf("niveau de tolérence:");
+            scanf("%d", &t);
+            printf("niveau de rouge modifié [0-255] :");
+            scanf("%d", &nr);
+            printf("niveau de vert modifié [0-255] :");
+            scanf("%d", &ng);
+            printf("niveau de bleu modifié [0-255] :");
+            scanf("%d", &nb);
+            switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+        }else if(strncmp(tmp, "neg", 3) == 0){
+            negatifColor(image->sprite,ox,oy,fx,fy);
+        }else{
+            printf("Commande inconnue");
+        }
+        display_image(id);
+        ligne = readline("\nGraphics editor>region>");
+        tmp = strdup(ligne);
+    }while(strncmp(tmp, "exit", 4) != 0);
 }

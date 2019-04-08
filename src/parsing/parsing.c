@@ -64,6 +64,9 @@ void traitement_ligne(char *ligne_a_traiter) {
 
         save_image(atoi(tmp + 5));
 
+    } else if (strncmp(tmp, "select", 6) == 0) {
+        selectRegion(atoi(tmp + 7));
+
     } else if (strncmp(tmp, "clear", 5) == 0) {
         clear();
     } else if (strncmp(tmp, "exit", 4) == 0) {
