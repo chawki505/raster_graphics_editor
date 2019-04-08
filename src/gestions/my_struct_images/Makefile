@@ -5,7 +5,7 @@ SOURCES = my_struct_images.c
 
 OBJS = $(SOURCES:%.c=%.o)
 
-INCLUDES =`pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
+INCLUDES =  `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
 
 all : libmy_struct_images.a
 

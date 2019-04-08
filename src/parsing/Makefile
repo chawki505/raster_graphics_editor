@@ -5,7 +5,7 @@ SOURCES = parsing.c
 
 OBJS = $(SOURCES:%.c=%.o)
 
-INCLUDES = -I ../ `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
+INCLUDES =`pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
 
 all : libparsing.a
 
@@ -16,7 +16,7 @@ libparsing.a : $(OBJS)
 %.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $<
 
-parsing.o : parsing.h ../gestions/traitement_image/traitement_image.h
+parsing.o : ../includes.h ../gestions/traitement_image/traitement_image.h parsing.h
 
 clean :
 	rm -f libparsing.a $(OBJS)

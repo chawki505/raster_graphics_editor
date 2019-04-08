@@ -2,7 +2,6 @@
 // Created by chawki on 15/02/19.
 //
 
-
 #include "../traitement_fenetre/traitement_fenetre.h"
 #include "../my_struct_images/my_struct_images.h"
 
@@ -30,7 +29,6 @@ char *get_format_image(char *image_name) {
     return (format + 1);
 }
 
-
 /* fonction pour ouvrire une image et l'afficher dans une fenetre*/
 void load_image(char *path_image) {
 
@@ -52,7 +50,6 @@ void load_image(char *path_image) {
 
         if (strncmp(format, "bmp", 3) == 0) {
             myimage = createStruct_bmp_format(path_image, nom_image, format);
-
         } else if (strncmp(format, "jpg", 3) == 0) {
             myimage = createStruct_other_format(path_image, nom_image, format, IMG_INIT_JPG);
         } else if (strncmp(format, "png", 3) == 0) {
@@ -67,7 +64,6 @@ void load_image(char *path_image) {
         fprintf(stderr, "format image non correcte\n");
     }
 }
-
 
 /* print image in window if exist*/
 void display_image(int id) {
@@ -86,7 +82,6 @@ void display_image(int id) {
             SDL_Event event;
             bool quit = false;
             SDL_Surface *pSprite = image->sprite;
-
 
             if (pSprite) {
 
@@ -125,7 +120,6 @@ void display_image(int id) {
     }
 }
 
-
 /* fonction pour sauvguarder une image au format png */
 void save_image(int id) {
     structImage *image = get_image(id);
@@ -143,14 +137,12 @@ void rotation_image(int id) {
 
     structImage *image = get_image(id);
 
-
     if (image == NULL) {
         perror("Aucune image chargé pour la rotation\n");
         return;
     }
 
     SDL_Surface *pSprite = image->sprite;
-
 
     SDL_Event event;
 
@@ -175,8 +167,8 @@ void rotation_image(int id) {
         case 360:
         case -360:
             w_img = pSprite->w * 600 / pSprite->h;
-            h_img = 600;//we define window's width always be 600px
-            box = (SDL_Rect) {0, 0, w_img, h_img};// SDL_Point point={pSprite->w/2, pSprite->h/2};
+            h_img = 600;                          //we define window's width always be 600px
+            box = (SDL_Rect) {0, 0, w_img, h_img}; // SDL_Point point={pSprite->w/2, pSprite->h/2};
             point = (SDL_Point) {w_img / 2, h_img / 2};
             break;
 
@@ -185,11 +177,11 @@ void rotation_image(int id) {
         case -270:
         case 270:
             h_img = pSprite->w * 600 / pSprite->h;
-            w_img = 600;//we define window's width always be 600px
+            w_img = 600; //we define window's width always be 600px
             box = (SDL_Rect) {h_img / 2 - (h_img - w_img / 2),
                               -h_img / 2 + (h_img - w_img / 2),
                               h_img,
-                              w_img};// SDL_Point point={pSprite->w/2, pSprite->h/2};
+                              w_img}; // SDL_Point point={pSprite->w/2, pSprite->h/2};
             point = (SDL_Point) {h_img / 2,
                                  w_img / 2};
             break;
@@ -198,15 +190,13 @@ void rotation_image(int id) {
             return;
     }
 
-
     SDL_Window *pWindow = SDL_CreateWindow(
             "Image",
             SDL_WINDOWPOS_UNDEFINED,
             SDL_WINDOWPOS_UNDEFINED,
             w_img,
             h_img,
-            SDL_WINDOW_OPENGL
-    );
+            SDL_WINDOW_OPENGL);
 
     //cas creation de la spirit
     while (!quit) {

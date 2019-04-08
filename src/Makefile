@@ -7,16 +7,14 @@ SOURCES = main.c
 
 OBJS = $(SOURCES:%.c=%.o)
 
-INCLUDES = `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
+INCLUDES = I . I parsing I gestions/my_struct_images I gestions/traitement_fenetre I gestions/traitement_image `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
 
 LIBS = `pkg-config sdl2 --libs` `pkg-config SDL2_image --libs` -lreadline
-
 
 PARSINGLIB = parsing/libparsing.a
 MYSTRUCTIMAGESLIB = gestions/my_struct_images/libmy_struct_images.a
 TRAITEMENTFENETRELIB = gestions/traitement_fenetre/libtraitement_fenetre.a
 TRAITEMENTIMAGELIB = gestions/traitement_image/libtraitement_image.a
-
 
 all :
 	make -C parsing
