@@ -36,4 +36,6 @@ void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int
 
 void selectRegion(int id);
 
+void drawzone(int id);
+
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

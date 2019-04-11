@@ -67,6 +67,9 @@ void traitement_ligne(char *ligne_a_traiter) {
     } else if (strncmp(tmp, "select", 6) == 0) {
         selectRegion(atoi(tmp + 7));
 
+    }else if (strncmp(tmp, "drawzone", 8) == 0){
+        drawzone(atoi(tmp+9));
+
     } else if (strncmp(tmp, "clear", 5) == 0) {
         clear();
     } else if (strncmp(tmp, "exit", 4) == 0) {

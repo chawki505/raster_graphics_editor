@@ -371,12 +371,10 @@ void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t,
 }
 
 void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int ng, int nb) {
-    Uint8 r = 0, g = 0, b = 0, a = 0;
     Uint32 pixel = 0;
     SDL_LockSurface(surface);
     for (int i = ox; i < fx; ++i) {
         for (int j = oy; j < fy; ++j) {
-            getPixelColor(surface, i, j, &r, &g, &b, &a);
             pixel = SDL_MapRGBA(surface->format, nr, ng, nb, 255);
             setPixelColor(surface, i, j, pixel);
         }
@@ -402,7 +400,6 @@ void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int
     }
     for (int i = ox; i < fx; ++i) {
         for (int j = oy; j < fy; ++j) {
-            getPixelColor(surface, i, j, &r, &g, &b, &a);
             pixel = SDL_MapRGBA(surface->format, saveColor[i-ox][j-oy][0], saveColor[i-ox][j-oy][1], saveColor[i-ox][j-oy][2], 255);
             setPixelColor(surface, i+nx, j+ny, pixel);
         }
@@ -474,4 +471,49 @@ void selectRegion(int id){
         ligne = readline("\nGraphics editor>region>");
         tmp = strdup(ligne);
     }while(strncmp(tmp, "exit", 4) != 0);
+}
+
+void drawzone(int id){
+    structImage *image = get_image(id);
+    int ox,oy,fx,fy;
+    printf("Saisir le point x d'origine :");
+    scanf("%d",&ox);
+    printf("Saisir le point y d'origine :");
+    scanf("%d",&oy);
+    printf("Saisir le point x de fin :");
+    scanf("%d",&fx);
+    printf("Saisir le point y de fin :");
+    scanf("%d",&fy);
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int dimX = fx-ox;
+    int dimY = fy-oy;
+    Uint8 saveColor[dimX][dimY][3];
+
+    SDL_LockSurface(image->sprite);
+    for (int i = 0; i < dimX; ++i) {
+        for (int j = 0; j < dimY; ++j) {
+            getPixelColor(image->sprite, i+ox, j+oy, &r, &g, &b, &a);
+            saveColor[i][j][0] = r;
+            saveColor[i][j][1] = g;
+            saveColor[i][j][2] = b;
+
+        }
+
+
+    }
+    SDL_UnlockSurface(image->sprite);
+
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, dimX, dimY, 32, 0, 0, 0, 0);
+    SDL_LockSurface(surface);
+    for (int i = 0; i < dimX; ++i) {
+        for (int j = 0; j < dimY; ++j) {
+            pixel = SDL_MapRGBA(surface->format, saveColor[i][j][0], saveColor[i][j][1], saveColor[i][j][2], 255);
+            setPixelColor(surface, i, j, pixel);
+        }
+    }
+    SDL_UnlockSurface(surface);
+    SDL_FreeSurface(image->sprite);
+    image->sprite=surface;
+
 }
