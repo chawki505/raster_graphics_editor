@@ -54,7 +54,6 @@ void traitement_ligne(char *ligne_a_traiter) {
         load_image(tmp + 5);
 
     } else if (strncmp(tmp, "display", 7) == 0) {
-
         display_image((int) strtol(tmp + 8, NULL, 10));
 
     } else if (strncmp(tmp, "rotation", 8) == 0) {
@@ -67,7 +66,6 @@ void traitement_ligne(char *ligne_a_traiter) {
         symh_image((int) strtol(tmp + 5, NULL, 10));
 
     } else if (strncmp(tmp, "save", 4) == 0) {
-
         save_image(atoi(tmp + 5));
 
     } else if (strncmp(tmp, "select", 6) == 0) {
