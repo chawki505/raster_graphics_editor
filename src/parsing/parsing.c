@@ -67,10 +67,19 @@ void traitement_ligne(char *ligne_a_traiter) {
     } else if (strncmp(tmp, "select", 6) == 0) {
         selectRegion(atoi(tmp + 7));
 
-    }else if (strncmp(tmp, "drawzone", 8) == 0){
-        drawzone(atoi(tmp+9));
+    } else if (strncmp(tmp, "drawzone", 8) == 0) {
+        drawzone(atoi(tmp + 9));
 
-    } else if (strncmp(tmp, "clear", 5) == 0) {
+    } else if (strncmp(tmp, "rotate", 6) == 0) {
+        int r;
+        printf("nb de rotation: ");
+        scanf("%d", &r);
+        while (r > 0) {
+            rotation(atoi(tmp + 7));
+            r = r - 1;
+        }
+
+    }else if (strncmp(tmp, "clear", 5) == 0) {
         clear();
     } else if (strncmp(tmp, "exit", 4) == 0) {
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).

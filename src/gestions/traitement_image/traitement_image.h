@@ -38,4 +38,9 @@ void selectRegion(int id);
 
 void drawzone(int id);
 
+void rotation(int id);
+
+
+
+
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H
