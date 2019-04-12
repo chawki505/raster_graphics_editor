@@ -137,99 +137,52 @@ void save_image(int id) {
     }
 }
 
-//TODO: a modifier !
-/* fonction pour la rotation de l'image par un multiple de 90 */
-void rotation_image(int id) {
-
+void symv_image(int id){
     structImage *image = get_image(id);
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int w = image->sprite->w;
+    int h= image->sprite->h;
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+    SDL_LockSurface(image->sprite);
+    SDL_LockSurface(surface);
+    for (int i = 0; i < w; ++i) {
+        for (int j = 0; j < h; ++j) {
+            getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
+            setPixelColor(surface, i, h-j-1, pixel);
 
-
-    if (image == NULL) {
-        perror("Aucune image chargé pour la rotation\n");
-        return;
-    }
-
-    SDL_Surface *pSprite = image->sprite;
-
-
-    SDL_Event event;
-
-    bool quit = false;
-
-    SDL_Renderer *renderer = NULL;
-    SDL_Texture *t = NULL;
-
-    int w_img = 0;
-    int h_img = 0;
-
-    char *tmp = readline("\nSaisir l'angle de rotation:");
-
-    int angle = (int) strtol(tmp, NULL, 10);
-
-    SDL_Rect box;
-    SDL_Point point;
-
-    switch (angle) {
-        case -180:
-        case 180:
-        case 360:
-        case -360:
-            w_img = pSprite->w * 600 / pSprite->h;
-            h_img = 600;//we define window's width always be 600px
-            box = (SDL_Rect) {0, 0, w_img, h_img};// SDL_Point point={pSprite->w/2, pSprite->h/2};
-            point = (SDL_Point) {w_img / 2, h_img / 2};
-            break;
-
-        case -90:
-        case 90:
-        case -270:
-        case 270:
-            h_img = pSprite->w * 600 / pSprite->h;
-            w_img = 600;//we define window's width always be 600px
-            box = (SDL_Rect) {h_img / 2 - (h_img - w_img / 2),
-                              -h_img / 2 + (h_img - w_img / 2),
-                              h_img,
-                              w_img};// SDL_Point point={pSprite->w/2, pSprite->h/2};
-            point = (SDL_Point) {h_img / 2,
-                                 w_img / 2};
-            break;
-        default:
-            printf("erreur d'angle\n");
-            return;
-    }
-
-
-    SDL_Window *pWindow = SDL_CreateWindow(
-            "Image",
-            SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED,
-            w_img,
-            h_img,
-            SDL_WINDOW_OPENGL
-    );
-
-    //cas creation de la spirit
-    while (!quit) {
-
-        SDL_WaitEvent(&event);
-        switch (event.type) {
-            case SDL_QUIT:
-                quit = true;
-                break;
         }
-
-        renderer = SDL_CreateRenderer(pWindow, -1, 0);
-
-        t = SDL_CreateTextureFromSurface(renderer, pSprite);
-
-        SDL_RenderCopyEx(renderer, t, NULL, &box, angle, &point, SDL_FLIP_NONE);
-
-        SDL_RenderPresent(renderer);
-        SDL_UpdateWindowSurface(pWindow);
     }
+    SDL_UnlockSurface(surface);
+    SDL_UnlockSurface(image->sprite);
 
-    //free(pSprite);
-    SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
+    SDL_FreeSurface(image->sprite);
+    image->sprite=surface;
+}
+
+void symh_image(int id){
+    structImage *image = get_image(id);
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int w = image->sprite->w;
+    int h= image->sprite->h;
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+    SDL_LockSurface(image->sprite);
+    SDL_LockSurface(surface);
+    for (int i = 0; i < w; ++i) {
+        for (int j = 0; j < h; ++j) {
+            getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
+            setPixelColor(surface, w-i-1, j, pixel);
+
+        }
+    }
+    SDL_UnlockSurface(surface);
+    SDL_UnlockSurface(image->sprite);
+
+    SDL_FreeSurface(image->sprite);
+    image->sprite=surface;
 }
 
 Uint32 getPixel(SDL_Surface *surface, int x, int y) {
@@ -472,7 +425,37 @@ void selectRegion(int id){
         tmp = strdup(ligne);
     }while(strncmp(tmp, "exit", 4) != 0);
 }
+void rotation_image(int id){
+    structImage *image = get_image(id);
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int w = image->sprite->w;
+    int h= image->sprite->h;
+    Uint8 saveColor[w][h][3];
+    SDL_LockSurface(image->sprite);
+    for (int i = 0; i < w; ++i) {
+        for (int j = 0; j < h; ++j) {
+            getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
+            saveColor[i][j][0] = r;
+            saveColor[i][j][1] = g;
+            saveColor[i][j][2] = b;
 
+        }
+    }
+    SDL_UnlockSurface(image->sprite);
+
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, h, w, 32, 0, 0, 0, 0);
+    SDL_LockSurface(surface);
+    for (int i = 0; i < w; ++i) {
+        for (int j = 0; j < h; ++j) {
+            pixel = SDL_MapRGBA(surface->format, saveColor[i][j][0], saveColor[i][j][1], saveColor[i][j][2], 255);
+            setPixelColor(surface, j, w-i-1, pixel);
+        }
+    }
+    SDL_UnlockSurface(surface);
+    SDL_FreeSurface(image->sprite);
+    image->sprite=surface;
+}
 void drawzone(int id){
     structImage *image = get_image(id);
     int ox,oy,fx,fy;

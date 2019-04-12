@@ -38,4 +38,8 @@ void selectRegion(int id);
 
 void drawzone(int id);
 
+void symh_image(int id);
+
+void symv_image(int id);
+
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H
