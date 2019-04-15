@@ -329,7 +329,7 @@ void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     SDL_LockSurface(surface);
     for (int i = 0; i < dimX; ++i) {
         for (int j = 0; j < dimY; ++j) {
-            getPixelColor(surface, i+ox, j+oy, &r, &g, &b, &a);
+            getPixelColor(surface, i + ox, j + oy, &r, &g, &b, &a);
             Uint8 grey = (r + g + b) / 3;
             saveColor[i][j] = grey;
             somme = somme + grey;
@@ -383,62 +383,62 @@ void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int
 }
 
 void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nx, int ny) {
-    int dimX = fx-ox;
-    int dimY = fy-oy;
+    int dimX = fx - ox;
+    int dimY = fy - oy;
     Uint32 saveColor[dimX][dimY];
     SDL_LockSurface(surface);
     for (int i = 0; i < dimX; ++i) {
         for (int j = 0; j < dimY; ++j) {
-            saveColor[i][j] = getPixel(surface, i+ox, j+oy);
+            saveColor[i][j] = getPixel(surface, i + ox, j + oy);
         }
     }
     for (int i = ox; i < fx; ++i) {
         for (int j = oy; j < fy; ++j) {
-            setPixelColor(surface, i+nx, j+ny, saveColor[i][j]);
+            setPixelColor(surface, i + nx, j + ny, saveColor[i][j]);
         }
     }
     SDL_UnlockSurface(surface);
 }
 
-void selectRegion(int id){
+void selectRegion(int id) {
     structImage *image = get_image(id);
-    int ox,oy,fx,fy;
+    int ox, oy, fx, fy;
     printf("Saisir le point x d'origine :");
-    scanf("%d",&ox);
+    scanf("%d", &ox);
     printf("Saisir le point y d'origine :");
-    scanf("%d",&oy);
+    scanf("%d", &oy);
     printf("Saisir le point x de fin :");
-    scanf("%d",&fx);
+    scanf("%d", &fx);
     printf("Saisir le point y de fin :");
-    scanf("%d",&fy);
-    char *ligne="";
-    char *tmp=NULL;
-    do{
-        if(strlen(ligne)==0){
+    scanf("%d", &fy);
+    char *ligne = "";
+    char *tmp = NULL;
+    do {
+        if (strlen(ligne) == 0) {
             printf("Initialisation");
-        }else if(strncmp(tmp, "cut", 3) == 0){
-           fillColor(image->sprite,ox,oy,fx,fy,0,0,0);
-        }else if(strncmp(tmp, "fill", 4) == 0){
-            int r,g,b;
+        } else if (strncmp(tmp, "cut", 3) == 0) {
+            fillColor(image->sprite, ox, oy, fx, fy, 0, 0, 0);
+        } else if (strncmp(tmp, "fill", 4) == 0) {
+            int r, g, b;
             printf("niveau de rouge [0-255] :");
-            scanf("%d",&r);
+            scanf("%d", &r);
             printf("niveau de vert [0-255] :");
-            scanf("%d",&g);
+            scanf("%d", &g);
             printf("niveau de bleu [0-255] :");
-            scanf("%d",&b);
-            fillColor(image->sprite,ox,oy,fx,fy,r,g,b);
-        }else if(strncmp(tmp, "copy", 4) == 0){
-            int nx,ny;
+            scanf("%d", &b);
+            fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
+        } else if (strncmp(tmp, "copy", 4) == 0) {
+            int nx, ny;
             printf("Saisir le point x d'origine de la copie:");
-            scanf("%d",&nx);
+            scanf("%d", &nx);
             printf("Saisir le point y d'origine de la copie:");
-            scanf("%d",&ny);
-            copyAndPasteColor(image->sprite,ox,oy,fx,fy,nx,ny);
-        }else if(strncmp(tmp, "grey", 4) == 0){
-            greyColor(image->sprite,ox,oy,fx,fy);
-        }else if(strncmp(tmp, "bw", 2) == 0){
-            blackAndWhiteColor(image->sprite,ox,oy,fx,fy);
-        }else if(strncmp(tmp, "switch", 6) == 0) {
+            scanf("%d", &ny);
+            copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
+        } else if (strncmp(tmp, "grey", 4) == 0) {
+            greyColor(image->sprite, ox, oy, fx, fy);
+        } else if (strncmp(tmp, "bw", 2) == 0) {
+            blackAndWhiteColor(image->sprite, ox, oy, fx, fy);
+        } else if (strncmp(tmp, "switch", 6) == 0) {
             int sr, sg, sb, nr, ng, nb, t;
             printf("niveau de rouge recherché [0-255] :");
             scanf("%d", &sr);
@@ -455,63 +455,63 @@ void selectRegion(int id){
             printf("niveau de bleu modifié [0-255] :");
             scanf("%d", &nb);
             switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
-        }else if(strncmp(tmp, "neg", 3) == 0){
-            negatifColor(image->sprite,ox,oy,fx,fy);
-        }else{
+        } else if (strncmp(tmp, "neg", 3) == 0) {
+            negatifColor(image->sprite, ox, oy, fx, fy);
+        } else {
             printf("Commande inconnue");
         }
         display_image(id);
         ligne = readline("\nGraphics editor>region>");
         tmp = strdup(ligne);
-    }while(strncmp(tmp, "exit", 4) != 0);
+    } while (strncmp(tmp, "exit", 4) != 0);
 }
 
-void drawzone(int id){
+void drawzone(int id) {
     structImage *image = get_image(id);
-    int ox,oy,fx,fy;
+    int ox, oy, fx, fy;
     printf("Saisir le point x d'origine :");
-    scanf("%d",&ox);
+    scanf("%d", &ox);
     printf("Saisir le point y d'origine :");
-    scanf("%d",&oy);
+    scanf("%d", &oy);
     printf("Saisir le point x de fin :");
-    scanf("%d",&fx);
+    scanf("%d", &fx);
     printf("Saisir le point y de fin :");
-    scanf("%d",&fy);
+    scanf("%d", &fy);
     Uint32 pixel = 0;
-    int dimX = fx-ox;
-    int dimY = fy-oy;
+    int dimX = fx - ox;
+    int dimY = fy - oy;
     SDL_Surface *surface = SDL_CreateRGBSurface(0, dimX, dimY, 32, 0, 0, 0, 0);
     SDL_LockSurface(surface);
     SDL_LockSurface(image->sprite);
     for (int i = 0; i < dimX; ++i) {
         for (int j = 0; j < dimY; ++j) {
-            pixel = getPixel(image->sprite, i+ox, j+oy);
+            pixel = getPixel(image->sprite, i + ox, j + oy);
             setPixelColor(surface, i, j, pixel);
         }
     }
     SDL_UnlockSurface(image->sprite);
     SDL_UnlockSurface(surface);
     SDL_FreeSurface(image->sprite);
-    image->sprite=surface;
+    image->sprite = surface;
 }
 
-void rotation(int id){
+void rotation(int id) {
     structImage *image = get_image(id);
     Uint32 pixel = 0;
     int w = image->sprite->w;
-    int h= image->sprite->h;
+    int h = image->sprite->h;
     SDL_LockSurface(image->sprite);
     SDL_Surface *surface = SDL_CreateRGBSurface(0, h, w, 32, 0, 0, 0, 0);
     SDL_LockSurface(surface);
     for (int i = 0; i < w; ++i) {
         for (int j = 0; j < h; ++j) {
             pixel = getPixel(image->sprite, i, j);
-            setPixelColor(surface, j, w-i-1, pixel);
+            setPixelColor(surface, j, w - i - 1, pixel);
         }
     }
     SDL_UnlockSurface(image->sprite);
     SDL_UnlockSurface(surface);
     SDL_FreeSurface(image->sprite);
-    image->sprite=surface;
+    image->sprite = surface;
 }
 

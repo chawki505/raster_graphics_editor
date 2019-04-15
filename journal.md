@@ -85,6 +85,17 @@
 | replace Cmake with Makefile (create Makefile)                            |    |
 
 
+## Date : 12/04/2019
+| Prévu                                                              | Fait|
+| -------------------------------------------------------------------|:---:|
+| Fonction changement couleur de l'image                              |  X  |
+| Fonction redimention image                              |    |
+| Fonction changement rotation image                              |  X  |
+| Fonction changement region image                            |  X  |
+| replace Cmake with Makefile (create Makefile)                            |  X  |
+
+
+
 
 
             
