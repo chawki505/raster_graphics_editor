@@ -48,27 +48,22 @@ void init_value_struct(char *path, char *name, char *format, structImage *myStru
 /* insertion image vers la fin*/
 void add_image(structImage *mystruc) {
 
-    int compteur = 1;
-
     if (mystruc) {
 
         structImage *liste = my_images;
 
         if (liste == NULL) {
 
-            mystruc->id = compteur;
+            mystruc->id = 1;
             my_images = mystruc;
         } else {
-
+            int compteur = 2;
             while (liste->next != NULL) {
-
                 compteur++;
                 liste = liste->next;
             }
-            if (compteur == 1) {
-                compteur++;
-            }
-
+            if (liste->id == 1)
+                compteur = 2;
             mystruc->id = compteur;
             liste->next = mystruc;
         }
@@ -86,7 +81,41 @@ structImage *get_image(int id) {
     return liste ? liste : NULL;
 }
 
-void printStruct(structImage *myStruct) {
-    printf("%d\n%s\n%s\n%s", myStruct->id, myStruct->path, myStruct->format, myStruct->name);
+void print_struct(structImage *myStruct) {
+    printf("ID:%d\t\tPATH:%s\t\tFORMAT:%s\t\tNAME:%s\n", myStruct->id, myStruct->path, myStruct->format,
+           myStruct->name);
 }
 
+void print_list_image() {
+    structImage *liste = my_images;
+
+    while (liste != NULL) {
+        print_struct(liste);
+        liste = liste->next;
+    }
+}
+
+void delete_image(int id) {
+    structImage *liste = my_images;
+    structImage *tmp = NULL;
+    while (liste->next->id != id) {
+        liste = liste->next;
+    }
+    printf("-----------------------------");
+    printf("Delete image:\n");
+    print_struct(liste->next);
+    printf("-----------------------------Done!\n");
+    tmp = liste->next;
+    liste->next = tmp->next;
+    SDL_FreeSurface(tmp->sprite);
+    free(tmp);
+    liste = liste->next;
+    while (liste != NULL) {
+        liste->id--;
+        liste = liste->next;
+    }
+    printf("-----------------------------");
+    printf("New list:\n");
+    print_list_image();
+    printf("-----------------------------");
+}

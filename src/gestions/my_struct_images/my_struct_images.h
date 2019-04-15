@@ -33,9 +33,13 @@ structImage *createStruct_other_format(char *path, char *name, char *format, int
 structImage *createStruct_bmp_format(char *path, char *name, char *format);
 
 
-void printStruct(structImage *myStruct);
+void print_struct(structImage *myStruct);
 
 void add_image(structImage *mystruc);
+
+void print_list_image();
+
+void delete_image(int id);
 
 structImage *get_image(int id);
 

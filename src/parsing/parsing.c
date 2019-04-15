@@ -4,6 +4,7 @@
 
 #include "parsing.h"
 #include "../gestions/traitement_image/traitement_image.h"
+#include "../gestions/my_struct_images/my_struct_images.h"
 
 extern void clear();
 
@@ -52,10 +53,14 @@ void traitement_ligne(char *ligne_a_traiter) {
     if (strncmp(tmp, "load", 4) == 0 && strlen(tmp) > 5) {
 
         load_image(tmp + 5);
+    } else if (strncmp(tmp, "show", 4) == 0) {
+        print_list_image();
 
     } else if (strncmp(tmp, "display", 7) == 0) {
-
         display_image((int) strtol(tmp + 8, NULL, 10));
+
+    } else if (strncmp(tmp, "delete", 6) == 0) {
+        delete_image((int) strtol(tmp + 7, NULL, 10));
 
     } else if (strncmp(tmp, "rotation", 8) == 0) {
         rotation_image((int) strtol(tmp + 9, NULL, 10));
