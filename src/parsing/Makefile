@@ -16,7 +16,7 @@ libparsing.a : $(OBJS)
 %.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $<
 
-parsing.o : ../includes.h ../gestions/traitement_image/traitement_image.h parsing.h
+parsing.o : parsing.h ../gestions/traitement_image/traitement_image.h
 
 clean :
 	rm -f libparsing.a $(OBJS)

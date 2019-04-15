@@ -2,10 +2,10 @@
 // Created by chawki on 15/02/19.
 //
 
+#include "traitement_image.h"
+
 #include "../traitement_fenetre/traitement_fenetre.h"
 #include "../my_struct_images/my_struct_images.h"
-
-#include "traitement_image.h"
 
 /* return le format de l'image passer en parametre*/
 char *get_format_image(char *image_name) {

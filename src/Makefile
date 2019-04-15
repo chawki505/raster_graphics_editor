@@ -7,7 +7,7 @@ SOURCES = main.c
 
 OBJS = $(SOURCES:%.c=%.o)
 
-INCLUDES = I . I parsing I gestions/my_struct_images I gestions/traitement_fenetre I gestions/traitement_image `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
+INCLUDES = `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
 
 LIBS = `pkg-config sdl2 --libs` `pkg-config SDL2_image --libs` -lreadline
 
@@ -20,8 +20,9 @@ all :
 	make -C parsing
 	make -C gestions
 	make $(NAME)
+	make clean
 
-$(NAME) : $(OBJS) $(PARSINGLIB) $(MYSTRUCTIMAGESLIB) $(TRAITEMENTFENETRELIB) $(TRAITEMENTIMAGELIB)
+$(NAME) : $(OBJS)  $(PARSINGLIB) $(TRAITEMENTIMAGELIB) $(TRAITEMENTFENETRELIB) $(MYSTRUCTIMAGESLIB)  
 	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
 %.o : %.c
@@ -32,4 +33,8 @@ main.o : includes.h parsing/parsing.h
 clean :
 	make -C parsing clean
 	make -C gestions clean
+	rm -f $(OBJS)
+
+fullclean :
+	make clean
 	rm -f $(NAME) $(OBJS)
