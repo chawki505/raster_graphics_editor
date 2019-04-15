@@ -16,6 +16,10 @@ void save_image(int id);
 
 void rotation_image(int id);
 
+void symh_image(int id);
+
+void symv_image(int id);
+
 Uint32 getPixel(SDL_Surface *surface, int x, int y);
 
 void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a);

@@ -60,6 +60,12 @@ void traitement_ligne(char *ligne_a_traiter) {
     } else if (strncmp(tmp, "rotation", 8) == 0) {
         rotation_image((int) strtol(tmp + 9, NULL, 10));
 
+    } else if (strncmp(tmp, "symv", 4) == 0) {
+        symv_image((int) strtol(tmp + 5, NULL, 10));
+
+    } else if (strncmp(tmp, "symh", 4) == 0) {
+        symh_image((int) strtol(tmp + 5, NULL, 10));
+
     } else if (strncmp(tmp, "save", 4) == 0) {
 
         save_image(atoi(tmp + 5));

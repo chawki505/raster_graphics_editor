@@ -222,6 +222,54 @@ void rotation_image(int id) {
     SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
 }
 
+void symv_image(int id){
+    structImage *image = get_image(id);
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int w = image->sprite->w;
+    int h= image->sprite->h;
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+    SDL_LockSurface(image->sprite);
+    SDL_LockSurface(surface);
+    for (int i = 0; i < w; ++i) {
+        for (int j = 0; j < h; ++j) {
+            getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
+            setPixelColor(surface, i, h-j-1, pixel);
+
+        }
+    }
+    SDL_UnlockSurface(surface);
+    SDL_UnlockSurface(image->sprite);
+
+    SDL_FreeSurface(image->sprite);
+    image->sprite=surface;
+}
+
+void symh_image(int id){
+    structImage *image = get_image(id);
+    Uint8 r = 0, g = 0, b = 0, a = 0;
+    Uint32 pixel = 0;
+    int w = image->sprite->w;
+    int h= image->sprite->h;
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
+    SDL_LockSurface(image->sprite);
+    SDL_LockSurface(surface);
+    for (int i = 0; i < w; ++i) {
+        for (int j = 0; j < h; ++j) {
+            getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
+            setPixelColor(surface, w-i-1, j, pixel);
+
+        }
+    }
+    SDL_UnlockSurface(surface);
+    SDL_UnlockSurface(image->sprite);
+
+    SDL_FreeSurface(image->sprite);
+    image->sprite=surface;
+}
+
 Uint32 getPixel(SDL_Surface *surface, int x, int y) {
     int nbOctetsParPixel = surface->format->BytesPerPixel;
     Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
