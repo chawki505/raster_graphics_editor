@@ -80,3 +80,5 @@ Supprimerait cmake-build-debug/raster_graphics_editor.cbp
 cmake-build-debug/
 /.vscode/
 .vscode/
+/test/graphics_test
+/src/graphics
