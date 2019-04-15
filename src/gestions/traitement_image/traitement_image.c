@@ -382,8 +382,8 @@ void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int
             saveColor[i][j] = getPixel(surface, i + ox, j + oy);
         }
     }
-    for (int i = ox; i < fx; ++i) {
-        for (int j = oy; j < fy; ++j) {
+    for (int i = 0; i < dimX; ++i) {
+        for (int j = 0; j < dimY; ++j) {
             setPixelColor(surface, i + nx, j + ny, saveColor[i][j]);
         }
     }
@@ -401,11 +401,14 @@ void selectRegion(int id) {
     scanf("%d", &fx);
     printf("Saisir le point y de fin :");
     scanf("%d", &fy);
+    if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
+        return;
+    }
     char *ligne = "";
     char *tmp = NULL;
     do {
         if (strlen(ligne) == 0) {
-            printf("Initialisation");
+
         } else if (strncmp(tmp, "cut", 3) == 0) {
             fillColor(image->sprite, ox, oy, fx, fy, 0, 0, 0);
         } else if (strncmp(tmp, "fill", 4) == 0) {
@@ -416,14 +419,20 @@ void selectRegion(int id) {
             scanf("%d", &g);
             printf("niveau de bleu [0-255] :");
             scanf("%d", &b);
-            fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
+            if (errorcolor(r, g, b) == 0) {
+                fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
+            }
         } else if (strncmp(tmp, "copy", 4) == 0) {
             int nx, ny;
             printf("Saisir le point x d'origine de la copie:");
             scanf("%d", &nx);
             printf("Saisir le point y d'origine de la copie:");
             scanf("%d", &ny);
-            copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
+            if (nx+fx>image->sprite->w||ny+fy>image->sprite->h||nx<0||ny<0){
+                perror("zone de copie non disponible");
+            } else{
+                copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
+            }
         } else if (strncmp(tmp, "grey", 4) == 0) {
             greyColor(image->sprite, ox, oy, fx, fy);
         } else if (strncmp(tmp, "bw", 2) == 0) {
@@ -444,14 +453,16 @@ void selectRegion(int id) {
             scanf("%d", &ng);
             printf("niveau de bleu modifié [0-255] :");
             scanf("%d", &nb);
-            switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+            if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0){
+                switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+            }
         } else if (strncmp(tmp, "neg", 3) == 0) {
             negatifColor(image->sprite, ox, oy, fx, fy);
         } else {
             printf("Commande inconnue");
         }
-        display_image(id);
-        ligne = readline("\nGraphics editor>region>");
+        printf("\nGraphics editor>%dx%d>%dx%d>%s",ox,oy,fx,fy,image->name);
+        ligne = readline(">");
         tmp = strdup(ligne);
     } while (strncmp(tmp, "exit", 4) != 0);
 }
@@ -503,5 +514,21 @@ void rotation(int id) {
     SDL_UnlockSurface(surface);
     SDL_FreeSurface(image->sprite);
     image->sprite = surface;
+}
+
+int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax) {
+    if (ox < 0 || oy < 0 || fx > wmax || fy > hmax) {
+        perror("Valeurs de positionnement incorrects");
+        return 1;
+    }
+    return 0;
+}
+
+int errorcolor(int r, int g, int b) {
+    if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+        perror("Valeurs de couleur incorrects");
+        return 1;
+    }
+    return 0;
 }
 
