@@ -505,3 +505,85 @@ void rotation(int id) {
     image->sprite = surface;
 }
 
+
+void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
+
+    int nbOctetsParPixel = surface->format->BytesPerPixel;
+
+    Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
+
+    switch (nbOctetsParPixel) {
+        case 1:
+            *p = pixel;
+            break;
+
+        case 2:
+            *(Uint16 *) p = pixel;
+            break;
+
+        case 3:
+            if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
+                p[0] = (pixel >> 16) & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = pixel & 0xff;
+            } else {
+                p[0] = pixel & 0xff;
+                p[1] = (pixel >> 8) & 0xff;
+                p[2] = (pixel >> 16) & 0xff;
+            }
+            break;
+
+        case 4:
+            *(Uint32 *) p = pixel;
+            break;
+    }
+}
+
+
+SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h) {
+
+    if (image && w && h) {
+
+        SDL_Surface *_ret = SDL_CreateRGBSurface(image->flags, w, h, image->format->BitsPerPixel,
+                                                 image->format->Rmask, image->format->Gmask, image->format->Bmask,
+                                                 image->format->Amask);
+
+        double _stretch_factor_x = ((double) (w) / (double) (image->w));
+        double _stretch_factor_y = ((double) (h) / (double) (image->h));
+
+        //Run across all Y pixels.
+        for (Sint32 y = 0; y < image->h; y++)
+            //Run across all X pixels.
+            for (Sint32 x = 0; x < image->w; x++)
+                //Draw _stretch_factor_y pixels for each Y pixel.
+                for (Sint32 o_y = 0; o_y < _stretch_factor_y; ++o_y)
+                    //Draw _stretch_factor_x pixels for each X pixel.
+                    for (Sint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
+
+                        setPixel(_ret,
+                                 (Sint32) (_stretch_factor_x * x) + o_x,
+                                 (Sint32) (_stretch_factor_y * y) + o_y,
+                                 getPixel(image, x, y)
+                        );
+
+
+        return _ret;
+    } else {
+        perror("Erreur resize image !\n");
+        return NULL;
+    }
+}
+
+
+void resize(int id) {
+
+    structImage *image = get_image(id);
+    SDL_Surface *new_image = resize_image(image->sprite, 300, 300);
+
+    if (new_image) {
+        SDL_FreeSurface(image->sprite);
+        image->sprite = new_image;
+    }
+
+
+}

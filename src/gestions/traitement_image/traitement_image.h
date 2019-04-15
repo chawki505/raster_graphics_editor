@@ -28,7 +28,8 @@ void negatifColor(SDL_Surface *surface, int ox, int oy, int fx, int fy);
 
 void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy);
 
-void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t, int sr, int sg, int sb, int nr, int ng, int nb);
+void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t, int sr, int sg, int sb, int nr, int ng,
+                 int nb);
 
 void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int ng, int nb);
 
@@ -40,7 +41,9 @@ void drawzone(int id);
 
 void rotation(int id);
 
+SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h);
 
+void resize(int id);
 
 
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

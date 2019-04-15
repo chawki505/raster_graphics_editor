@@ -79,6 +79,13 @@ void traitement_ligne(char *ligne_a_traiter) {
             r = r - 1;
         }
 
+
+    } else if (strncmp(tmp, "resize", 6) == 0) {
+
+
+        resize((int) strtol(tmp + 7, NULL, 10));
+
+
     } else if (strncmp(tmp, "clear", 5) == 0) {
         clear();
     } else if (strncmp(tmp, "exit", 4) == 0) {
