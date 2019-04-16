@@ -131,143 +131,82 @@ void save_image(int id) {
     }
 }
 
-//TODO: a modifier !
-/* fonction pour la rotation de l'image par un multiple de 90 */
-void rotation_image(int id) {
-
+void symv_image(int id) {
     structImage *image = get_image(id);
 
-    if (image == NULL) {
-        perror("Aucune image chargé pour la rotation\n");
-        return;
-    }
+    SDL_Surface *old_surface = image->sprite;
+    int w = old_surface->w;
+    int h = old_surface->h;
 
-    SDL_Surface *pSprite = image->sprite;
-
-    SDL_Event event;
-
-    bool quit = false;
-
-    SDL_Renderer *renderer = NULL;
-    SDL_Texture *t = NULL;
-
-    int w_img = 0;
-    int h_img = 0;
-
-    char *tmp = readline("\nSaisir l'angle de rotation:");
-
-    int angle = (int) strtol(tmp, NULL, 10);
-
-    SDL_Rect box;
-    SDL_Point point;
-
-    switch (angle) {
-        case -180:
-        case 180:
-        case 360:
-        case -360:
-            w_img = pSprite->w * 600 / pSprite->h;
-            h_img = 600;                          //we define window's width always be 600px
-            box = (SDL_Rect) {0, 0, w_img, h_img}; // SDL_Point point={pSprite->w/2, pSprite->h/2};
-            point = (SDL_Point) {w_img / 2, h_img / 2};
-            break;
-
-        case -90:
-        case 90:
-        case -270:
-        case 270:
-            h_img = pSprite->w * 600 / pSprite->h;
-            w_img = 600; //we define window's width always be 600px
-            box = (SDL_Rect) {h_img / 2 - (h_img - w_img / 2),
-                              -h_img / 2 + (h_img - w_img / 2),
-                              h_img,
-                              w_img}; // SDL_Point point={pSprite->w/2, pSprite->h/2};
-            point = (SDL_Point) {h_img / 2,
-                                 w_img / 2};
-            break;
-        default:
-            printf("erreur d'angle\n");
-            return;
-    }
-
-    SDL_Window *pWindow = SDL_CreateWindow(
-            "Image",
-            SDL_WINDOWPOS_UNDEFINED,
-            SDL_WINDOWPOS_UNDEFINED,
-            w_img,
-            h_img,
-            SDL_WINDOW_OPENGL);
-
-    //cas creation de la spirit
-    while (!quit) {
-
-        SDL_WaitEvent(&event);
-        switch (event.type) {
-            case SDL_QUIT:
-                quit = true;
-                break;
-        }
-
-        renderer = SDL_CreateRenderer(pWindow, -1, 0);
-
-        t = SDL_CreateTextureFromSurface(renderer, pSprite);
-
-        SDL_RenderCopyEx(renderer, t, NULL, &box, angle, &point, SDL_FLIP_NONE);
-
-        SDL_RenderPresent(renderer);
-        SDL_UpdateWindowSurface(pWindow);
-    }
-
-    //free(pSprite);
-    SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
-}
-
-void symv_image(int id){
-    structImage *image = get_image(id);
     Uint8 r = 0, g = 0, b = 0, a = 0;
     Uint32 pixel = 0;
-    int w = image->sprite->w;
-    int h= image->sprite->h;
-    SDL_Surface *surface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
-    SDL_LockSurface(image->sprite);
+
+    SDL_Surface *surface = SDL_CreateRGBSurface(0,
+                                                w,
+                                                h,
+                                                32,
+                                                old_surface->format->Rmask,
+                                                old_surface->format->Gmask,
+                                                old_surface->format->Bmask,
+                                                old_surface->format->Amask);
+    SDL_LockSurface(old_surface);
     SDL_LockSurface(surface);
+
     for (int i = 0; i < w; ++i) {
         for (int j = 0; j < h; ++j) {
+
+
             getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
-            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
-            setPixelColor(surface, i, h-j-1, pixel);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, a);
+            setPixelColor(surface, i, h - j - 1, pixel);
 
         }
     }
-    SDL_UnlockSurface(surface);
-    SDL_UnlockSurface(image->sprite);
 
-    SDL_FreeSurface(image->sprite);
-    image->sprite=surface;
+    SDL_UnlockSurface(surface);
+    SDL_UnlockSurface(old_surface);
+
+    SDL_FreeSurface(old_surface);
+    image->sprite = surface;
 }
 
-void symh_image(int id){
+void symh_image(int id) {
     structImage *image = get_image(id);
+
+    SDL_Surface *old_surface = image->sprite;
+    int w = old_surface->w;
+    int h = old_surface->h;
+
     Uint8 r = 0, g = 0, b = 0, a = 0;
     Uint32 pixel = 0;
-    int w = image->sprite->w;
-    int h= image->sprite->h;
-    SDL_Surface *surface = SDL_CreateRGBSurface(0, w, h, 32, 0, 0, 0, 0);
-    SDL_LockSurface(image->sprite);
+
+    SDL_Surface *surface = SDL_CreateRGBSurface(0,
+                                                w,
+                                                h,
+                                                32,
+                                                old_surface->format->Rmask,
+                                                old_surface->format->Gmask,
+                                                old_surface->format->Bmask,
+                                                old_surface->format->Amask);
+    SDL_LockSurface(old_surface);
     SDL_LockSurface(surface);
+
     for (int i = 0; i < w; ++i) {
         for (int j = 0; j < h; ++j) {
+
+
             getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
-            pixel = SDL_MapRGBA(surface->format, r, g, b, 255);
-            setPixelColor(surface, w-i-1, j, pixel);
+            pixel = SDL_MapRGBA(surface->format, r, g, b, a);
+            setPixelColor(surface, w - i - 1, j, pixel);
 
         }
     }
-    SDL_UnlockSurface(surface);
-    SDL_UnlockSurface(image->sprite);
 
-    SDL_FreeSurface(image->sprite);
-    image->sprite=surface;
+    SDL_UnlockSurface(surface);
+    SDL_UnlockSurface(old_surface);
+
+    SDL_FreeSurface(old_surface);
+    image->sprite = surface;
 }
 
 Uint32 getPixel(SDL_Surface *surface, int x, int y) {
@@ -476,9 +415,9 @@ void selectRegion(int id) {
             scanf("%d", &nx);
             printf("Saisir le point y d'origine de la copie:");
             scanf("%d", &ny);
-            if (nx+fx>image->sprite->w||ny+fy>image->sprite->h||nx<0||ny<0){
+            if (nx + fx > image->sprite->w || ny + fy > image->sprite->h || nx < 0 || ny < 0) {
                 perror("zone de copie non disponible");
-            } else{
+            } else {
                 copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
             }
         } else if (strncmp(tmp, "grey", 4) == 0) {
@@ -501,7 +440,7 @@ void selectRegion(int id) {
             scanf("%d", &ng);
             printf("niveau de bleu modifié [0-255] :");
             scanf("%d", &nb);
-            if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0){
+            if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
                 switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
             }
         } else if (strncmp(tmp, "neg", 3) == 0) {
@@ -509,7 +448,7 @@ void selectRegion(int id) {
         } else {
             printf("Commande inconnue");
         }
-        printf("\nGraphics editor>%dx%d>%dx%d>%s",ox,oy,fx,fy,image->name);
+        printf("\nGraphics editor>%dx%d>%dx%d>%s", ox, oy, fx, fy, image->name);
         ligne = readline(">");
         tmp = strdup(ligne);
     } while (strncmp(tmp, "exit", 4) != 0);
@@ -529,7 +468,11 @@ void drawzone(int id) {
     Uint32 pixel = 0;
     int dimX = fx - ox;
     int dimY = fy - oy;
-    SDL_Surface *surface = SDL_CreateRGBSurface(0, dimX, dimY, 32, 0, 0, 0, 0);
+    SDL_Surface *surface = SDL_CreateRGBSurface(0, dimX, dimY, 32,
+                                                image->sprite->format->Rmask,
+                                                image->sprite->format->Gmask,
+                                                image->sprite->format->Bmask,
+                                                image->sprite->format->Amask);
     SDL_LockSurface(surface);
     SDL_LockSurface(image->sprite);
     for (int i = 0; i < dimX; ++i) {
@@ -547,10 +490,21 @@ void drawzone(int id) {
 void rotation(int id) {
     structImage *image = get_image(id);
     Uint32 pixel = 0;
-    int w = image->sprite->w;
-    int h = image->sprite->h;
-    SDL_LockSurface(image->sprite);
-    SDL_Surface *surface = SDL_CreateRGBSurface(0, h, w, 32, 0, 0, 0, 0);
+    SDL_Surface *old_surface = image->sprite;
+
+    int w = old_surface->w;
+    int h = old_surface->h;
+
+    SDL_LockSurface(old_surface);
+
+    SDL_Surface *surface = SDL_CreateRGBSurface(0,
+                                                h,
+                                                w,
+                                                32,
+                                                old_surface->format->Rmask,
+                                                old_surface->format->Gmask,
+                                                old_surface->format->Bmask,
+                                                old_surface->format->Amask);
     SDL_LockSurface(surface);
     for (int i = 0; i < w; ++i) {
         for (int j = 0; j < h; ++j) {
@@ -558,9 +512,9 @@ void rotation(int id) {
             setPixelColor(surface, j, w - i - 1, pixel);
         }
     }
-    SDL_UnlockSurface(image->sprite);
+    SDL_UnlockSurface(old_surface);
     SDL_UnlockSurface(surface);
-    SDL_FreeSurface(image->sprite);
+    SDL_FreeSurface(old_surface);
     image->sprite = surface;
 }
 

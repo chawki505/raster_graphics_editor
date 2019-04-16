@@ -112,6 +112,14 @@ void traitement_ligne(char *ligne_a_traiter) {
         else
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
 
+
+    } else if (strncmp(argumentslist[0], "delete", strlen("delete")) == 0) {
+
+        if (get_nb_args() == 2)
+            delete_image(strtol(argumentslist[1], NULL, 10));
+        else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
     } else if (strncmp(argumentslist[0], "show", strlen("show")) == 0) {
 
         print_list_image();
