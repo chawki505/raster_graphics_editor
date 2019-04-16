@@ -45,7 +45,10 @@ void drawzone(int id);
 
 void rotation(int id);
 
+SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h);
 int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax);
+
+void resize(int id, int w, int h);
 
 int errorcolor(int r, int g, int b);
 
