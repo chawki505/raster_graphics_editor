@@ -5,7 +5,61 @@
 #include "parsing.h"
 #include "../gestions/traitement_image/traitement_image.h"
 
+
+char *argumentslist[TAILLE_LIST_ARGS];
+
 extern void clear();
+
+//methode pour creer un liste des arguments de la commande donner en entrer
+void creation_liste_arguments(char *saisi_user) {
+    int compteur = 0;
+    int longueur = 0;
+    char *separateur = " ";
+
+
+    //init tab argument
+    for (int i = 0; i < TAILLE_LIST_ARGS; ++i) {
+        argumentslist[i] = NULL;
+    }
+
+    //renvoi le nombre de caractere avant le separateur espace
+    longueur = strcspn(saisi_user, separateur);
+
+    //copier le premier element comme etant la commande principale
+    argumentslist[compteur] = strndup(saisi_user, longueur);
+
+    //incrementé le compteur pour la suite
+    saisi_user = saisi_user + longueur;
+
+    compteur++;
+
+    while (strlen(saisi_user) > 0) {
+        if (saisi_user[0] == ' ') saisi_user++; //avancer si le premier caractere est un espace
+        longueur = strcspn(saisi_user, separateur); //calculer la taille du mot avant le separateur
+        argumentslist[compteur] = strndup(saisi_user, longueur); // decouper la chaine et la mettre dans le tab des args
+        saisi_user = saisi_user + longueur; //avancer la chaine de saisi
+        ++compteur;
+    }
+}
+
+//vider la memoire des arguments
+void liberation_arguments() {
+    int compteur = 0;
+    while (compteur < TAILLE_LIST_ARGS && argumentslist[compteur] != NULL) {
+        free(argumentslist[compteur]);
+        compteur++;
+    }
+}
+
+//retourne le nombre d'argument dans le tab des arguments
+int get_nb_args() {
+    int compteur = 0;
+
+    while (argumentslist[compteur] != NULL) {
+        compteur++;
+    }
+    return compteur;
+}
 
 /*supprime les espaces dans le debut de la chaine si existe*/
 void traitement_espaces_debut(char *chaine_a_traiter) {
@@ -26,7 +80,7 @@ void traitement_espaces_fin(char *chaine_a_traiter) {
 
 /* lecture des ligne saisi */
 char *lecture_commande() {
-    return readline("\nGraphics editor> ");
+    return readline("Graphics editor> ");
 }
 
 
@@ -47,57 +101,77 @@ void traitement_ligne(char *ligne_a_traiter) {
     traitement_espaces_debut(ligne_a_traiter);
     traitement_espaces_fin(ligne_a_traiter);
 
-    char *tmp = strdup(ligne_a_traiter);
-
-    if (strncmp(tmp, "load", 4) == 0 && strlen(tmp) > 5) {
-
-        load_image(tmp + 5);
-
-    } else if (strncmp(tmp, "display", 7) == 0) {
-
-        display_image((int) strtol(tmp + 8, NULL, 10));
-
-    } else if (strncmp(tmp, "rotation", 8) == 0) {
-        rotation_image((int) strtol(tmp + 9, NULL, 10));
-
-    } else if (strncmp(tmp, "save", 4) == 0) {
-
-        save_image(atoi(tmp + 5));
-
-    } else if (strncmp(tmp, "select", 6) == 0) {
-        selectRegion(atoi(tmp + 7));
-
-    } else if (strncmp(tmp, "drawzone", 8) == 0) {
-        drawzone(atoi(tmp + 9));
-
-    } else if (strncmp(tmp, "rotate", 6) == 0) {
-        int r;
-        printf("nb de rotation: ");
-        scanf("%d", &r);
-        while (r > 0) {
-            rotation(atoi(tmp + 7));
-            r = r - 1;
-        }
+    creation_liste_arguments(ligne_a_traiter);
 
 
-    } else if (strncmp(tmp, "resize", 6) == 0) {
+    if (strncmp(argumentslist[0], "load", strlen("load")) == 0) {
+
+        if (get_nb_args() == 2)
+            load_image(argumentslist[1]);
+        else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+    } else if (strncmp(argumentslist[0], "display", strlen("display")) == 0) {
+
+        if (get_nb_args() == 2)
+            display_image((int) strtol(argumentslist[1], NULL, 10));
+        else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+    } else if (strncmp(argumentslist[0], "save", strlen("save")) == 0) {
+
+        if (get_nb_args() == 2)
+            save_image(strtol(argumentslist[1], NULL, 10));
+        else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+    } else if (strncmp(argumentslist[0], "select", strlen("select")) == 0) {
+        if (get_nb_args() == 2)
+            selectRegion(strtol(argumentslist[1], NULL, 10));
+        else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+    } else if (strncmp(argumentslist[0], "drawzone", strlen("drawzone")) == 0) {
+        if (get_nb_args() == 2)
+            drawzone(strtol(argumentslist[1], NULL, 10));
+        else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+    } else if (strncmp(argumentslist[0], "rotate", strlen("rotate")) == 0) {
+
+        if (get_nb_args() == 3) {
+            int r = strtol(argumentslist[2], NULL, 10);
+            while (r > 0) {
+                rotation(strtol(argumentslist[1], NULL, 10));
+                r = r - 1;
+            }
+        } else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
 
 
-        resize((int) strtol(tmp + 7, NULL, 10));
+    } else if (strncmp(argumentslist[0], "resize", strlen("resize")) == 0) {
 
 
-    } else if (strncmp(tmp, "clear", 5) == 0) {
+        if (get_nb_args() == 4) {
+            int id_image = strtol(argumentslist[1], NULL, 10);
+            int w = strtol(argumentslist[2], NULL, 10);
+            int h = strtol(argumentslist[3], NULL, 10);
+
+            resize(id_image, w, h);
+        } else
+            fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+    } else if (strncmp(argumentslist[0], "clear", strlen("clear")) == 0) {
         clear();
-    } else if (strncmp(tmp, "exit", 4) == 0) {
+    } else if (strncmp(argumentslist[0], "exit", strlen("exit")) == 0) {
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
+        liberation_arguments();
         exit(EXIT_SUCCESS);
 
     } else {
-        fprintf(stderr, "\nCommande : %s inconnue ou incomplete\n", tmp);
+        fprintf(stderr, "Commande : %s inconnue\n", ligne_a_traiter);
     }
 
 
-    free(tmp);
-
-
+    liberation_arguments();
 }

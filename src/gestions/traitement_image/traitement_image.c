@@ -544,9 +544,9 @@ SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h) {
 
     if (image && w && h) {
 
-        SDL_Surface *_ret = SDL_CreateRGBSurface(image->flags, w, h, image->format->BitsPerPixel,
-                                                 image->format->Rmask, image->format->Gmask, image->format->Bmask,
-                                                 image->format->Amask);
+        SDL_Surface *new_image = SDL_CreateRGBSurface(image->flags, w, h, image->format->BitsPerPixel,
+                                                      image->format->Rmask, image->format->Gmask, image->format->Bmask,
+                                                      image->format->Amask);
 
         double _stretch_factor_x = ((double) (w) / (double) (image->w));
         double _stretch_factor_y = ((double) (h) / (double) (image->h));
@@ -560,14 +560,12 @@ SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h) {
                     //Draw _stretch_factor_x pixels for each X pixel.
                     for (Sint32 o_x = 0; o_x < _stretch_factor_x; ++o_x)
 
-                        setPixel(_ret,
+                        setPixel(new_image,
                                  (Sint32) (_stretch_factor_x * x) + o_x,
                                  (Sint32) (_stretch_factor_y * y) + o_y,
                                  getPixel(image, x, y)
                         );
-
-
-        return _ret;
+        return new_image;
     } else {
         perror("Erreur resize image !\n");
         return NULL;
@@ -575,14 +573,20 @@ SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h) {
 }
 
 
-void resize(int id) {
+void resize(int id, int w, int h) {
 
     structImage *image = get_image(id);
-    SDL_Surface *new_image = resize_image(image->sprite, 300, 300);
 
-    if (new_image) {
-        SDL_FreeSurface(image->sprite);
-        image->sprite = new_image;
+    if (image) {
+        SDL_Surface *new_image = resize_image(image->sprite, w, h);
+
+        if (new_image) {
+            SDL_FreeSurface(image->sprite);
+            image->sprite = new_image;
+            fprintf(stdout, "Image redimensionner avec succès !\n");
+        }
+    } else {
+        fprintf(stdout, "Échec de chargement de l'image (id non existant)\n");
     }
 
 

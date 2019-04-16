@@ -43,7 +43,7 @@ void rotation(int id);
 
 SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h);
 
-void resize(int id);
+void resize(int id, int w, int h);
 
 
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H
