@@ -7,6 +7,9 @@
 #include "../traitement_fenetre/traitement_fenetre.h"
 #include "../my_struct_images/my_struct_images.h"
 
+
+void close_all_Lwindow(LWindow *gWindows, int nb_window);
+
 /* return le format de l'image passer en parametre*/
 char *get_format_image(char *image_name) {
 
@@ -65,60 +68,6 @@ void load_image(char *path_image) {
     }
 }
 
-/* print image in window if exist*/
-void display_image(int id) {
-
-    structImage *image = get_image(id);
-
-    if (image) {
-
-        /*
-     Creatation d'une fenetre
-     */
-        SDL_Window *pWindow = create_window();
-
-        if (pWindow) {
-
-            SDL_Event event;
-            bool quit = false;
-            SDL_Surface *pSprite = image->sprite;
-
-            if (pSprite) {
-
-                while (!quit) {
-                    SDL_WaitEvent(&event);
-
-                    switch (event.type) {
-                        case SDL_QUIT:
-                            quit = true;
-                            break;
-                    }
-
-                    SDL_Surface *surface_window = SDL_GetWindowSurface(pWindow);
-
-                    int w, h;
-                    SDL_GetWindowSize(pWindow, &w, &h);
-
-                    SDL_Rect dest = {w / 2 - pSprite->w / 2, h / 2 - pSprite->h / 2, 0, 0};
-                    SDL_BlitSurface(pSprite, NULL, surface_window, &dest); // Copie du sprite
-
-                    SDL_UpdateWindowSurface(
-                            pWindow); // Mise à jour de la fenêtre pour prendre en compte la copie du sprite
-                }
-
-                //SDL_FreeSurface(pSprite); // Libération de la ressource occupée par le sprite
-                //free(pSprite);
-
-                //cas erreur creation du spirit
-            } else {
-                fprintf(stdout, "Échec de chargement de l'image (%s)\n", SDL_GetError());
-            }
-            SDL_DestroyWindow(pWindow); //Liberation de la ressource occupée par la fenetre
-        }
-    } else {
-        fprintf(stdout, "Échec de chargement de l'image (id non existant)\n");
-    }
-}
 
 /* fonction pour sauvguarder une image au format png */
 void save_image(int id) {
@@ -617,6 +566,85 @@ void resize(int id, int w, int h) {
     } else {
         fprintf(stdout, "Échec de chargement de l'image (id non existant)\n");
     }
+}
 
 
+void close_all_Lwindow(LWindow *gWindows, int nb_window) {
+    //Destroy windows
+    for (int i = 0; i < nb_window; ++i) {
+        free_LWindow(&gWindows[i]);
+    }
+}
+
+
+int run_display(int *tab_id_images, int sizetab) {
+
+    //init value of tab window
+    int nb_window = sizetab;
+
+    //Our custom windows
+    LWindow gWindows[nb_window];
+
+
+    for (int i = 0; i < nb_window; ++i) {
+        init_value_LWindow(&gWindows[i]);
+    }
+
+
+    //Initialize the windows
+    for (int i = 0; i < nb_window; ++i) {
+        structImage *myimage = get_image(tab_id_images[i]);
+        if (init_LWindow(&gWindows[i], myimage->sprite))
+            fprintf(stdout, "Window %d created\n", i + 1);
+    }
+
+    //Main loop flag
+    bool quit = false;
+
+    //Event handler
+    SDL_Event event;
+
+    //While application is running
+    while (!quit) {
+
+        //Handle events on queue
+        while (SDL_PollEvent(&event) != 0) {
+            //User requests quit
+            if (event.type == SDL_QUIT) {
+                quit = true;
+            }
+
+            //Handle window events
+            for (int i = 0; i < nb_window; ++i) {
+                handleEvent_LWindow(&gWindows[i], &event);
+            }
+        }
+
+
+        //Update all windows
+        for (int i = 0; i < nb_window; ++i) {
+            render_LWindow(&gWindows[i]);
+        }
+
+        //Check all windows
+        bool allWindowsClosed = true;
+
+        for (int i = 0; i < nb_window; ++i) {
+            if (gWindows[i].mShown) {
+                allWindowsClosed = false;
+                break;
+            }
+        }
+
+        //Application closed all windows
+        if (allWindowsClosed) {
+            quit = true;
+        }
+    }
+
+    //Free resources
+    close_all_Lwindow(gWindows, nb_window);
+
+
+    return 0;
 }

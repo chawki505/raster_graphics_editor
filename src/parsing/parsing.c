@@ -9,6 +9,7 @@
 
 char *argumentslist[TAILLE_LIST_ARGS];
 
+
 extern void clear();
 
 //methode pour creer un liste des arguments de la commande donner en entrer
@@ -126,9 +127,31 @@ void traitement_ligne(char *ligne_a_traiter) {
 
     } else if (strncmp(argumentslist[0], "display", strlen("display")) == 0) {
 
-        if (get_nb_args() == 2)
-            display_image((int) strtol(argumentslist[1], NULL, 10));
-        else
+        if (get_nb_args() >= 2) {
+
+            if (get_nb_args() - 1 >= TAILLE_LIST_ARGS) {
+
+                fprintf(stderr, "vous ne pouvez pas afficher plus de %d fenetres en meme temp\n", TAILLE_LIST_ARGS);
+                return;
+            }
+
+            int tab_id_images[TAILLE_LIST_ARGS];
+            int compteur = 0;
+
+            for (int i = 1; i < get_nb_args(); ++i) {
+                int id = strtol(argumentslist[i], NULL, 10);
+                if (get_image(id) != NULL) {
+                    tab_id_images[compteur] = id;
+                    compteur++;
+                } else {
+                    fprintf(stderr, "Erreur id image: id %s n'existe pas\n ", argumentslist[i]);
+                }
+            }
+
+            run_display(tab_id_images, compteur);
+
+
+        } else
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
 
     } else if (strncmp(argumentslist[0], "save", strlen("save")) == 0) {
@@ -194,8 +217,10 @@ void traitement_ligne(char *ligne_a_traiter) {
 
     } else if (strncmp(argumentslist[0], "exit", strlen("exit")) == 0) {
 
+
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         liberation_arguments();
+        //TODO:free my_image
         exit(EXIT_SUCCESS);
 
     } else {

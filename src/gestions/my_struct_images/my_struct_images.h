@@ -8,13 +8,6 @@
 #include "../../includes.h"
 
 
-typedef enum {
-    jpg = 0,
-    png = 1,
-    bmp = 2,
-} formatImage;
-
-
 typedef struct structImage {
     int id;
     SDL_Surface *sprite;

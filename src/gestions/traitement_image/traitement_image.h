@@ -10,11 +10,7 @@
 
 void load_image(char *path_image);
 
-void display_image(int id);
-
 void save_image(int id);
-
-void rotation_image(int id);
 
 void symh_image(int id);
 
@@ -46,10 +42,13 @@ void drawzone(int id);
 void rotation(int id);
 
 SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h);
+
 int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax);
 
 void resize(int id, int w, int h);
 
 int errorcolor(int r, int g, int b);
+
+int run_display(int *tab_id_images, int sizetab);
 
 #endif //RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H

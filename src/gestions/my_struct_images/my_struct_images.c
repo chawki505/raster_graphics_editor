@@ -98,9 +98,11 @@ void print_list_image() {
 void delete_image(int id) {
     structImage *liste = my_images;
     structImage *tmp = NULL;
+
     while (liste->next->id != id) {
         liste = liste->next;
     }
+
     printf("-----------------------------");
     printf("Delete image:\n");
     print_struct(liste->next);
