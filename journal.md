@@ -97,6 +97,17 @@
 
 
 
+## Date : 21/04/2019
+| Prévu                                                              | Fait|
+| -------------------------------------------------------------------|:---:|
+| Fonction redimention image                              |  X  |
+| Fonction multiwindow                             |   X |
+| correction bug load image                              |   X |
+| update project                            |   X |
+| correction other bug                            |    |
+
+
+
 
             
 

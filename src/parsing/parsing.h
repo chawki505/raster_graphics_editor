@@ -26,4 +26,6 @@ void traitement_espaces_fin(char *chaine_a_traiter);
 
 void traitement_ligne(char *chaine_a_traiter);
 
+void display_help();
+
 #endif //RASTER_GRAPHICS_EDITOR_PARSING_H

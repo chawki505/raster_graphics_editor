@@ -19,6 +19,12 @@ structImage *createStruct_other_format(char *path, char *name, char *format, int
     init_value_struct(path, name, format, myStruct);
     myStruct->sprite = IMG_Load(path); //load other format image
 
+    if (myStruct->sprite == NULL) {
+        fprintf(stderr, "ERROR: load image\n");
+        free(myStruct);
+        return NULL;
+    }
+
     return myStruct;
 }
 
@@ -33,6 +39,13 @@ structImage *createStruct_bmp_format(char *path, char *name, char *format) {
 
     init_value_struct(path, name, format, myStruct);
     myStruct->sprite = SDL_LoadBMP(path); //load bitmap image
+
+
+    if (myStruct->sprite == NULL) {
+        fprintf(stderr, "ERROR: load image\n");
+        free(myStruct);
+        return NULL;
+    }
 
     return myStruct;
 }

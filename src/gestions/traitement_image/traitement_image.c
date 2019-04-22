@@ -35,34 +35,47 @@ char *get_format_image(char *image_name) {
 /* fonction pour ouvrire une image et l'afficher dans une fenetre*/
 void load_image(char *path_image) {
 
+    char *path = strdup(path_image);
+    char *nom = NULL;
+    char *format = NULL;
+
     char *tmp = strdup(path_image);
 
     tmp = strstr(tmp, "/");
 
-    char *nom_image = tmp;
+    if (tmp == NULL) {
+        nom = path;
+    } else {
 
-    while (tmp != NULL) {
-        nom_image = tmp + 1;
-        tmp = strstr(tmp + 1, "/");
+        while (tmp != NULL) {
+            nom = tmp + 1;
+            tmp = strstr(tmp + 1, "/");
+        }
+
     }
 
-    char *format = get_format_image(nom_image);
+
+    format = get_format_image(nom);
 
     if (format) {
         structImage *myimage = NULL;
 
         if (strncmp(format, "bmp", 3) == 0) {
-            myimage = createStruct_bmp_format(path_image, nom_image, format);
+            myimage = createStruct_bmp_format(path, nom, format);
         } else if (strncmp(format, "jpg", 3) == 0) {
-            myimage = createStruct_other_format(path_image, nom_image, format, IMG_INIT_JPG);
+            myimage = createStruct_other_format(path, nom, format, IMG_INIT_JPG);
         } else if (strncmp(format, "png", 3) == 0) {
-            myimage = createStruct_other_format(path_image, nom_image, format, IMG_INIT_PNG);
+            myimage = createStruct_other_format(path, nom, format, IMG_INIT_PNG);
+        } else {
+            fprintf(stderr, "format image non correcte\n");
+            return;
         }
 
         if (myimage) {
             add_image(myimage);
             fprintf(stdout, "image open %s \n", myimage->name);
         }
+
     } else {
         fprintf(stderr, "format image non correcte\n");
     }

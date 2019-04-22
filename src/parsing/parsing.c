@@ -215,6 +215,10 @@ void traitement_ligne(char *ligne_a_traiter) {
 
         clear();
 
+    } else if (strncmp(argumentslist[0], "help", strlen("help")) == 0) {
+
+        display_help();
+
     } else if (strncmp(argumentslist[0], "exit", strlen("exit")) == 0) {
 
 
@@ -230,4 +234,52 @@ void traitement_ligne(char *ligne_a_traiter) {
     }
 
     liberation_arguments();
+}
+
+
+void display_help() {
+
+
+    fprintf(stdout, "\nListe des commandes disponibles :\n"
+                    "\n"
+                    "- exit : quite l' application\n"
+                    "\n"
+                    "- load pathfile : charge une image et lui donne un id\n"
+                    "\n"
+                    "- delete id : décharge l'image lié à id\n"
+                    "\n"
+                    "- save id [path] [name] [type] : sauvegarde l'image lié à id\n"
+                    "\n"
+                    "- show : affiche toutes les informations des images chargés\n"
+                    "\n"
+                    "- display id : affiche l'image lié à id\n"
+                    "\n"
+                    "- symv id : applique une symétrie verticale à l'image lié à id\n"
+                    "\n"
+                    "- symh id : applique une symétrie horizontale à l'image lié à id\n"
+                    "\n"
+                    "- rotate id nb : affectue nb rotation vers la gauche à l'image lié à id\n"
+                    "\n"
+                    "- drawzone id [width_origin=(default:0)] [height_origin=(default:0)] [width_end=(default:max)] [height_end=(default:max)] : modifie la zone de dessin l'image lié à id en fonction du point supérieur gauche (width_origine, height_origine) et du point inferieur bas (width_end, height_end)\n"
+                    "\n"
+                    "- resize id width height : modifie la résolution de l'image lié à id en fonction de width et height\n"
+                    "\n"
+                    "- select id [width_origin=(default:0)] [height_origin=(default:0)] [width_end=(default:max)] [height_end=(default:max)] : selection une partie de l'image lié à id en fonction du point supérieur gauche (width_origine, height_origine) et du point inferieur bas (width_end, height_end) afin défectuer les action suivantes :\n"
+                    "\n"
+                    "\t- cut [reverse=1]: remplace la zone par du noir ou du blanc si l'option reverse est utilisé\n"
+                    "\n"
+                    "\t- copy position_x position_y : copy la zone dans une autre zone d'origine le point supérieur gauche (position_x, position_y)\n"
+                    "\n"
+                    "\t- fill r g b : rempli la zone d'un melange de couleur rgb, attention r, g et b doit etre compris entre 0 et 255\n"
+                    "\n"
+                    "\t- switch r g b nr ng nb : recherhe dans la zone les pixels ayant pour couleur un mélange de couleur r g b et les modifies par une mélange de couleur nr ng nb\n"
+                    "\n"
+                    "\t- neg : applique une filtre négatif sur la zone\n"
+                    "\n"
+                    "\t- bw : applique une filtre noir et blanc sur la zone\n"
+                    "\n"
+                    "\t- grey : applique une filtre gris sur la zone\n"
+                    "\n"
+                    "\t- exit : déselection la zone"
+                    "\n\n");
 }
