@@ -176,15 +176,80 @@ void traitement_ligne(char *ligne_a_traiter) {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
     } else if (strncmp(argumentslist[0], "select", strlen("select")) == 0) {
 
-        if (get_nb_args() == 2)
-            selectRegion(strtol(argumentslist[1], NULL, 10));
-        else
+        if (get_nb_args() == 2) {
+            int id = strtol(argumentslist[1], NULL, 10);
+            int ox = strtol(argumentslist[2], NULL, 10);
+            int oy = strtol(argumentslist[3], NULL, 10);
+            int fx = strtol(argumentslist[4], NULL, 10);
+            int fy = strtol(argumentslist[5], NULL, 10);
+            structImage *image = get_image(id);
+            if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
+                return;
+            }
+            char *ligne = "";
+            do {
+                if (strlen(ligne) == 0) {
+
+                } else if (strncmp(argumentslist[0], "cut", 3) == 0) {
+                    fillColor(image->sprite, ox, oy, fx, fy, 0, 0, 0);
+                } else if (strncmp(argumentslist[0], "fill", 4) == 0) {
+                    if (get_nb_args() == 4) {
+                        int r = strtol(argumentslist[1], NULL, 10),
+                                g = strtol(argumentslist[2], NULL, 10),
+                                b = strtol(argumentslist[3], NULL, 10);
+                        if (errorcolor(r, g, b) == 0) {
+                            fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
+                        }
+                    } else
+                        fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+                } else if (strncmp(argumentslist[0], "copy", 4) == 0) {
+                    int nx = strtol(argumentslist[1], NULL, 10);
+                    int ny = strtol(argumentslist[2], NULL, 10);
+                    if (nx + fx > image->sprite->w || ny + fy > image->sprite->h || nx < 0 || ny < 0) {
+                        perror("zone de copie non disponible");
+                    } else {
+                        copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
+                    }
+                } else if (strncmp(argumentslist[0], "grey", 4) == 0) {
+                    greyColor(image->sprite, ox, oy, fx, fy);
+                } else if (strncmp(argumentslist[0], "bw", 2) == 0) {
+                    blackAndWhiteColor(image->sprite, ox, oy, fx, fy);
+                } else if (strncmp(argumentslist[0], "switch", 6) == 0) {
+                    int sr = strtol(argumentslist[2], NULL, 10);
+                    int sg = strtol(argumentslist[2], NULL, 10);
+                    int sb = strtol(argumentslist[2], NULL, 10);
+                    int nr = strtol(argumentslist[2], NULL, 10);
+                    int ng = strtol(argumentslist[2], NULL, 10);
+                    int nb = strtol(argumentslist[2], NULL, 10);
+                    int t = strtol(argumentslist[2], NULL, 10);
+                    if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
+                        switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+                    }
+                } else if (strncmp(argumentslist[0], "neg", 3) == 0) {
+                    negatifColor(image->sprite, ox, oy, fx, fy);
+                } else {
+                    printf("Commande inconnue");
+                }
+                printf("\nGraphics editor>%dx%d>%dx%d>%s", ox, oy, fx, fy, image->name);
+                ligne = readline(">");
+                traitement_espaces_debut(ligne);
+                traitement_espaces_fin(ligne);
+                creation_liste_arguments(ligne);
+            } while (strncmp(argumentslist[0], "exit", 4) != 0);
+
+
+        } else
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
 
     } else if (strncmp(argumentslist[0], "drawzone", strlen("drawzone")) == 0) {
 
-        if (get_nb_args() == 2)
-            drawzone(strtol(argumentslist[1], NULL, 10));
+        if (get_nb_args() == 6)
+            drawzone(strtol(argumentslist[1], NULL, 10),
+                     strtol(argumentslist[2], NULL, 10),
+                     strtol(argumentslist[3], NULL, 10),
+                     strtol(argumentslist[4], NULL, 10),
+                     strtol(argumentslist[5], NULL, 10));
         else
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
 
