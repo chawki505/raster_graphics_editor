@@ -174,15 +174,25 @@ void traitement_ligne(char *ligne_a_traiter) {
             symh_image((int) strtol(argumentslist[1], NULL, 10));
         else
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+
+
     } else if (strncmp(argumentslist[0], "select", strlen("select")) == 0) {
 
-        if (get_nb_args() == 2) {
+        if (get_nb_args() == 6 || get_nb_args() == 2) {
             int id = strtol(argumentslist[1], NULL, 10);
-            int ox = strtol(argumentslist[2], NULL, 10);
-            int oy = strtol(argumentslist[3], NULL, 10);
-            int fx = strtol(argumentslist[4], NULL, 10);
-            int fy = strtol(argumentslist[5], NULL, 10);
             structImage *image = get_image(id);
+            int ox = 0;
+            int oy = 0;
+            int fx = image->sprite->w;
+            int fy = image->sprite->h;
+
+            if (get_nb_args() == 6) {
+                ox = strtol(argumentslist[2], NULL, 10);
+                oy = strtol(argumentslist[3], NULL, 10);
+                fx = strtol(argumentslist[4], NULL, 10);
+                fy = strtol(argumentslist[5], NULL, 10);
+            }
+
             if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
                 return;
             }
@@ -191,7 +201,11 @@ void traitement_ligne(char *ligne_a_traiter) {
                 if (strlen(ligne) == 0) {
 
                 } else if (strncmp(argumentslist[0], "cut", 3) == 0) {
-                    fillColor(image->sprite, ox, oy, fx, fy, 0, 0, 0);
+                    if (get_nb_args() > 1) {
+                        fillColor(image->sprite, ox, oy, fx, fy, 255, 255, 255);
+                    } else {
+                        fillColor(image->sprite, ox, oy, fx, fy, 0, 0, 0);
+                    }
                 } else if (strncmp(argumentslist[0], "fill", 4) == 0) {
                     if (get_nb_args() == 4) {
                         int r = strtol(argumentslist[1], NULL, 10),
@@ -200,31 +214,39 @@ void traitement_ligne(char *ligne_a_traiter) {
                         if (errorcolor(r, g, b) == 0) {
                             fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
                         }
-                    } else
-                        fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
-
-                } else if (strncmp(argumentslist[0], "copy", 4) == 0) {
-                    int nx = strtol(argumentslist[1], NULL, 10);
-                    int ny = strtol(argumentslist[2], NULL, 10);
-                    if (nx + fx > image->sprite->w || ny + fy > image->sprite->h || nx < 0 || ny < 0) {
-                        perror("zone de copie non disponible");
                     } else {
-                        copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
+                        fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+                    }
+                } else if (strncmp(argumentslist[0], "copy", 4) == 0) {
+                    if (get_nb_args() == 4) {
+                        int nx = strtol(argumentslist[1], NULL, 10);
+                        int ny = strtol(argumentslist[2], NULL, 10);
+                        if (nx + fx > image->sprite->w || ny + fy > image->sprite->h || nx < 0 || ny < 0) {
+                            perror("zone de copie non disponible");
+                        } else {
+                            copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
+                        }
+                    } else {
+                        fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
                     }
                 } else if (strncmp(argumentslist[0], "grey", 4) == 0) {
                     greyColor(image->sprite, ox, oy, fx, fy);
                 } else if (strncmp(argumentslist[0], "bw", 2) == 0) {
                     blackAndWhiteColor(image->sprite, ox, oy, fx, fy);
                 } else if (strncmp(argumentslist[0], "switch", 6) == 0) {
-                    int sr = strtol(argumentslist[2], NULL, 10);
-                    int sg = strtol(argumentslist[2], NULL, 10);
-                    int sb = strtol(argumentslist[2], NULL, 10);
-                    int nr = strtol(argumentslist[2], NULL, 10);
-                    int ng = strtol(argumentslist[2], NULL, 10);
-                    int nb = strtol(argumentslist[2], NULL, 10);
-                    int t = strtol(argumentslist[2], NULL, 10);
-                    if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
-                        switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+                    if (get_nb_args() == 8) {
+                        int sr = strtol(argumentslist[1], NULL, 10);
+                        int sg = strtol(argumentslist[2], NULL, 10);
+                        int sb = strtol(argumentslist[3], NULL, 10);
+                        int nr = strtol(argumentslist[4], NULL, 10);
+                        int ng = strtol(argumentslist[5], NULL, 10);
+                        int nb = strtol(argumentslist[6], NULL, 10);
+                        int t = strtol(argumentslist[7], NULL, 10);
+                        if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
+                            switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+                        }
+                    } else {
+                        fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
                     }
                 } else if (strncmp(argumentslist[0], "neg", 3) == 0) {
                     negatifColor(image->sprite, ox, oy, fx, fy);
@@ -238,9 +260,10 @@ void traitement_ligne(char *ligne_a_traiter) {
                 creation_liste_arguments(ligne);
             } while (strncmp(argumentslist[0], "exit", 4) != 0);
 
-
-        } else
+        } else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+        }
+
 
     } else if (strncmp(argumentslist[0], "drawzone", strlen("drawzone")) == 0) {
 
@@ -337,7 +360,7 @@ void display_help() {
                     "\n"
                     "\t- fill r g b : rempli la zone d'un melange de couleur rgb, attention r, g et b doit etre compris entre 0 et 255\n"
                     "\n"
-                    "\t- switch r g b nr ng nb : recherhe dans la zone les pixels ayant pour couleur un mélange de couleur r g b et les modifies par une mélange de couleur nr ng nb\n"
+                    "\t- switch r g b nr ng nb t : recherhe dans la zone les pixels ayant pour couleur un mélange de couleur r g b avec une tolérence -/+ t et les modifies par une mélange de couleur nr ng nb\n"
                     "\n"
                     "\t- neg : applique une filtre négatif sur la zone\n"
                     "\n"

@@ -18,10 +18,10 @@ char *get_format_image(char *image_name) {
     }
 
     //duplique le nom de l'image dans un argumentslist[0]
-    char *argumentslist[0] = strdup(image_name);
+    char *tmp = strdup(image_name);
 
     //creer un pointeur sur le .
-    char *format = strstr(argumentslist[0], ".");
+    char *format = strstr(tmp, ".");
 
     //si null ==> image name faux
     if (format == NULL) {
@@ -39,17 +39,17 @@ void load_image(char *path_image) {
     char *nom = NULL;
     char *format = NULL;
 
-    char *argumentslist[0] = strdup(path_image);
+    char *tmp = strdup(path_image);
 
-    argumentslist[0] = strstr(argumentslist[0], "/");
+    tmp = strstr(tmp, "/");
 
-    if (argumentslist[0] == NULL) {
+    if (tmp == NULL) {
         nom = path;
     } else {
 
-        while (argumentslist[0] != NULL) {
-            nom = argumentslist[0] + 1;
-            argumentslist[0] = strstr(argumentslist[0] + 1, "/");
+        while (tmp != NULL) {
+            nom =tmp + 1;
+            tmp = strstr(tmp+ 1, "/");
         }
 
     }
