@@ -112,25 +112,46 @@ void delete_image(int id) {
     structImage *liste = my_images;
     structImage *tmp = NULL;
 
-    while (liste->next->id != id) {
-        liste = liste->next;
+    if (liste == NULL) {
+        return;
     }
 
-    printf("-----------------------------");
-    printf("Delete image:\n");
-    print_struct(liste->next);
-    printf("-----------------------------Done!\n");
-    tmp = liste->next;
-    liste->next = tmp->next;
-    SDL_FreeSurface(tmp->sprite);
-    free(tmp);
-    liste = liste->next;
-    while (liste != NULL) {
-        liste->id--;
-        liste = liste->next;
+    if (id == 1 && liste->next == NULL) {
+        my_images = NULL;
+        return;
     }
-    printf("-----------------------------");
-    printf("New list:\n");
-    print_list_image();
-    printf("-----------------------------");
+    int cpt = 1;
+    while (liste->next != NULL) {
+        liste = liste->next;
+        cpt++;
+    }
+    if (cpt < id) {
+        perror("L'id n'est pas présent dans la liste d'images chargées");
+        return;
+    }
+
+    if (id == 1) {
+        my_images = my_images->next;
+        liste = my_images;
+        int i = 1;
+        while (liste != NULL) {
+            liste->id = i;
+            i++;
+            liste = liste->next;
+        }
+    } else {
+        liste = my_images;
+        while (liste->next->id != id) {
+            liste = liste->next;
+        }
+        tmp = liste->next;
+        liste->next = tmp->next;
+        liste = liste->next;
+        while (liste != NULL) {
+            liste->id = liste->id-1;
+            liste = liste->next;
+        }
+    }
+
+
 }

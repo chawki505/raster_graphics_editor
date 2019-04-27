@@ -312,7 +312,9 @@ void traitement_ligne(char *ligne_a_traiter) {
 
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         liberation_arguments();
-        //TODO:free my_image
+        while (my_images != NULL) {
+            delete_image(1);
+        }
         exit(EXIT_SUCCESS);
 
     } else {
