@@ -17,7 +17,7 @@ char *get_format_image(char *image_name) {
         return NULL;
     }
 
-    //duplique le nom de l'image dans un tmp
+    //duplique le nom de l'image dans un argumentslist[0]
     char *tmp = strdup(image_name);
 
     //creer un pointeur sur le .
@@ -48,8 +48,8 @@ void load_image(char *path_image) {
     } else {
 
         while (tmp != NULL) {
-            nom = tmp + 1;
-            tmp = strstr(tmp + 1, "/");
+            nom =tmp + 1;
+            tmp = strstr(tmp+ 1, "/");
         }
 
     }
@@ -339,97 +339,15 @@ void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int
     SDL_UnlockSurface(surface);
 }
 
-void selectRegion(int id) {
+void drawzone(int id, int ox, int oy, int fx, int fy) {
     structImage *image = get_image(id);
-    int ox, oy, fx, fy;
-    printf("Saisir le point x d'origine :");
-    scanf("%d", &ox);
-    printf("Saisir le point y d'origine :");
-    scanf("%d", &oy);
-    printf("Saisir le point x de fin :");
-    scanf("%d", &fx);
-    printf("Saisir le point y de fin :");
-    scanf("%d", &fy);
-    if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
-        return;
-    }
-    char *ligne = "";
-    char *tmp = NULL;
-    do {
-        if (strlen(ligne) == 0) {
-
-        } else if (strncmp(tmp, "cut", 3) == 0) {
-            fillColor(image->sprite, ox, oy, fx, fy, 0, 0, 0);
-        } else if (strncmp(tmp, "fill", 4) == 0) {
-            int r, g, b;
-            printf("niveau de rouge [0-255] :");
-            scanf("%d", &r);
-            printf("niveau de vert [0-255] :");
-            scanf("%d", &g);
-            printf("niveau de bleu [0-255] :");
-            scanf("%d", &b);
-            if (errorcolor(r, g, b) == 0) {
-                fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
-            }
-        } else if (strncmp(tmp, "copy", 4) == 0) {
-            int nx, ny;
-            printf("Saisir le point x d'origine de la copie:");
-            scanf("%d", &nx);
-            printf("Saisir le point y d'origine de la copie:");
-            scanf("%d", &ny);
-            if (nx + fx > image->sprite->w || ny + fy > image->sprite->h || nx < 0 || ny < 0) {
-                perror("zone de copie non disponible");
-            } else {
-                copyAndPasteColor(image->sprite, ox, oy, fx, fy, nx, ny);
-            }
-        } else if (strncmp(tmp, "grey", 4) == 0) {
-            greyColor(image->sprite, ox, oy, fx, fy);
-        } else if (strncmp(tmp, "bw", 2) == 0) {
-            blackAndWhiteColor(image->sprite, ox, oy, fx, fy);
-        } else if (strncmp(tmp, "switch", 6) == 0) {
-            int sr, sg, sb, nr, ng, nb, t;
-            printf("niveau de rouge recherché [0-255] :");
-            scanf("%d", &sr);
-            printf("niveau de vert recherché [0-255] :");
-            scanf("%d", &sg);
-            printf("niveau de bleu recherché [0-255] :");
-            scanf("%d", &sb);
-            printf("niveau de tolérence:");
-            scanf("%d", &t);
-            printf("niveau de rouge modifié [0-255] :");
-            scanf("%d", &nr);
-            printf("niveau de vert modifié [0-255] :");
-            scanf("%d", &ng);
-            printf("niveau de bleu modifié [0-255] :");
-            scanf("%d", &nb);
-            if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
-                switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
-            }
-        } else if (strncmp(tmp, "neg", 3) == 0) {
-            negatifColor(image->sprite, ox, oy, fx, fy);
-        } else {
-            printf("Commande inconnue");
-        }
-        printf("\nGraphics editor>%dx%d>%dx%d>%s", ox, oy, fx, fy, image->name);
-        ligne = readline(">");
-        tmp = strdup(ligne);
-    } while (strncmp(tmp, "exit", 4) != 0);
-}
-
-void drawzone(int id) {
-    structImage *image = get_image(id);
-    int ox, oy, fx, fy;
-    printf("Saisir le point x d'origine :");
-    scanf("%d", &ox);
-    printf("Saisir le point y d'origine :");
-    scanf("%d", &oy);
-    printf("Saisir le point x de fin :");
-    scanf("%d", &fx);
-    printf("Saisir le point y de fin :");
-    scanf("%d", &fy);
-    Uint32 pixel = 0;
     int dimX = fx - ox;
     int dimY = fy - oy;
+    if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1
+        || dimX < 0 || dimY < 0) {
+        return;
+    }
+    Uint32 pixel = 0;
     SDL_Surface *surface = SDL_CreateRGBSurface(0, dimX, dimY, 32,
                                                 image->sprite->format->Rmask,
                                                 image->sprite->format->Gmask,

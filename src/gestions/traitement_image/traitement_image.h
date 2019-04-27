@@ -35,9 +35,7 @@ void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int
 
 void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nx, int ny);
 
-void selectRegion(int id);
-
-void drawzone(int id);
+void drawzone(int id, int ox, int oy, int fx, int fy);
 
 void rotation(int id);
 
