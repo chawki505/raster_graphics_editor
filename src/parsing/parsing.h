@@ -24,7 +24,7 @@ void traitement_espaces_debut(char *chaine_a_traiter);
 
 void traitement_espaces_fin(char *chaine_a_traiter);
 
-void traitement_ligne(char *chaine_a_traiter);
+int traitement_ligne(char *chaine_a_traiter);
 
 void display_help();
 

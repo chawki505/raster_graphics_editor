@@ -8,13 +8,13 @@
 #include "../../includes.h"
 
 
-void load_image(char *path_image);
+int load_image(char *path_image);
 
-void save_image(int id);
+int save_image(int id);
 
-void symh_image(int id);
+int symh_image(int id);
 
-void symv_image(int id);
+int symv_image(int id);
 
 Uint32 getPixel(SDL_Surface *surface, int x, int y);
 
@@ -35,15 +35,15 @@ void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int
 
 void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nx, int ny);
 
-void drawzone(int id, int ox, int oy, int fx, int fy);
+int drawzone(int id, int ox, int oy, int fx, int fy);
 
-void rotation(int id);
+int rotation(int id);
 
 SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h);
 
 int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax);
 
-void resize(int id, int w, int h);
+int resize(int id, int w, int h);
 
 int errorcolor(int r, int g, int b);
 

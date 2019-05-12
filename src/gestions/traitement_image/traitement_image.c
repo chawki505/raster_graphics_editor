@@ -33,7 +33,7 @@ char *get_format_image(char *image_name) {
 }
 
 /* fonction pour ouvrire une image et l'afficher dans une fenetre*/
-void load_image(char *path_image) {
+int load_image(char *path_image) {
 
     char *path = strdup(path_image);
     char *nom = NULL;
@@ -48,8 +48,8 @@ void load_image(char *path_image) {
     } else {
 
         while (tmp != NULL) {
-            nom =tmp + 1;
-            tmp = strstr(tmp+ 1, "/");
+            nom = tmp + 1;
+            tmp = strstr(tmp + 1, "/");
         }
 
     }
@@ -68,7 +68,7 @@ void load_image(char *path_image) {
             myimage = createStruct_other_format(path, nom, format, IMG_INIT_PNG);
         } else {
             fprintf(stderr, "format image non correcte\n");
-            return;
+            return 1;
         }
 
         if (myimage) {
@@ -78,23 +78,31 @@ void load_image(char *path_image) {
 
     } else {
         fprintf(stderr, "format image non correcte\n");
+        return 1;
     }
+    return 0;
 }
 
 
 /* fonction pour sauvguarder une image au format png */
-void save_image(int id) {
+int save_image(int id) {
     structImage *image = get_image(id);
 
     if (image && IMG_SavePNG(image->sprite, "my_image_save.png") == 0) {
         fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
+        return 0;
     } else {
         fprintf(stderr, "Erreur de sauvgarde\n");
+        return 1;
     }
 }
 
-void symv_image(int id) {
+int symv_image(int id) {
     structImage *image = get_image(id);
+    if (image == NULL){
+        fprintf(stderr, "Id d'image non présent\n");
+        return 1;
+    }
 
     SDL_Surface *old_surface = image->sprite;
     int w = old_surface->w;
@@ -130,10 +138,15 @@ void symv_image(int id) {
 
     SDL_FreeSurface(old_surface);
     image->sprite = surface;
+    return 0;
 }
 
-void symh_image(int id) {
+int symh_image(int id) {
     structImage *image = get_image(id);
+    if (image == NULL){
+        fprintf(stderr, "Id d'image non présent\n");
+        return 1;
+    }
 
     SDL_Surface *old_surface = image->sprite;
     int w = old_surface->w;
@@ -169,6 +182,7 @@ void symh_image(int id) {
 
     SDL_FreeSurface(old_surface);
     image->sprite = surface;
+    return 0;
 }
 
 Uint32 getPixel(SDL_Surface *surface, int x, int y) {
@@ -339,13 +353,17 @@ void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int
     SDL_UnlockSurface(surface);
 }
 
-void drawzone(int id, int ox, int oy, int fx, int fy) {
+int drawzone(int id, int ox, int oy, int fx, int fy) {
     structImage *image = get_image(id);
+    if (image == NULL){
+        fprintf(stderr, "Id d'image non présent\n");
+        return 1;
+    }
     int dimX = fx - ox;
     int dimY = fy - oy;
     if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1
         || dimX < 0 || dimY < 0) {
-        return;
+        return 1;
     }
     Uint32 pixel = 0;
     SDL_Surface *surface = SDL_CreateRGBSurface(0, dimX, dimY, 32,
@@ -365,10 +383,15 @@ void drawzone(int id, int ox, int oy, int fx, int fy) {
     SDL_UnlockSurface(surface);
     SDL_FreeSurface(image->sprite);
     image->sprite = surface;
+    return 0;
 }
 
-void rotation(int id) {
+int rotation(int id) {
     structImage *image = get_image(id);
+    if (image == NULL){
+        fprintf(stderr, "Id d'image non présent\n");
+        return 1;
+    }
     Uint32 pixel = 0;
     SDL_Surface *old_surface = image->sprite;
 
@@ -396,10 +419,11 @@ void rotation(int id) {
     SDL_UnlockSurface(surface);
     SDL_FreeSurface(old_surface);
     image->sprite = surface;
+    return 0;
 }
 
 int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax) {
-    if (ox < 0 || oy < 0 || fx > wmax || fy > hmax) {
+    if (ox < 0 || oy < 0 || ox > wmax || oy > hmax || ox > fx || oy > fy || fx > wmax || fx > hmax ) {
         perror("Valeurs de positionnement incorrects");
         return 1;
     }
@@ -482,7 +506,7 @@ SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h) {
 }
 
 
-void resize(int id, int w, int h) {
+int resize(int id, int w, int h) {
 
     structImage *image = get_image(id);
 
@@ -496,7 +520,9 @@ void resize(int id, int w, int h) {
         }
     } else {
         fprintf(stdout, "Échec de chargement de l'image (id non existant)\n");
+        return 1;
     }
+    return 0;
 }
 
 

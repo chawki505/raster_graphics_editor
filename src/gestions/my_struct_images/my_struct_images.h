@@ -32,7 +32,7 @@ void add_image(structImage *mystruc);
 
 void print_list_image();
 
-void delete_image(int id);
+int delete_image(int id);
 
 structImage *get_image(int id);
 
