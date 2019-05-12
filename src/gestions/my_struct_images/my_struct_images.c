@@ -108,17 +108,17 @@ void print_list_image() {
     }
 }
 
-void delete_image(int id) {
+int delete_image(int id) {
     structImage *liste = my_images;
     structImage *tmp = NULL;
 
     if (liste == NULL) {
-        return;
+        return 1;
     }
 
     if (id == 1 && liste->next == NULL) {
         my_images = NULL;
-        return;
+        return 1;
     }
     int cpt = 1;
     while (liste->next != NULL) {
@@ -127,7 +127,7 @@ void delete_image(int id) {
     }
     if (cpt < id) {
         perror("L'id n'est pas présent dans la liste d'images chargées");
-        return;
+        return 1;
     }
 
     if (id == 1) {
@@ -152,6 +152,6 @@ void delete_image(int id) {
             liste = liste->next;
         }
     }
-
+    return 0;
 
 }

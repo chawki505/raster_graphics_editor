@@ -98,46 +98,39 @@ void clear() {
 
 
 /* traite la ligne saisi par l'utilisateur */
-void traitement_ligne(char *ligne_a_traiter) {
-
+int traitement_ligne(char *ligne_a_traiter) {
     traitement_espaces_debut(ligne_a_traiter);
     traitement_espaces_fin(ligne_a_traiter);
 
     creation_liste_arguments(ligne_a_traiter);
 
-
     if (strncmp(argumentslist[0], "load", strlen("load")) == 0) {
-
         if (get_nb_args() == 2)
             load_image(argumentslist[1]);
-        else
+        else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
-
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "delete", strlen("delete")) == 0) {
-
         if (get_nb_args() == 2)
             delete_image(strtol(argumentslist[1], NULL, 10));
-        else
+        else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "show", strlen("show")) == 0) {
-
         print_list_image();
 
     } else if (strncmp(argumentslist[0], "display", strlen("display")) == 0) {
-
         if (get_nb_args() >= 2) {
-
             if (get_nb_args() - 1 >= TAILLE_LIST_ARGS) {
-
                 fprintf(stderr, "vous ne pouvez pas afficher plus de %d fenetres en meme temp\n", TAILLE_LIST_ARGS);
-                return;
+                return 1;
             }
-
             int tab_id_images[TAILLE_LIST_ARGS];
             int compteur = 0;
-
             for (int i = 1; i < get_nb_args(); ++i) {
                 int id = strtol(argumentslist[i], NULL, 10);
                 if (get_image(id) != NULL) {
@@ -147,40 +140,45 @@ void traitement_ligne(char *ligne_a_traiter) {
                     fprintf(stderr, "Erreur id image: id %s n'existe pas\n ", argumentslist[i]);
                 }
             }
-
             run_display(tab_id_images, compteur);
 
-
-        } else
+        } else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "save", strlen("save")) == 0) {
-
         if (get_nb_args() == 2)
             save_image(strtol(argumentslist[1], NULL, 10));
-        else
+        else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "symv", 4) == 0) {
-
         if (get_nb_args() == 2)
             symv_image((int) strtol(argumentslist[1], NULL, 10));
-        else
+        else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "symh", 4) == 0) {
-
         if (get_nb_args() == 2)
             symh_image((int) strtol(argumentslist[1], NULL, 10));
-        else
+        else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
-
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "select", strlen("select")) == 0) {
-
         if (get_nb_args() == 6 || get_nb_args() == 2) {
             int id = strtol(argumentslist[1], NULL, 10);
             structImage *image = get_image(id);
+            if (image == NULL) {
+                fprintf(stderr, "Id d'image non présent\n");
+                return 1;
+            }
             int ox = 0;
             int oy = 0;
             int fx = image->sprite->w;
@@ -192,9 +190,8 @@ void traitement_ligne(char *ligne_a_traiter) {
                 fx = strtol(argumentslist[4], NULL, 10);
                 fy = strtol(argumentslist[5], NULL, 10);
             }
-
             if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
-                return;
+                return 1;
             }
             char *ligne = "";
             do {
@@ -218,7 +215,7 @@ void traitement_ligne(char *ligne_a_traiter) {
                         fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
                     }
                 } else if (strncmp(argumentslist[0], "copy", 4) == 0) {
-                    if (get_nb_args() == 4) {
+                    if (get_nb_args() == 3) {
                         int nx = strtol(argumentslist[1], NULL, 10);
                         int ny = strtol(argumentslist[2], NULL, 10);
                         if (nx + fx > image->sprite->w || ny + fy > image->sprite->h || nx < 0 || ny < 0) {
@@ -259,34 +256,34 @@ void traitement_ligne(char *ligne_a_traiter) {
                 traitement_espaces_fin(ligne);
                 creation_liste_arguments(ligne);
             } while (strncmp(argumentslist[0], "exit", 4) != 0);
-
         } else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+            return 1;
         }
 
-
     } else if (strncmp(argumentslist[0], "drawzone", strlen("drawzone")) == 0) {
-
         if (get_nb_args() == 6)
             drawzone(strtol(argumentslist[1], NULL, 10),
                      strtol(argumentslist[2], NULL, 10),
                      strtol(argumentslist[3], NULL, 10),
                      strtol(argumentslist[4], NULL, 10),
                      strtol(argumentslist[5], NULL, 10));
-        else
+        else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "rotate", strlen("rotate")) == 0) {
-
         if (get_nb_args() == 3) {
-            int r = strtol(argumentslist[2], NULL, 10);
+            int r = strtol(argumentslist[2], NULL, 10) % 4;
             while (r > 0) {
                 rotation(strtol(argumentslist[1], NULL, 10));
                 r = r - 1;
             }
-        } else
+        } else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
-
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "resize", strlen("resize")) == 0) {
 
@@ -296,20 +293,18 @@ void traitement_ligne(char *ligne_a_traiter) {
             int h = strtol(argumentslist[3], NULL, 10);
 
             resize(id_image, w, h);
-        } else
+        } else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
+            return 1;
+        }
 
     } else if (strncmp(argumentslist[0], "clear", strlen("clear")) == 0) {
-
         clear();
 
     } else if (strncmp(argumentslist[0], "help", strlen("help")) == 0) {
-
         display_help();
 
     } else if (strncmp(argumentslist[0], "exit", strlen("exit")) == 0) {
-
-
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         liberation_arguments();
         while (my_images != NULL) {
@@ -318,18 +313,16 @@ void traitement_ligne(char *ligne_a_traiter) {
         exit(EXIT_SUCCESS);
 
     } else {
-
-
         fprintf(stderr, "Commande : %s inconnue\n", ligne_a_traiter);
+        return 1;
     }
 
     liberation_arguments();
+    return 0;
 }
 
 
 void display_help() {
-
-
     fprintf(stdout, "\nListe des commandes disponibles :\n"
                     "\n"
                     "- exit : quite l' application\n"
