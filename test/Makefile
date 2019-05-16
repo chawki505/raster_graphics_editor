@@ -18,7 +18,7 @@ TRAITEMENTIMAGELIB = ../src/gestions/traitement_image/libtraitement_image.a
 
 
 all :
-	make test -C ../src
+	make -C ../src test
 	make $(NAME)
 	make clean
 
