@@ -142,7 +142,7 @@ void test_create_structe_valide_png() {
 // teste la creation d'une fausse structure d'une image png
 void test_create_structe_not_valide_png() {
 
-    fprintf(stdout, "TEST create note valide struct image bmp image : ");
+    fprintf(stdout, "TEST create note valide struct image png image : ");
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
@@ -164,7 +164,7 @@ void test_create_structe_not_valide_png() {
 // teste la creation d'une structure d'une image jpg
 void test_create_structe_valide_jpg() {
 
-    fprintf(stdout, "TEST create valide struct image bmp image : ");
+    fprintf(stdout, "TEST create valide struct image jpg image : ");
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
@@ -188,7 +188,7 @@ void test_create_structe_valide_jpg() {
 // teste la creation d'une fausse structure d'une image jpg
 void test_create_structe_not_valide_jpg() {
 
-    fprintf(stdout, "TEST create note valide struct image bmp image : ");
+    fprintf(stdout, "TEST create note valide struct image jpg image : ");
 
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 
