@@ -31,6 +31,7 @@ $(NAME) : $(OBJS) $(PARSINGLIB) $(TRAITEMENTIMAGELIB) $(TRAITEMENTFENETRELIB) $(
 testes.o : testes.h
 
 clean :
+	make -C ../src clean
 	rm -f $(OBJS)
 
 fullclean :

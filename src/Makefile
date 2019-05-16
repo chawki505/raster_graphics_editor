@@ -20,6 +20,7 @@ all :
 	make -C parsing
 	make -C gestions
 	make $(NAME)
+	make clean
 
 test :
 	make -C parsing
