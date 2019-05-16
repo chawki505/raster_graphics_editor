@@ -10,7 +10,7 @@ INCLUDES = `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
 all : libtraitement_image.a
 
 libtraitement_image.a : $(OBJS)
-	ar crU $@ $^
+	ar cru $@ $^
 	ranlib $@
 
 %.o : %.c

@@ -10,7 +10,7 @@ INCLUDES =  `pkg-config sdl2 --cflags` `pkg-config SDL2_image --cflags`
 all : libmy_struct_images.a
 
 libmy_struct_images.a : $(OBJS)
-	ar crU $@ $^
+	ar cru $@ $^
 	ranlib $@
 
 %.o : %.c
