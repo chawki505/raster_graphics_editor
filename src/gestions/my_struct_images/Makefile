@@ -16,7 +16,7 @@ libmy_struct_images.a : $(OBJS)
 %.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $<
 
-my_struct_images.o : my_struct_images.h
+my_struct_images.o : ../../includes.h my_struct_images.h
 
 clean :
 	rm -f libmy_struct_images.a $(OBJS)

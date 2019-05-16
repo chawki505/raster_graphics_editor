@@ -2,9 +2,11 @@
 // Created by chawki on 15/02/19.
 //
 
-#include "parsing.h"
-#include "../gestions/traitement_image/traitement_image.h"
+#include "../includes.h"
 #include "../gestions/my_struct_images/my_struct_images.h"
+#include "../gestions/traitement_image/traitement_image.h"
+
+#include "parsing.h"
 
 
 char *argumentslist[TAILLE_LIST_ARGS];

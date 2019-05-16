@@ -6,7 +6,6 @@
 #define RASTER_GRAPHICS_EDITOR_PARSING_H
 
 
-#include "../includes.h"
 
 
 #define TAILLE_LIST_ARGS 32

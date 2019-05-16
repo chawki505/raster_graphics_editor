@@ -2,10 +2,12 @@
 // Created by chawki on 15/02/19.
 //
 
-#include "traitement_image.h"
+#include "../../includes.h"
 
-#include "../traitement_fenetre/traitement_fenetre.h"
 #include "../my_struct_images/my_struct_images.h"
+#include "../traitement_fenetre/traitement_fenetre.h"
+
+#include "traitement_image.h"
 
 
 void close_all_Lwindow(LWindow *gWindows, int nb_window);
@@ -99,7 +101,7 @@ int save_image(int id) {
 
 int symv_image(int id) {
     structImage *image = get_image(id);
-    if (image == NULL){
+    if (image == NULL) {
         fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
@@ -143,7 +145,7 @@ int symv_image(int id) {
 
 int symh_image(int id) {
     structImage *image = get_image(id);
-    if (image == NULL){
+    if (image == NULL) {
         fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
@@ -355,7 +357,7 @@ void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int
 
 int drawzone(int id, int ox, int oy, int fx, int fy) {
     structImage *image = get_image(id);
-    if (image == NULL){
+    if (image == NULL) {
         fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
@@ -388,7 +390,7 @@ int drawzone(int id, int ox, int oy, int fx, int fy) {
 
 int rotation(int id) {
     structImage *image = get_image(id);
-    if (image == NULL){
+    if (image == NULL) {
         fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
@@ -423,7 +425,7 @@ int rotation(int id) {
 }
 
 int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax) {
-    if (ox < 0 || oy < 0 || ox > wmax || oy > hmax || ox > fx || oy > fy || fx > wmax || fx > hmax ) {
+    if (ox < 0 || oy < 0 || ox > wmax || oy > hmax || ox > fx || oy > fy || fx > wmax || fx > hmax) {
         perror("Valeurs de positionnement incorrects");
         return 1;
     }

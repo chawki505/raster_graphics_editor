@@ -2,6 +2,8 @@
 // Created by chawki on 22/02/19.
 //
 
+#include "../../includes.h"
+
 #include "my_struct_images.h"
 
 

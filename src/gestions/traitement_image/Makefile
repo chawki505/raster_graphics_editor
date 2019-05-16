@@ -16,7 +16,7 @@ libtraitement_image.a : $(OBJS)
 %.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $<
 
-traitement_image.o : traitement_image.h ../my_struct_images/my_struct_images.h ../traitement_fenetre/traitement_fenetre.h  
+traitement_image.o : ../../includes.h ../my_struct_images/my_struct_images.h ../traitement_fenetre/traitement_fenetre.h  traitement_image.h
 
 clean :
 	rm -f libtraitement_image.a $(OBJS)
