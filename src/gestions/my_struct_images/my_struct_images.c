@@ -40,6 +40,7 @@ structImage *createStruct_bmp_format(char *path, char *name, char *format) {
     }
 
     init_value_struct(path, name, format, myStruct);
+
     myStruct->sprite = SDL_LoadBMP(path); //load bitmap image
 
 

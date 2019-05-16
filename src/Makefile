@@ -20,7 +20,10 @@ all :
 	make -C parsing
 	make -C gestions
 	make $(NAME)
-	make clean
+
+test :
+	make -C parsing
+	make -C gestions
 
 $(NAME) : $(OBJS)  $(PARSINGLIB) $(TRAITEMENTIMAGELIB) $(TRAITEMENTFENETRELIB) $(MYSTRUCTIMAGESLIB)  
 	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
