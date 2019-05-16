@@ -8,6 +8,16 @@
 
 void test_init_sdl();
 
-void test_create_structe();
+void test_create_structe_valide_bmp();
+
+void test_create_structe_not_valide_bmp();
+
+void test_create_structe_valide_png();
+
+void test_create_structe_not_valide_png();
+
+void test_create_structe_valide_jpg();
+
+void test_create_structe_not_valide_jpg();
 
 #endif //GRAPHICS_EDITOR_TESTES_H
