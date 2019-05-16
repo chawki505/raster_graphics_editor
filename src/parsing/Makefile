@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -c -g -Wall
+CFLAGS = -g -Wall -c
 
 SOURCES = parsing.c
 

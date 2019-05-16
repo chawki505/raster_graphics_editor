@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -c -g -Wall
+CFLAGS = -g -Wall -c
 
 SOURCES = my_struct_images.c
 

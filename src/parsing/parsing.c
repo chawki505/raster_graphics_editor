@@ -27,10 +27,10 @@ void creation_liste_arguments(char *saisi_user) {
     }
 
     //renvoi le nombre de caractere avant le separateur espace
-    longueur = strcspn(saisi_user, separateur);
+    longueur = (int) strcspn(saisi_user, separateur);
 
     //copier le premier element comme etant la commande principale
-    argumentslist[compteur] = strndup(saisi_user, longueur);
+    argumentslist[compteur] = strndup(saisi_user, (size_t) longueur);
 
     //incrementé le compteur pour la suite
     saisi_user = saisi_user + longueur;
@@ -39,8 +39,9 @@ void creation_liste_arguments(char *saisi_user) {
 
     while (strlen(saisi_user) > 0) {
         if (saisi_user[0] == ' ') saisi_user++; //avancer si le premier caractere est un espace
-        longueur = strcspn(saisi_user, separateur); //calculer la taille du mot avant le separateur
-        argumentslist[compteur] = strndup(saisi_user, longueur); // decouper la chaine et la mettre dans le tab des args
+        longueur = (int) strcspn(saisi_user, separateur); //calculer la taille du mot avant le separateur
+        argumentslist[compteur] = strndup(saisi_user,
+                                          (size_t) longueur); // decouper la chaine et la mettre dans le tab des args
         saisi_user = saisi_user + longueur; //avancer la chaine de saisi
         ++compteur;
     }
@@ -116,7 +117,7 @@ int traitement_ligne(char *ligne_a_traiter) {
 
     } else if (strncmp(argumentslist[0], "delete", strlen("delete")) == 0) {
         if (get_nb_args() == 2)
-            delete_image(strtol(argumentslist[1], NULL, 10));
+            delete_image((int) strtol(argumentslist[1], NULL, 10));
         else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
             return 1;
@@ -134,7 +135,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             int tab_id_images[TAILLE_LIST_ARGS];
             int compteur = 0;
             for (int i = 1; i < get_nb_args(); ++i) {
-                int id = strtol(argumentslist[i], NULL, 10);
+                int id = (int) strtol(argumentslist[i], NULL, 10);
                 if (get_image(id) != NULL) {
                     tab_id_images[compteur] = id;
                     compteur++;
@@ -151,7 +152,7 @@ int traitement_ligne(char *ligne_a_traiter) {
 
     } else if (strncmp(argumentslist[0], "save", strlen("save")) == 0) {
         if (get_nb_args() == 2)
-            save_image(strtol(argumentslist[1], NULL, 10));
+            save_image((int) strtol(argumentslist[1], NULL, 10));
         else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
             return 1;
@@ -175,7 +176,7 @@ int traitement_ligne(char *ligne_a_traiter) {
 
     } else if (strncmp(argumentslist[0], "select", strlen("select")) == 0) {
         if (get_nb_args() == 6 || get_nb_args() == 2) {
-            int id = strtol(argumentslist[1], NULL, 10);
+            int id = (int) strtol(argumentslist[1], NULL, 10);
             structImage *image = get_image(id);
             if (image == NULL) {
                 fprintf(stderr, "Id d'image non présent\n");
@@ -187,10 +188,10 @@ int traitement_ligne(char *ligne_a_traiter) {
             int fy = image->sprite->h;
 
             if (get_nb_args() == 6) {
-                ox = strtol(argumentslist[2], NULL, 10);
-                oy = strtol(argumentslist[3], NULL, 10);
-                fx = strtol(argumentslist[4], NULL, 10);
-                fy = strtol(argumentslist[5], NULL, 10);
+                ox = (int) strtol(argumentslist[2], NULL, 10);
+                oy = (int) strtol(argumentslist[3], NULL, 10);
+                fx = (int) strtol(argumentslist[4], NULL, 10);
+                fy = (int) strtol(argumentslist[5], NULL, 10);
             }
             if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
                 return 1;
@@ -207,9 +208,9 @@ int traitement_ligne(char *ligne_a_traiter) {
                     }
                 } else if (strncmp(argumentslist[0], "fill", 4) == 0) {
                     if (get_nb_args() == 4) {
-                        int r = strtol(argumentslist[1], NULL, 10),
-                                g = strtol(argumentslist[2], NULL, 10),
-                                b = strtol(argumentslist[3], NULL, 10);
+                        int r = (int) strtol(argumentslist[1], NULL, 10),
+                                g = (int) strtol(argumentslist[2], NULL, 10),
+                                b = (int) strtol(argumentslist[3], NULL, 10);
                         if (errorcolor(r, g, b) == 0) {
                             fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
                         }
@@ -218,8 +219,8 @@ int traitement_ligne(char *ligne_a_traiter) {
                     }
                 } else if (strncmp(argumentslist[0], "copy", 4) == 0) {
                     if (get_nb_args() == 3) {
-                        int nx = strtol(argumentslist[1], NULL, 10);
-                        int ny = strtol(argumentslist[2], NULL, 10);
+                        int nx = (int) strtol(argumentslist[1], NULL, 10);
+                        int ny = (int) strtol(argumentslist[2], NULL, 10);
                         if (nx + fx > image->sprite->w || ny + fy > image->sprite->h || nx < 0 || ny < 0) {
                             perror("zone de copie non disponible");
                         } else {
@@ -234,13 +235,13 @@ int traitement_ligne(char *ligne_a_traiter) {
                     blackAndWhiteColor(image->sprite, ox, oy, fx, fy);
                 } else if (strncmp(argumentslist[0], "switch", 6) == 0) {
                     if (get_nb_args() == 8) {
-                        int sr = strtol(argumentslist[1], NULL, 10);
-                        int sg = strtol(argumentslist[2], NULL, 10);
-                        int sb = strtol(argumentslist[3], NULL, 10);
-                        int nr = strtol(argumentslist[4], NULL, 10);
-                        int ng = strtol(argumentslist[5], NULL, 10);
-                        int nb = strtol(argumentslist[6], NULL, 10);
-                        int t = strtol(argumentslist[7], NULL, 10);
+                        int sr = (int) strtol(argumentslist[1], NULL, 10);
+                        int sg = (int) strtol(argumentslist[2], NULL, 10);
+                        int sb = (int) strtol(argumentslist[3], NULL, 10);
+                        int nr = (int) strtol(argumentslist[4], NULL, 10);
+                        int ng = (int) strtol(argumentslist[5], NULL, 10);
+                        int nb = (int) strtol(argumentslist[6], NULL, 10);
+                        int t = (int) strtol(argumentslist[7], NULL, 10);
                         if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
                             switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
                         }
@@ -265,11 +266,11 @@ int traitement_ligne(char *ligne_a_traiter) {
 
     } else if (strncmp(argumentslist[0], "drawzone", strlen("drawzone")) == 0) {
         if (get_nb_args() == 6)
-            drawzone(strtol(argumentslist[1], NULL, 10),
-                     strtol(argumentslist[2], NULL, 10),
-                     strtol(argumentslist[3], NULL, 10),
-                     strtol(argumentslist[4], NULL, 10),
-                     strtol(argumentslist[5], NULL, 10));
+            drawzone((int) strtol(argumentslist[1], NULL, 10),
+                     (int) strtol(argumentslist[2], NULL, 10),
+                     (int) strtol(argumentslist[3], NULL, 10),
+                     (int) strtol(argumentslist[4], NULL, 10),
+                     (int) strtol(argumentslist[5], NULL, 10));
         else {
             fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
             return 1;
@@ -277,9 +278,9 @@ int traitement_ligne(char *ligne_a_traiter) {
 
     } else if (strncmp(argumentslist[0], "rotate", strlen("rotate")) == 0) {
         if (get_nb_args() == 3) {
-            int r = strtol(argumentslist[2], NULL, 10) % 4;
+            int r = (int) strtol(argumentslist[2], NULL, 10) % 4;
             while (r > 0) {
-                rotation(strtol(argumentslist[1], NULL, 10));
+                rotation((int) strtol(argumentslist[1], NULL, 10));
                 r = r - 1;
             }
         } else {
@@ -290,9 +291,9 @@ int traitement_ligne(char *ligne_a_traiter) {
     } else if (strncmp(argumentslist[0], "resize", strlen("resize")) == 0) {
 
         if (get_nb_args() == 4) {
-            int id_image = strtol(argumentslist[1], NULL, 10);
-            int w = strtol(argumentslist[2], NULL, 10);
-            int h = strtol(argumentslist[3], NULL, 10);
+            int id_image = (int) strtol(argumentslist[1], NULL, 10);
+            int w = (int) strtol(argumentslist[2], NULL, 10);
+            int h = (int) strtol(argumentslist[3], NULL, 10);
 
             resize(id_image, w, h);
         } else {

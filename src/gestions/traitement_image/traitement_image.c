@@ -198,10 +198,7 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y) {
             return *(Uint16 *) p;
 
         case 3:
-            if (SDL_BYTEORDER == SDL_BIG_ENDIAN)
-                return p[0] << 16 | p[1] << 8 | p[2];
-            else
-                return p[0] | p[1] << 8 | p[2] << 16;
+            return SDL_BYTEORDER == SDL_BIG_ENDIAN ? p[0] << 16 | p[1] << 8 | p[2] : p[0] | p[1] << 8 | p[2] << 16;
 
         case 4:
             return *(Uint32 *) p;
@@ -220,22 +217,22 @@ void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel) {
     Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
     switch (nbOctetsParPixel) {
         case 1:
-            *p = pixel;
+            *p = (Uint8) pixel;
             break;
 
         case 2:
-            *(Uint16 *) p = pixel;
+            *(Uint16 *) p = (Uint16) pixel;
             break;
 
         case 3:
             if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-                p[0] = (pixel >> 16) & 0xff;
-                p[1] = (pixel >> 8) & 0xff;
-                p[2] = pixel & 0xff;
+                p[0] = (Uint8) ((pixel >> 16) & 0xff);
+                p[1] = (Uint8) ((pixel >> 8) & 0xff);
+                p[2] = (Uint8) (pixel & 0xff);
             } else {
-                p[0] = pixel & 0xff;
-                p[1] = (pixel >> 8) & 0xff;
-                p[2] = (pixel >> 16) & 0xff;
+                p[0] = (Uint8) (pixel & 0xff);
+                p[1] = (Uint8) ((pixel >> 8) & 0xff);
+                p[2] = (Uint8) ((pixel >> 16) & 0xff);
             }
             break;
 
@@ -252,7 +249,7 @@ void greyColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     for (int i = ox; i < fx; ++i) {
         for (int j = oy; j < fy; ++j) {
             getPixelColor(surface, i, j, &r, &g, &b, &a);
-            Uint8 grey = (r + g + b) / 3;
+            Uint8 grey = (Uint8) ((r + g + b) / 3);
             pixel = SDL_MapRGBA(surface->format, grey, grey, grey, 255);// grey mod
             setPixelColor(surface, i, j, pixel);
         }
@@ -267,7 +264,7 @@ void negatifColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     for (int i = ox; i < fx; ++i) {
         for (int j = oy; j < fy; ++j) {
             getPixelColor(surface, i, j, &r, &g, &b, &a);
-            pixel = SDL_MapRGBA(surface->format, 255 - r, 255 - g, 255 - b, a);
+            pixel = SDL_MapRGBA(surface->format, (Uint8) (255 - r), (Uint8) (255 - g), (Uint8) (255 - b), a);
             setPixelColor(surface, i, j, pixel);
         }
     }
@@ -285,12 +282,12 @@ void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     for (int i = 0; i < dimX; ++i) {
         for (int j = 0; j < dimY; ++j) {
             getPixelColor(surface, i + ox, j + oy, &r, &g, &b, &a);
-            Uint8 grey = (r + g + b) / 3;
+            Uint8 grey = (Uint8) ((r + g + b) / 3);
             saveColor[i][j] = grey;
             somme = somme + grey;
         }
     }
-    moyenne = somme / (dimX * dimY);
+    moyenne = (Uint8) (somme / (dimX * dimY));
     for (int i = ox; i < fx; ++i) {
         for (int j = oy; j < fy; ++j) {
             if (saveColor[i - ox][j - oy] <= moyenne) {
@@ -317,7 +314,7 @@ void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t,
             if (sr - t <= r && r <= sr + t
                 && sg - t <= g && g <= sg + t
                 && sb - t <= b && b <= sb + t) {
-                pixel = SDL_MapRGBA(surface->format, nr, ng, nb, 255);
+                pixel = SDL_MapRGBA(surface->format, (Uint8) nr, (Uint8) ng, (Uint8) nb, 255);
                 setPixelColor(surface, i, j, pixel);
             }
         }
@@ -330,7 +327,7 @@ void fillColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int nr, int
     SDL_LockSurface(surface);
     for (int i = ox; i < fx; ++i) {
         for (int j = oy; j < fy; ++j) {
-            pixel = SDL_MapRGBA(surface->format, nr, ng, nb, 255);
+            pixel = SDL_MapRGBA(surface->format, (Uint8) nr, (Uint8) ng, (Uint8) nb, 255);
             setPixelColor(surface, i, j, pixel);
         }
     }
@@ -449,22 +446,22 @@ void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
 
     switch (nbOctetsParPixel) {
         case 1:
-            *p = pixel;
+            *p = (Uint8) pixel;
             break;
 
         case 2:
-            *(Uint16 *) p = pixel;
+            *(Uint16 *) p = (Uint16) pixel;
             break;
 
         case 3:
             if (SDL_BYTEORDER == SDL_BIG_ENDIAN) {
-                p[0] = (pixel >> 16) & 0xff;
-                p[1] = (pixel >> 8) & 0xff;
-                p[2] = pixel & 0xff;
+                p[0] = (Uint8) ((pixel >> 16) & 0xff);
+                p[1] = (Uint8) ((pixel >> 8) & 0xff);
+                p[2] = (Uint8) (pixel & 0xff);
             } else {
-                p[0] = pixel & 0xff;
-                p[1] = (pixel >> 8) & 0xff;
-                p[2] = (pixel >> 16) & 0xff;
+                p[0] = (Uint8) (pixel & 0xff);
+                p[1] = (Uint8) ((pixel >> 8) & 0xff);
+                p[2] = (Uint8) ((pixel >> 16) & 0xff);
             }
             break;
 
@@ -513,7 +510,7 @@ int resize(int id, int w, int h) {
     structImage *image = get_image(id);
 
     if (image) {
-        SDL_Surface *new_image = resize_image(image->sprite, w, h);
+        SDL_Surface *new_image = resize_image(image->sprite, (Uint16) w, (Uint16) h);
 
         if (new_image) {
             SDL_FreeSurface(image->sprite);
