@@ -35,6 +35,17 @@ int main() {
     test_create_structe_not_valide_jpg();
     printf("--------------------FIN TEST--------------------\n");
 
+    printf("\n--------------------TEST--------------------\n");
 
+    test_load_image();
+
+    test_load_image_incorrect_format();
+
+    test_symh();
+
+    test_symv();
+
+    test_rotation();
+    printf("--------------------FIN TEST--------------------\n");
     return 0;
 }
