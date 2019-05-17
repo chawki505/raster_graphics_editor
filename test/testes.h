@@ -30,6 +30,14 @@ void test_error_couleur();
 
 void test_error_zone();
 
+void test_load_image();
 
+void test_load_image_incorrect_format();
+
+void test_symh();
+
+void test_symv();
+
+void test_rotation();
 
 #endif //GRAPHICS_EDITOR_TESTES_H
