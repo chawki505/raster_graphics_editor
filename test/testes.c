@@ -329,10 +329,8 @@ void test_load_image() {
     if (check == 0 && my_images->id == 1) {
         print_ok();
         delete_image(1);
-        fprintf(stdout, "OK\n");
     } else {
         print_ko();
-        fprintf(stdout, "NOT OK\n");
     }
 
     SDL_Quit();
@@ -350,10 +348,8 @@ void test_load_image_incorrect_format() {
 
     if (check ==1) {
         print_ok();
-        fprintf(stdout, "OK\n");
     } else {
         print_ko();
-        fprintf(stdout, "NOT OK\n");
     }
 
     SDL_Quit();
@@ -372,11 +368,9 @@ void test_symh() {
     int check = symh_image(1);
     if (check == 0) {
         print_ok();
-        fprintf(stdout, "OK\n");
         delete_image(1);
     } else {
         print_ko();
-        fprintf(stdout, "NOT OK\n");
     }
 
     SDL_Quit();
@@ -395,11 +389,9 @@ void test_symv() {
     int check = symv_image(1);
     if (check == 0) {
         print_ok();
-        fprintf(stdout, "OK\n");
         delete_image(1);
     } else {
         print_ko();
-        fprintf(stdout, "NOT OK\n");
     }
 
     SDL_Quit();
@@ -418,11 +410,9 @@ void test_rotation() {
     int check = rotation(1);
     if (check == 0) {
         print_ok();
-        fprintf(stdout, "OK\n");
         delete_image(1);
     } else {
         print_ko();
-        fprintf(stdout, "NOT OK\n");
     }
 
     SDL_Quit();
