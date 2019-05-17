@@ -114,11 +114,3 @@
 | add test unitaire                            |  X  |
 | write rapport                            |  X  |
 | check depot git                            |  X  |
-
-
-
-
-
-
-            
-
