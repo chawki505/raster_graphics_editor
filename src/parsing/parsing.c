@@ -158,8 +158,8 @@ int traitement_ligne(char *ligne_a_traiter) {
         }
 
     } else if (strncmp(argumentslist[0], "save", strlen("save")) == 0) {
-        if (get_nb_args() == 2)
-            save_image((int) strtol(argumentslist[1], NULL, 10));
+        if (get_nb_args() == 4)
+            save_image((int) strtol(argumentslist[1], NULL, 10), argumentslist[2], argumentslist[3]);
         else {
             if (mode_test == 0)fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
             rc = 1;
@@ -375,7 +375,7 @@ void display_help() {
                         "\n"
                         "- delete id : décharge l'image lié à id\n"
                         "\n"
-                        "- save id [path] [name] [type] : sauvegarde l'image lié à id\n"
+                        "- save id [path] [type] : sauvegarde l'image lié à id\n"
                         "\n"
                         "- show : affiche toutes les informations des images chargés\n"
                         "\n"

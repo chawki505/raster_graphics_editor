@@ -93,12 +93,24 @@ int load_image(char *path_image) {
 
 
 /* fonction pour sauvguarder une image au format png */
-int save_image(int id) {
+int save_image(int id, char *path, char *type) {
     structImage *image = get_image(id);
 
-    if (image && IMG_SavePNG(image->sprite, "my_image_save.png") == 0) {
+    if (image && strncmp(type, "png", 3) == 0 && IMG_SavePNG(image->sprite, path) == 0) {
         if (mode_test == 0)fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
         return 0;
+
+
+    } else if (image && strncmp(type, "jpg", 3) == 0 && IMG_SaveJPG(image->sprite, path, 100) == 0) {
+        if (mode_test == 0)fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
+        return 0;
+
+
+    } else if (image && strncmp(type, "bmp", 3) == 0 && SDL_SaveBMP(image->sprite, path) == 0) {
+        if (mode_test == 0)fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
+        return 0;
+
+
     } else {
         if (mode_test == 0)fprintf(stderr, "Erreur de sauvgarde\n");
         return 1;

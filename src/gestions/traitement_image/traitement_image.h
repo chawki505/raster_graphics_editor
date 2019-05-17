@@ -6,10 +6,9 @@
 #define RASTER_GRAPHICS_EDITOR_TRAITEMENT_IMAGE_H
 
 
-
 int load_image(char *path_image);
 
-int save_image(int id);
+int save_image(int id, char *path, char *type);
 
 int symh_image(int id);
 
