@@ -101,9 +101,11 @@ int save_image(int id, char *path, char *type) {
         return 0;
 
 
+#if  defined(__unix__) || defined(__APPLE__)
     } else if (image && strncmp(type, "jpg", 3) == 0 && IMG_SaveJPG(image->sprite, path, 100) == 0) {
         if (mode_test == 0)fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
         return 0;
+#endif
 
 
     } else if (image && strncmp(type, "bmp", 3) == 0 && SDL_SaveBMP(image->sprite, path) == 0) {
