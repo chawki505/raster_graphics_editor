@@ -20,4 +20,16 @@ void test_create_structe_valide_jpg();
 
 void test_create_structe_not_valide_jpg();
 
+int test_parser_0(char *buf);
+
+int test_parser_1(char *buf);
+
+void test_parser();
+
+void test_error_couleur();
+
+void test_error_zone();
+
+
+
 #endif //GRAPHICS_EDITOR_TESTES_H

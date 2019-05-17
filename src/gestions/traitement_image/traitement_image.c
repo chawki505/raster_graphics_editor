@@ -423,7 +423,6 @@ int rotation(int id) {
 
 int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax) {
     if (ox < 0 || oy < 0 || ox > wmax || oy > hmax || ox > fx || oy > fy || fx > wmax || fx > hmax) {
-        perror("Valeurs de positionnement incorrects");
         return 1;
     }
     return 0;
@@ -431,7 +430,6 @@ int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax) {
 
 int errorcolor(int r, int g, int b) {
     if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
-        perror("Valeurs de couleur incorrects");
         return 1;
     }
     return 0;

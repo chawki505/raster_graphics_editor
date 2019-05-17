@@ -194,6 +194,7 @@ int traitement_ligne(char *ligne_a_traiter) {
                 fy = (int) strtol(argumentslist[5], NULL, 10);
             }
             if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
+                fprintf(stderr, "Valeurs de positionnement incorrects\n");
                 return 1;
             }
             char *ligne = "";
@@ -213,6 +214,8 @@ int traitement_ligne(char *ligne_a_traiter) {
                                 b = (int) strtol(argumentslist[3], NULL, 10);
                         if (errorcolor(r, g, b) == 0) {
                             fillColor(image->sprite, ox, oy, fx, fy, r, g, b);
+                        } else {
+                            fprintf(stderr, "Valeurs de couleur incorrects\n");
                         }
                     } else {
                         fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
@@ -244,6 +247,8 @@ int traitement_ligne(char *ligne_a_traiter) {
                         int t = (int) strtol(argumentslist[7], NULL, 10);
                         if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
                             switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+                        } else {
+                            fprintf(stderr, "Valeurs de couleur incorrects\n");
                         }
                     } else {
                         fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");

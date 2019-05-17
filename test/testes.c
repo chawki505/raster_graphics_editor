@@ -206,3 +206,124 @@ void test_create_structe_not_valide_jpg() {
     }
     SDL_Quit();
 }
+
+int test_parser_0(char *buf) {
+    if (traitement_ligne(buf) == 0) {
+        printf("test avec '%s': \033[1;32m OK \033[0m\n", buf);
+        return 1;
+    } else {
+        printf("test avec '%s': \033[1;31m KO \033[0m\n", buf);
+        return 0;
+
+    }
+}
+
+int test_parser_1(char *buf) {
+    if (traitement_ligne(buf) == 1) {
+        printf("test avec '%s': \033[1;32m OK \033[0m\n", buf);
+        return 1;
+    } else {
+        printf("test avec '%s': \033[1;31m KO \033[0m\n", buf);
+        return 0;
+    }
+}
+
+void test_parser() {
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+    char buf1[50] = "";
+    char buf2[50] = "load";
+    char buf3[50] = "load test";
+    char buf4[50] = "delete test test";
+    char buf5[50] = "delete test";
+    char buf6[50] = "show";
+    char buf7[50] = "display";
+    char buf8[50] = "display 1 1";
+    char buf9[200] = "display 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ";
+    char buf10[50] = "save";
+    char buf11[50] = "save test";
+    char buf12[50] = "symv";
+    char buf13[50] = "symv test";
+    char buf14[50] = "symh";
+    char buf15[50] = "symh test";
+    char buf16[50] = "select";
+    char buf17[50] = "drawzone";
+    char buf18[50] = "drawzone test test test test test";
+    char buf19[50] = "rotate";
+    char buf20[50] = "rotate test test";
+    char buf21[50] = "resize";
+    char buf22[50] = "resize test test test";
+    char buf23[50] = "clear";
+    char buf25[50] = "fhkjsh fbsqdfjb fsbdefbfj";
+    int cpt = 0;
+
+    cpt += test_parser_1(buf1);
+    cpt += test_parser_1(buf2);
+    cpt += test_parser_0(buf3);
+    cpt += test_parser_1(buf4);
+    cpt += test_parser_0(buf5);
+    cpt += test_parser_0(buf6);
+    cpt += test_parser_1(buf7);
+    cpt += test_parser_0(buf8);
+    cpt += test_parser_1(buf9);
+    cpt += test_parser_1(buf10);
+    cpt += test_parser_0(buf11);
+    cpt += test_parser_1(buf12);
+    cpt += test_parser_0(buf13);
+    cpt += test_parser_1(buf14);
+    cpt += test_parser_0(buf15);
+    cpt += test_parser_1(buf16);
+    cpt += test_parser_1(buf17);
+    cpt += test_parser_0(buf18);
+    cpt += test_parser_1(buf19);
+    cpt += test_parser_0(buf20);
+    cpt += test_parser_1(buf21);
+    cpt += test_parser_0(buf22);
+    cpt += test_parser_0(buf23);
+    cpt += test_parser_1(buf25);
+
+    printf("Score pour test_parser:\033[1;33m %d \033[0m /25\n", cpt);
+
+
+    SDL_Quit();
+}
+
+void test_error_couleur() {
+    int tab[3] = {-25, 300, 158};
+    int cpt = 1;
+    for (int i = 0; i < 3; ++i) {
+        for (int j = 0; j < 3; ++j) {
+            for (int k = 0; k < 3; ++k) {
+                cpt += errorcolor(tab[i], tab[j], tab[k]);
+            }
+        }
+    }
+    printf("Score pour test_error_couleur: \033[1;33m %d \033[0m /27\n", cpt);
+
+}
+
+void test_error_zone() {
+    char good_test[4096][100];
+    int cpt = 0;
+    int tab[4] = {-1, 5, 10, 15};
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 4; ++j) {
+            for (int k = 0; k < 4; ++k) {
+                for (int l = 0; l < 4; ++l) {
+                    for (int m = 0; m < 4; ++m) {
+                        for (int n = 0; n < 4; ++n) {
+                            if (errorzone(tab[i], tab[j], tab[k], tab[l], tab[m], tab[n]) == 0) {
+                                sprintf(good_test[cpt],
+                                        "Avec debut->%dx%d \tfin->%dx%d \tmax->%dx%d \t: \033[1;32m OK \033[0m\n",
+                                        tab[i], tab[j], tab[k], tab[l], tab[m], tab[n]);
+                                cpt++;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    for (int i1 = 0; i1 < cpt; ++i1) {
+        printf("%s", good_test[i1]);
+    }
+}

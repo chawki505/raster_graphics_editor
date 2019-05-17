@@ -11,6 +11,11 @@ int main() {
 
     test_init_sdl();
 
+    test_parser();
+
+    test_error_couleur();
+
+    test_error_zone();
 
     test_create_structe_valide_bmp();
 
