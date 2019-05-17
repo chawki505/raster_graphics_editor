@@ -41,7 +41,6 @@ bool init_LWindow(LWindow *, SDL_Surface *);
 //Handles window events
 void handleEvent_LWindow(LWindow *, SDL_Event *);
 
-
 //Shows windows contents
 void render_LWindow(LWindow *);
 

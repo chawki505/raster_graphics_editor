@@ -16,13 +16,15 @@ typedef struct structImage {
 } structImage;
 
 
-structImage *my_images;
+structImage *my_images; //liste des images chargé
 
+void init_value_struct(char *path, char *name, char *format, structImage *myStruct);
 
 structImage *createStruct_other_format(char *path, char *name, char *format, int type_image);
 
 structImage *createStruct_bmp_format(char *path, char *name, char *format);
 
+structImage *get_image(int id);
 
 void print_struct(structImage *myStruct);
 
@@ -31,8 +33,6 @@ void add_image(structImage *mystruc);
 void print_list_image();
 
 int delete_image(int id);
-
-structImage *get_image(int id);
 
 
 #endif //GRAPHICS_EDITOR_MY_STRUCT_IMAGES_H

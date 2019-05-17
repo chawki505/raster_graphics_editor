@@ -8,9 +8,7 @@
 
 extern int mode_test;
 
-
-void init_value_struct(char *path, char *name, char *format, structImage *myStruct);
-
+//fonction qui cree une structure de type png ou jpg
 structImage *createStruct_other_format(char *path, char *name, char *format, int type_image) {
     structImage *myStruct = malloc(sizeof(structImage));
 
@@ -32,7 +30,7 @@ structImage *createStruct_other_format(char *path, char *name, char *format, int
     return myStruct;
 }
 
-
+//fonction qui cree une structure de type bmp
 structImage *createStruct_bmp_format(char *path, char *name, char *format) {
     structImage *myStruct = malloc(sizeof(structImage));
 
@@ -55,6 +53,7 @@ structImage *createStruct_bmp_format(char *path, char *name, char *format) {
     return myStruct;
 }
 
+//fonction init valeure structure
 void init_value_struct(char *path, char *name, char *format, structImage *myStruct) {
     myStruct->id = 1;
     myStruct->path = path;
@@ -74,14 +73,15 @@ void add_image(structImage *mystruc) {
 
             mystruc->id = 1;
             my_images = mystruc;
+
         } else {
+
             int compteur = 2;
             while (liste->next != NULL) {
                 compteur++;
                 liste = liste->next;
             }
-            if (liste->id == 1)
-                compteur = 2;
+            if (liste->id == 1)compteur = 2;
             mystruc->id = compteur;
             liste->next = mystruc;
         }
@@ -99,11 +99,13 @@ structImage *get_image(int id) {
     return liste ? liste : NULL;
 }
 
+//afficher les données d'une structure
 void print_struct(structImage *myStruct) {
     printf("ID:%d\t\tPATH:%s\t\tFORMAT:%s\t\tNAME:%s\n", myStruct->id, myStruct->path, myStruct->format,
            myStruct->name);
 }
 
+//affiche la liste des images chargé
 void print_list_image() {
     structImage *liste = my_images;
 
@@ -113,6 +115,7 @@ void print_list_image() {
     }
 }
 
+//suprimme une image de la liste
 int delete_image(int id) {
     structImage *liste = my_images;
     structImage *tmp = NULL;
@@ -180,6 +183,4 @@ int delete_image(int id) {
     }
     if (mode_test == 0)fprintf(stdout, "image suprimer !\n");
     return 0;
-
-
 }

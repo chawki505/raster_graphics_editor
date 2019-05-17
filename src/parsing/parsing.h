@@ -6,8 +6,6 @@
 #define RASTER_GRAPHICS_EDITOR_PARSING_H
 
 
-
-
 #define TAILLE_LIST_ARGS 32
 
 
@@ -26,5 +24,8 @@ void traitement_espaces_fin(char *chaine_a_traiter);
 int traitement_ligne(char *chaine_a_traiter);
 
 void display_help();
+
+void clear();
+
 
 #endif //RASTER_GRAPHICS_EDITOR_PARSING_H

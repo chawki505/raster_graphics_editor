@@ -4,6 +4,7 @@
 int mode_test;
 
 
+//fonction pour tester la disponibilié de SDL
 bool init() {
     //Initialization flag
     bool success = true;

@@ -12,7 +12,7 @@
 
 extern int mode_test;
 
-
+//prototype d'une fonction qui est utiliser en local
 void close_all_Lwindow(LWindow *gWindows, int nb_window);
 
 /* return le format de l'image passer en parametre*/
@@ -56,9 +56,7 @@ int load_image(char *path_image) {
             nom = tmp + 1;
             tmp = strstr(tmp + 1, "/");
         }
-
     }
-
 
     format = get_format_image(nom);
 
@@ -87,7 +85,6 @@ int load_image(char *path_image) {
         if (mode_test == 0)fprintf(stderr, "format image non correcte\n");
         return 1;
     }
-
     return 0;
 }
 
@@ -101,7 +98,7 @@ int save_image(int id, char *path, char *type) {
         return 0;
 
 
-#if  defined(__APPLE__)
+#if defined(__APPLE__)
     } else if (image && strncmp(type, "jpg", 3) == 0 && IMG_SaveJPG(image->sprite, path, 100) == 0) {
         if (mode_test == 0)fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
         return 0;
@@ -119,8 +116,11 @@ int save_image(int id, char *path, char *type) {
     }
 }
 
+//focntion pour faire une symetrie verticale d'une image
 int symv_image(int id) {
+
     structImage *image = get_image(id);
+
     if (image == NULL) {
         if (mode_test == 0)fprintf(stderr, "Id d'image non présent\n");
         return 1;
@@ -147,7 +147,6 @@ int symv_image(int id) {
     for (int i = 0; i < w; ++i) {
         for (int j = 0; j < h; ++j) {
 
-
             getPixelColor(image->sprite, i, j, &r, &g, &b, &a);
             pixel = SDL_MapRGBA(surface->format, r, g, b, a);
             setPixelColor(surface, i, h - j - 1, pixel);
@@ -159,10 +158,12 @@ int symv_image(int id) {
     SDL_UnlockSurface(old_surface);
 
     SDL_FreeSurface(old_surface);
+
     image->sprite = surface;
     return 0;
 }
 
+//focntion pour faire une symetrie horizontal d'une image
 int symh_image(int id) {
     structImage *image = get_image(id);
     if (image == NULL) {
@@ -207,6 +208,7 @@ int symh_image(int id) {
     return 0;
 }
 
+//focntion pour obtenire un pixel d'une surface
 Uint32 getPixel(SDL_Surface *surface, int x, int y) {
     int nbOctetsParPixel = surface->format->BytesPerPixel;
     Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
@@ -227,11 +229,13 @@ Uint32 getPixel(SDL_Surface *surface, int x, int y) {
     }
 }
 
+//fonction pour obtenire la couleur d'un pixel
 void getPixelColor(SDL_Surface *surface, int x, int y, Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a) {
     Uint32 pixel = getPixel(surface, x, y);
     SDL_GetRGBA(pixel, surface->format, r, g, b, a);
 }
 
+//fonction pour modifier la couleur d'un pixel
 void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel) {
     int nbOctetsParPixel = surface->format->BytesPerPixel;
     Uint8 *p = (Uint8 *) surface->pixels + y * surface->pitch + x * nbOctetsParPixel;
@@ -262,6 +266,7 @@ void setPixelColor(SDL_Surface *surface, int x, int y, Uint32 pixel) {
     }
 }
 
+//focntion pour appliquer la couleur gris sur une surface
 void greyColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     Uint8 r = 0, g = 0, b = 0, a = 0;
     Uint32 pixel = 0;
@@ -277,6 +282,7 @@ void greyColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     SDL_UnlockSurface(surface);
 }
 
+//focntion pour le negative
 void negatifColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     Uint8 r = 0, g = 0, b = 0, a = 0;
     Uint32 pixel = 0;
@@ -291,6 +297,7 @@ void negatifColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     SDL_UnlockSurface(surface);
 }
 
+//focntion pour le BW
 void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     Uint8 r = 0, g = 0, b = 0, a = 0;
     Uint32 pixel = 0;
@@ -323,6 +330,8 @@ void blackAndWhiteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy) {
     SDL_UnlockSurface(surface);
 }
 
+
+//focntion pour changer de couleur
 void switchColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int t,
                  int sr, int sg, int sb, int nr, int ng, int nb) {
     Uint8 r = 0, g = 0, b = 0, a = 0;
@@ -405,6 +414,7 @@ int drawzone(int id, int ox, int oy, int fx, int fy) {
     return 0;
 }
 
+//fonction pour faire une rotation de l'image
 int rotation(int id) {
     structImage *image = get_image(id);
     if (image == NULL) {
@@ -441,6 +451,7 @@ int rotation(int id) {
     return 0;
 }
 
+//focntion pour test les erreurs d'une zone
 int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax) {
     if (ox < 0 || oy < 0 || ox > wmax || oy > hmax || ox > fx || oy > fy || fx > wmax || fx > hmax) {
         return 1;
@@ -448,6 +459,7 @@ int errorzone(int ox, int oy, int fx, int fy, int wmax, int hmax) {
     return 0;
 }
 
+//focntion pour test les erreurs d'une couleur
 int errorcolor(int r, int g, int b) {
     if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
         return 1;
@@ -456,6 +468,7 @@ int errorcolor(int r, int g, int b) {
 }
 
 
+//appliquer un pixel
 void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
 
     int nbOctetsParPixel = surface->format->BytesPerPixel;
@@ -489,7 +502,7 @@ void setPixel(SDL_Surface *surface, int x, int y, Uint32 pixel) {
     }
 }
 
-
+//focntion pour redimentioné une image
 SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h) {
 
     if (image && w && h) {
@@ -542,7 +555,7 @@ int resize(int id, int w, int h) {
     return 0;
 }
 
-
+//focntion pour liberer les ressouces des fenetres
 void close_all_Lwindow(LWindow *gWindows, int nb_window) {
     //Destroy windows
     for (int i = 0; i < nb_window; ++i) {
@@ -550,7 +563,7 @@ void close_all_Lwindow(LWindow *gWindows, int nb_window) {
     }
 }
 
-
+//fonction pour afficher les fenetres
 int run_display(int *tab_id_images, int sizetab) {
 
     //init value of tab window
@@ -618,7 +631,6 @@ int run_display(int *tab_id_images, int sizetab) {
 
     //Free resources
     close_all_Lwindow(gWindows, nb_window);
-
 
     return 0;
 }

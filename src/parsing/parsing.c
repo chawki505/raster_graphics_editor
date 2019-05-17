@@ -14,8 +14,6 @@ char *argumentslist[TAILLE_LIST_ARGS];
 extern int mode_test;
 
 
-extern void clear();
-
 //methode pour creer un liste des arguments de la commande donner en entrer
 void creation_liste_arguments(char *saisi_user) {
     int compteur = 0;
@@ -113,6 +111,7 @@ int traitement_ligne(char *ligne_a_traiter) {
 
     int rc = 0;
 
+    /**FONCTION load**/
     if (strncmp(argumentslist[0], "load", strlen("load")) == 0) {
         if (get_nb_args() == 2)
             load_image(argumentslist[1]);
@@ -121,6 +120,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION delete**/
     } else if (strncmp(argumentslist[0], "delete", strlen("delete")) == 0) {
         if (get_nb_args() == 2)
             delete_image((int) strtol(argumentslist[1], NULL, 10));
@@ -129,9 +129,11 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION show**/
     } else if (strncmp(argumentslist[0], "show", strlen("show")) == 0) {
         print_list_image();
 
+        /**FONCTION display**/
     } else if (strncmp(argumentslist[0], "display", strlen("display")) == 0) {
         if (get_nb_args() >= 2) {
             if (get_nb_args() - 1 >= TAILLE_LIST_ARGS) {
@@ -157,6 +159,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION save**/
     } else if (strncmp(argumentslist[0], "save", strlen("save")) == 0) {
         if (get_nb_args() == 4)
             save_image((int) strtol(argumentslist[1], NULL, 10), argumentslist[2], argumentslist[3]);
@@ -165,6 +168,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION symv**/
     } else if (strncmp(argumentslist[0], "symv", 4) == 0) {
         if (get_nb_args() == 2)
             symv_image((int) strtol(argumentslist[1], NULL, 10));
@@ -173,6 +177,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION symh**/
     } else if (strncmp(argumentslist[0], "symh", 4) == 0) {
         if (get_nb_args() == 2)
             symh_image((int) strtol(argumentslist[1], NULL, 10));
@@ -181,6 +186,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION select**/
     } else if (strncmp(argumentslist[0], "select", strlen("select")) == 0) {
 
         if (get_nb_args() == 6 || get_nb_args() == 2) {
@@ -304,6 +310,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION drawzone**/
     } else if (strncmp(argumentslist[0], "drawzone", strlen("drawzone")) == 0) {
         if (get_nb_args() == 6)
             drawzone((int) strtol(argumentslist[1], NULL, 10),
@@ -316,6 +323,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION rotate**/
     } else if (strncmp(argumentslist[0], "rotate", strlen("rotate")) == 0) {
         if (get_nb_args() == 3) {
             int r = (int) strtol(argumentslist[2], NULL, 10) % 4;
@@ -328,6 +336,7 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION resize**/
     } else if (strncmp(argumentslist[0], "resize", strlen("resize")) == 0) {
 
         if (get_nb_args() == 4) {
@@ -341,12 +350,15 @@ int traitement_ligne(char *ligne_a_traiter) {
             rc = 1;
         }
 
+        /**FONCTION clear**/
     } else if (strncmp(argumentslist[0], "clear", strlen("clear")) == 0) {
         clear();
 
+        /**FONCTION help**/
     } else if (strncmp(argumentslist[0], "help", strlen("help")) == 0) {
         display_help();
 
+        /**FONCTION exit**/
     } else if (strncmp(argumentslist[0], "exit", strlen("exit")) == 0) {
         SDL_Quit(); // Arrêt de la SDL (libération de la mémoire).
         liberation_arguments();
@@ -355,6 +367,7 @@ int traitement_ligne(char *ligne_a_traiter) {
         }
         exit(EXIT_SUCCESS);
 
+        /** inconnue**/
     } else {
         if (mode_test == 0)fprintf(stderr, "Commande : %s inconnue\n", ligne_a_traiter);
         rc = 1;
@@ -364,7 +377,7 @@ int traitement_ligne(char *ligne_a_traiter) {
     return rc;
 }
 
-
+//focntion pour afficher le help
 void display_help() {
     if (mode_test == 0)
         fprintf(stdout, "\nListe des commandes disponibles :\n"

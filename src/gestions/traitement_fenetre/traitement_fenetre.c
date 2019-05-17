@@ -9,9 +9,8 @@
 
 extern int mode_test;
 
-
+//Initialize non-existant window
 void init_value_LWindow(LWindow *window) {
-    //Initialize non-existant window
     window->mWindow = NULL;
     window->mMouseFocus = false;
     window->mKeyboardFocus = false;
@@ -21,6 +20,7 @@ void init_value_LWindow(LWindow *window) {
     window->mHeight = 0;
 }
 
+//fonction pour copier une surface
 SDL_Surface *copie_surface(SDL_Surface *surface_a_copier) {
 
     SDL_Surface *surface_copiee = NULL;
@@ -81,7 +81,7 @@ bool init_LWindow(LWindow *window, SDL_Surface *surface) {
     return window->mWindow != NULL && window->mSurface != NULL;
 }
 
-
+//fonction qui capture les evenements d'une fenetre
 void handleEvent_LWindow(LWindow *window, SDL_Event *event) {
 //If an event was detected for this window
     if (event->type == SDL_WINDOWEVENT && event->window.windowID == window->mWindowID) {
@@ -172,7 +172,7 @@ void handleEvent_LWindow(LWindow *window, SDL_Event *event) {
     }
 }
 
-
+//fonction pour actualier une image dans la fenetre
 void render_LWindow(LWindow *window) {
     if (!window->mMinimized) {
 
@@ -194,6 +194,7 @@ void render_LWindow(LWindow *window) {
 }
 
 
+//fonction pour liberer la roussource
 void free_LWindow(LWindow *window) {
     if (window->mWindow != NULL) {
         SDL_FreeSurface(window->mSurface);
