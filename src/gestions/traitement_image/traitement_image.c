@@ -72,19 +72,22 @@ int load_image(char *path_image) {
         } else if (strncmp(format, "png", 3) == 0) {
             myimage = createStruct_other_format(path, nom, format, IMG_INIT_PNG);
         } else {
-            if (mode_test == 0)fprintf(stderr, "format image non correcte\n");
+            fprintf(stderr, "format image non correcte\n");
             return 1;
         }
 
         if (myimage) {
             add_image(myimage);
-            if (mode_test == 0)fprintf(stdout, "image open %s \n", myimage->name);
+            fprintf(stdout, "image open %s \n", myimage->name);
+        } else {
+            return 1;
         }
 
     } else {
-        if (mode_test == 0)fprintf(stderr, "format image non correcte\n");
+        fprintf(stderr, "format image non correcte\n");
         return 1;
     }
+
     return 0;
 }
 
