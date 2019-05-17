@@ -10,6 +10,9 @@
 #include "traitement_image.h"
 
 
+extern int mode_test;
+
+
 void close_all_Lwindow(LWindow *gWindows, int nb_window);
 
 /* return le format de l'image passer en parametre*/
@@ -69,17 +72,17 @@ int load_image(char *path_image) {
         } else if (strncmp(format, "png", 3) == 0) {
             myimage = createStruct_other_format(path, nom, format, IMG_INIT_PNG);
         } else {
-            fprintf(stderr, "format image non correcte\n");
+            if (mode_test == 0)fprintf(stderr, "format image non correcte\n");
             return 1;
         }
 
         if (myimage) {
             add_image(myimage);
-            fprintf(stdout, "image open %s \n", myimage->name);
+            if (mode_test == 0)fprintf(stdout, "image open %s \n", myimage->name);
         }
 
     } else {
-        fprintf(stderr, "format image non correcte\n");
+        if (mode_test == 0)fprintf(stderr, "format image non correcte\n");
         return 1;
     }
     return 0;
@@ -91,10 +94,10 @@ int save_image(int id) {
     structImage *image = get_image(id);
 
     if (image && IMG_SavePNG(image->sprite, "my_image_save.png") == 0) {
-        fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
+        if (mode_test == 0)fprintf(stdout, "Image (%s) enregistrer !\n", image->name);
         return 0;
     } else {
-        fprintf(stderr, "Erreur de sauvgarde\n");
+        if (mode_test == 0)fprintf(stderr, "Erreur de sauvgarde\n");
         return 1;
     }
 }
@@ -102,7 +105,7 @@ int save_image(int id) {
 int symv_image(int id) {
     structImage *image = get_image(id);
     if (image == NULL) {
-        fprintf(stderr, "Id d'image non présent\n");
+        if (mode_test == 0)fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
 
@@ -146,7 +149,7 @@ int symv_image(int id) {
 int symh_image(int id) {
     structImage *image = get_image(id);
     if (image == NULL) {
-        fprintf(stderr, "Id d'image non présent\n");
+        if (mode_test == 0)fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
 
@@ -355,7 +358,7 @@ void copyAndPasteColor(SDL_Surface *surface, int ox, int oy, int fx, int fy, int
 int drawzone(int id, int ox, int oy, int fx, int fy) {
     structImage *image = get_image(id);
     if (image == NULL) {
-        fprintf(stderr, "Id d'image non présent\n");
+        if (mode_test == 0)fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
     int dimX = fx - ox;
@@ -388,7 +391,7 @@ int drawzone(int id, int ox, int oy, int fx, int fy) {
 int rotation(int id) {
     structImage *image = get_image(id);
     if (image == NULL) {
-        fprintf(stderr, "Id d'image non présent\n");
+        if (mode_test == 0)fprintf(stderr, "Id d'image non présent\n");
         return 1;
     }
     Uint32 pixel = 0;
@@ -497,7 +500,7 @@ SDL_Surface *resize_image(SDL_Surface *image, Uint16 w, Uint16 h) {
                         );
         return new_image;
     } else {
-        perror("Erreur resize image !\n");
+        if (mode_test == 0)fprintf(stderr, "Erreur resize image !\n");
         return NULL;
     }
 }
@@ -513,10 +516,10 @@ int resize(int id, int w, int h) {
         if (new_image) {
             SDL_FreeSurface(image->sprite);
             image->sprite = new_image;
-            fprintf(stdout, "Image redimensionner avec succès !\n");
+            if (mode_test == 0)fprintf(stdout, "Image redimensionner avec succès !\n");
         }
     } else {
-        fprintf(stdout, "Échec de chargement de l'image (id non existant)\n");
+        if (mode_test == 0)fprintf(stdout, "Échec de chargement de l'image (id non existant)\n");
         return 1;
     }
     return 0;
@@ -549,7 +552,7 @@ int run_display(int *tab_id_images, int sizetab) {
     for (int i = 0; i < nb_window; ++i) {
         structImage *myimage = get_image(tab_id_images[i]);
         if (init_LWindow(&gWindows[i], myimage->sprite))
-            fprintf(stdout, "Window %d created\n", i + 1);
+            if (mode_test == 0)fprintf(stdout, "Window %d created\n", i + 1);
     }
 
     //Main loop flag

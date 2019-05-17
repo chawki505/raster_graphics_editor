@@ -1,6 +1,8 @@
 #include "includes.h"
 #include "parsing/parsing.h"
 
+int mode_test;
+
 
 bool init() {
     //Initialization flag
@@ -22,6 +24,8 @@ bool init() {
 
 
 int main(int argc, char *argv[]) {
+
+    mode_test = 0;
 
     /*
      * Initialisation sdl

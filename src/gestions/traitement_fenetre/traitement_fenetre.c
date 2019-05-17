@@ -6,6 +6,8 @@
 
 #include "traitement_fenetre.h"
 
+extern int mode_test;
+
 
 void init_value_LWindow(LWindow *window) {
     //Initialize non-existant window
@@ -35,7 +37,7 @@ bool init_LWindow(LWindow *window, SDL_Surface *surface) {
 
     //Erreur create window
     if (!window->mWindow) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create window: %s", SDL_GetError());
+        if (mode_test == 0)SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create window: %s", SDL_GetError());
         return false;
     }
 
@@ -44,7 +46,7 @@ bool init_LWindow(LWindow *window, SDL_Surface *surface) {
 
     //erreur create surface
     if (!window->mSurface) {
-        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load surface: %s", SDL_GetError());
+        if (mode_test == 0)SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't load surface: %s", SDL_GetError());
         return false;
     }
 

@@ -6,7 +6,6 @@
 #define GRAPHICS_EDITOR_MY_STRUCT_IMAGES_H
 
 
-
 typedef struct structImage {
     int id;
     SDL_Surface *sprite;

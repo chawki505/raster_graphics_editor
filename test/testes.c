@@ -43,6 +43,19 @@ void reset() {
     printf("\033[0m");
 }
 
+
+void print_ok() {
+    green();
+    fprintf(stdout, "OK\n");
+    reset();
+}
+
+void print_ko() {
+    red();
+    fprintf(stdout, "KO\n");
+    reset();
+}
+
 //test si la lib sdl est active
 void test_init_sdl() {
     //DEBUT TEST
@@ -50,9 +63,7 @@ void test_init_sdl() {
     fprintf(stdout, "TEST Init sdl : ");
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) < 0) {
-        red();
-        fprintf(stdout, "NOT OK\n");
-        reset();
+        print_ko();
     } else {
         //Set texture filtering to linear
         if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1")) {
@@ -60,9 +71,7 @@ void test_init_sdl() {
             printf("Warning: Linear texture filtering not enabled!\n");
             reset();
         }
-        green();
-        fprintf(stdout, "OK\n");
-        reset();
+        print_ok();
 
         //FIN TEST
         SDL_Quit();
@@ -79,15 +88,11 @@ void test_create_structe_valide_bmp() {
     structImage *tmp_struct = createStruct_bmp_format("../img/image.bmp", "xxxxxx", "xxxxxx");
 
     if (tmp_struct != NULL) {
-        green();
-        fprintf(stdout, "OK\n");
-        reset();
+        print_ok();
         SDL_FreeSurface(tmp_struct->sprite);
         free(tmp_struct);
     } else {
-        red();
-        fprintf(stdout, "NOT OK\n");
-        reset();
+        print_ko();
     }
 
     SDL_Quit();
@@ -103,13 +108,9 @@ void test_create_structe_not_valide_bmp() {
     structImage *tmp_struct = createStruct_bmp_format("xxxxxx", "xxxxxx", "xxxxxx");
 
     if (tmp_struct == NULL) {
-        green();
-        fprintf(stdout, "OK\n");
-        reset();
+        print_ok();
     } else {
-        red();
-        fprintf(stdout, "NOT OK\n");
-        reset();
+        print_ko();
         free(tmp_struct);
     }
     SDL_Quit();
@@ -125,15 +126,11 @@ void test_create_structe_valide_png() {
     structImage *tmp_struct = createStruct_other_format("../img/image.png", "xxxxxx", "xxxxxx", IMG_INIT_PNG);
 
     if (tmp_struct != NULL) {
-        green();
-        fprintf(stdout, "OK\n");
-        reset();
+        print_ok();
         SDL_FreeSurface(tmp_struct->sprite);
         free(tmp_struct);
     } else {
-        red();
-        fprintf(stdout, "NOT OK\n");
-        reset();
+        print_ko();
     }
 
     SDL_Quit();
@@ -149,13 +146,9 @@ void test_create_structe_not_valide_png() {
     structImage *tmp_struct = createStruct_other_format("xxxxxx", "xxxxxx", "xxxxxx", IMG_INIT_PNG);
 
     if (tmp_struct == NULL) {
-        green();
-        fprintf(stdout, "OK\n");
-        reset();
+        print_ok();
     } else {
-        red();
-        fprintf(stdout, "NOT OK\n");
-        reset();
+        print_ko();
         free(tmp_struct);
     }
     SDL_Quit();
@@ -171,15 +164,11 @@ void test_create_structe_valide_jpg() {
     structImage *tmp_struct = createStruct_other_format("../img/image.jpg", "xxxxxx", "xxxxxx", IMG_INIT_JPG);
 
     if (tmp_struct != NULL) {
-        green();
-        fprintf(stdout, "OK\n");
-        reset();
+        print_ok();
         SDL_FreeSurface(tmp_struct->sprite);
         free(tmp_struct);
     } else {
-        red();
-        fprintf(stdout, "NOT OK\n");
-        reset();
+        print_ko();
     }
 
     SDL_Quit();
@@ -195,41 +184,41 @@ void test_create_structe_not_valide_jpg() {
     structImage *tmp_struct = createStruct_other_format("xxxxxx", "xxxxxx", "xxxxxx", IMG_INIT_JPG);
 
     if (tmp_struct == NULL) {
-        green();
-        fprintf(stdout, "OK\n");
-        reset();
+        print_ok();
     } else {
-        red();
-        fprintf(stdout, "NOT OK\n");
-        reset();
+        print_ko();
         free(tmp_struct);
     }
     SDL_Quit();
 }
 
 int test_parser_0(char *buf) {
+    printf("TEST avec '%s' : ", buf);
     if (traitement_ligne(buf) == 0) {
-        printf("test avec '%s': \033[1;32m OK \033[0m\n", buf);
+        print_ok();
         return 1;
     } else {
-        printf("test avec '%s': \033[1;31m KO \033[0m\n", buf);
+        print_ko();
         return 0;
 
     }
 }
 
 int test_parser_1(char *buf) {
+    printf("TEST avec '%s' : ", buf);
     if (traitement_ligne(buf) == 1) {
-        printf("test avec '%s': \033[1;32m OK \033[0m\n", buf);
+        print_ok();
         return 1;
     } else {
-        printf("test avec '%s': \033[1;31m KO \033[0m\n", buf);
+        print_ko();
         return 0;
     }
 }
 
 void test_parser() {
+
     SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+
     char buf1[50] = "";
     char buf2[50] = "load";
     char buf3[50] = "load test";
@@ -238,7 +227,7 @@ void test_parser() {
     char buf6[50] = "show";
     char buf7[50] = "display";
     char buf8[50] = "display 1 1";
-    char buf9[200] = "display 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 ";
+    char buf9[120] = "display 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1";
     char buf10[50] = "save";
     char buf11[50] = "save test";
     char buf12[50] = "symv";
@@ -252,8 +241,8 @@ void test_parser() {
     char buf20[50] = "rotate test test";
     char buf21[50] = "resize";
     char buf22[50] = "resize test test test";
-    char buf23[50] = "clear";
-    char buf25[50] = "fhkjsh fbsqdfjb fsbdefbfj";
+    char buf23[50] = "fhkjsh fbsqdfjb fsbdefbfj";
+
     int cpt = 0;
 
     cpt += test_parser_1(buf1);
@@ -264,7 +253,7 @@ void test_parser() {
     cpt += test_parser_0(buf6);
     cpt += test_parser_1(buf7);
     cpt += test_parser_0(buf8);
-    cpt += test_parser_1(buf9);
+    cpt += test_parser_0(buf9);
     cpt += test_parser_1(buf10);
     cpt += test_parser_0(buf11);
     cpt += test_parser_1(buf12);
@@ -278,11 +267,9 @@ void test_parser() {
     cpt += test_parser_0(buf20);
     cpt += test_parser_1(buf21);
     cpt += test_parser_0(buf22);
-    cpt += test_parser_0(buf23);
-    cpt += test_parser_1(buf25);
+    cpt += test_parser_1(buf23);
 
-    printf("Score pour test_parser:\033[1;33m %d \033[0m /25\n", cpt);
-
+    printf("\nScore pour test_parser: \033[1;33m%d\033[0m / 23\n", cpt);
 
     SDL_Quit();
 }
@@ -297,7 +284,7 @@ void test_error_couleur() {
             }
         }
     }
-    printf("Score pour test_error_couleur: \033[1;33m %d \033[0m /27\n", cpt);
+    printf("Score pour test_error_couleur: \033[1;33m%d\033[0m / 27\n", cpt);
 
 }
 

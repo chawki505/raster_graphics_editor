@@ -5,29 +5,36 @@
 
 #include "testes.h"
 
+int mode_test;
 
 int main() {
-    printf("file test \n");
+    mode_test = 1;
 
+    printf("\n--------------------TEST--------------------\n");
     test_init_sdl();
+    printf("--------------------FIN TEST--------------------\n");
 
+    printf("\n--------------------TEST--------------------\n");
     test_parser();
+    printf("--------------------FIN TEST--------------------\n");
 
+    printf("\n--------------------TEST--------------------\n");
     test_error_couleur();
+    printf("--------------------FIN TEST--------------------\n");
 
+    printf("\n--------------------TEST--------------------\n");
     test_error_zone();
+    printf("--------------------FIN TEST--------------------\n");
 
+    printf("\n--------------------TEST--------------------\n");
     test_create_structe_valide_bmp();
-
     test_create_structe_not_valide_bmp();
-
     test_create_structe_valide_png();
-
     test_create_structe_not_valide_png();
-
     test_create_structe_valide_jpg();
-
     test_create_structe_not_valide_jpg();
+    printf("--------------------FIN TEST--------------------\n");
+
 
     return 0;
 }

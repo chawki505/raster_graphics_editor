@@ -6,6 +6,8 @@
 
 #include "my_struct_images.h"
 
+extern int mode_test;
+
 
 void init_value_struct(char *path, char *name, char *format, structImage *myStruct);
 
@@ -13,7 +15,7 @@ structImage *createStruct_other_format(char *path, char *name, char *format, int
     structImage *myStruct = malloc(sizeof(structImage));
 
     if (myStruct == NULL) {
-        perror("promblème allocation image struct\n");
+        if (mode_test == 0)perror("promblème allocation image struct\n");
         return NULL;
     }
 
@@ -22,7 +24,7 @@ structImage *createStruct_other_format(char *path, char *name, char *format, int
     myStruct->sprite = IMG_Load(path); //load other format image
 
     if (myStruct->sprite == NULL) {
-        fprintf(stderr, "ERROR: load image\n");
+        if (mode_test == 0)fprintf(stderr, "ERROR: load image\n");
         free(myStruct);
         return NULL;
     }
@@ -35,7 +37,7 @@ structImage *createStruct_bmp_format(char *path, char *name, char *format) {
     structImage *myStruct = malloc(sizeof(structImage));
 
     if (myStruct == NULL) {
-        perror("promblème allocation image struct\n");
+        if (mode_test == 0)perror("promblème allocation image struct\n");
         return NULL;
     }
 
@@ -45,7 +47,7 @@ structImage *createStruct_bmp_format(char *path, char *name, char *format) {
 
 
     if (myStruct->sprite == NULL) {
-        fprintf(stderr, "ERROR: load image\n");
+        if (mode_test == 0)fprintf(stderr, "ERROR: load image\n");
         free(myStruct);
         return NULL;
     }
@@ -116,7 +118,9 @@ int delete_image(int id) {
     structImage *tmp = NULL;
 
     if (liste == NULL || id == 0) {
-        fprintf(stdout, "L'id (%d) n'est pas présent dans la liste d'images chargées ou id faux ou liste vide\n", id);
+        if (mode_test == 0)
+            fprintf(stdout, "L'id (%d) n'est pas présent dans la liste d'images chargées ou id faux ou liste vide\n",
+                    id);
         return 1;
     }
 
@@ -125,7 +129,7 @@ int delete_image(int id) {
         free(liste);
         my_images = NULL;
 
-        fprintf(stdout, "image suprimer !\n");
+        if (mode_test == 0)fprintf(stdout, "image suprimer !\n");
         return 0;
     }
 
@@ -137,7 +141,7 @@ int delete_image(int id) {
     }
 
     if (cpt < id) {
-        fprintf(stdout, "L'id (%d) n'est pas présent dans la liste d'images chargées\n", id);
+        if (mode_test == 0)fprintf(stdout, "L'id (%d) n'est pas présent dans la liste d'images chargées\n", id);
         return 1;
     }
 
@@ -174,7 +178,7 @@ int delete_image(int id) {
         SDL_FreeSurface(tmp->sprite);
         free(tmp);
     }
-    fprintf(stdout, "image suprimer !\n");
+    if (mode_test == 0)fprintf(stdout, "image suprimer !\n");
     return 0;
 
 
