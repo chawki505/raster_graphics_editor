@@ -182,12 +182,17 @@ int traitement_ligne(char *ligne_a_traiter) {
         }
 
     } else if (strncmp(argumentslist[0], "select", strlen("select")) == 0) {
+
         if (get_nb_args() == 6 || get_nb_args() == 2) {
+
             int id = (int) strtol(argumentslist[1], NULL, 10);
             structImage *image = get_image(id);
+
             if (image == NULL) {
+
                 if (mode_test == 0)fprintf(stderr, "Id d'image non présent\n");
                 rc = 1;
+
             } else {
 
                 int ox = 0;
@@ -201,11 +206,14 @@ int traitement_ligne(char *ligne_a_traiter) {
                     fx = (int) strtol(argumentslist[4], NULL, 10);
                     fy = (int) strtol(argumentslist[5], NULL, 10);
                 }
+
                 if (errorzone(ox, oy, fx, fy, image->sprite->w, image->sprite->h) == 1) {
                     if (mode_test == 0)fprintf(stderr, "Valeurs de positionnement incorrects\n");
                     rc = 1;
                 }
+
                 char *ligne = "";
+
                 do {
                     if (strlen(ligne) == 0) {
 
@@ -215,7 +223,9 @@ int traitement_ligne(char *ligne_a_traiter) {
                         } else {
                             fillColor(image->sprite, ox, oy, fx, fy, 0, 0, 0);
                         }
+
                     } else if (strncmp(argumentslist[0], "fill", 4) == 0) {
+
                         if (get_nb_args() == 4) {
                             int r = (int) strtol(argumentslist[1], NULL, 10),
                                     g = (int) strtol(argumentslist[2], NULL, 10),
@@ -228,6 +238,7 @@ int traitement_ligne(char *ligne_a_traiter) {
                         } else {
                             if (mode_test == 0)fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
                         }
+
                     } else if (strncmp(argumentslist[0], "copy", 4) == 0) {
                         if (get_nb_args() == 3) {
                             int nx = (int) strtol(argumentslist[1], NULL, 10);
@@ -240,11 +251,15 @@ int traitement_ligne(char *ligne_a_traiter) {
                         } else {
                             if (mode_test == 0)fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
                         }
+
                     } else if (strncmp(argumentslist[0], "grey", 4) == 0) {
                         greyColor(image->sprite, ox, oy, fx, fy);
+
                     } else if (strncmp(argumentslist[0], "bw", 2) == 0) {
                         blackAndWhiteColor(image->sprite, ox, oy, fx, fy);
+
                     } else if (strncmp(argumentslist[0], "switch", 6) == 0) {
+
                         if (get_nb_args() == 8) {
                             int sr = (int) strtol(argumentslist[1], NULL, 10);
                             int sg = (int) strtol(argumentslist[2], NULL, 10);
@@ -253,28 +268,38 @@ int traitement_ligne(char *ligne_a_traiter) {
                             int ng = (int) strtol(argumentslist[5], NULL, 10);
                             int nb = (int) strtol(argumentslist[6], NULL, 10);
                             int t = (int) strtol(argumentslist[7], NULL, 10);
+
                             if (errorcolor(sr, sg, sb) == 0 && errorcolor(nr, ng, nb) == 0) {
                                 switchColor(image->sprite, ox, oy, fx, fy, t, sr, sg, sb, nr, ng, nb);
+
                             } else {
                                 if (mode_test == 0)fprintf(stderr, "Valeurs de couleur incorrects\n");
                             }
+
                         } else {
                             if (mode_test == 0)fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
                         }
+
                     } else if (strncmp(argumentslist[0], "neg", 3) == 0) {
                         negatifColor(image->sprite, ox, oy, fx, fy);
+
                     } else {
                         if (mode_test == 0)printf("Commande inconnue\n");
                     }
+
+                    liberation_arguments();
                     printf("\nGraphics editor>%dx%d>%dx%d>%s", ox, oy, fx, fy, image->name);
                     ligne = readline(">");
+
                     traitement_espaces_debut(ligne);
                     traitement_espaces_fin(ligne);
                     creation_liste_arguments(ligne);
+
                 } while (strncmp(argumentslist[0], "exit", 4) != 0);
             }
 
         } else {
+
             if (mode_test == 0)fprintf(stderr, "Erreur nombre d'arguments dans la commande\n");
             rc = 1;
         }

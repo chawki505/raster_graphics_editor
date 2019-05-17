@@ -16,6 +16,7 @@ typedef struct LWindow {
     //Window data
     SDL_Window *mWindow;
     SDL_Surface *mSurface;
+    SDL_Surface *mcurrent_surface;
     int mWindowID;
 
     //Window dimensions

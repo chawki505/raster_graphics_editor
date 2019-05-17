@@ -16,7 +16,7 @@ libtraitement_fenetre.a : $(OBJS)
 %.o : %.c
 	$(CC) $(CFLAGS) $(INCLUDES) $<
 
-traitement_fenetre.o : ../../includes.h traitement_fenetre.h
+traitement_fenetre.o : ../../includes.h ../traitement_image/traitement_image.h traitement_fenetre.h
 
 clean :
 	rm -f libtraitement_fenetre.a $(OBJS)
