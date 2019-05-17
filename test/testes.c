@@ -314,3 +314,116 @@ void test_error_zone() {
         printf("%s", good_test[i1]);
     }
 }
+
+
+void test_load_image() {
+    // 0 should be returned and my_images should have id 1
+    // on attempt to load a image with correct path
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+
+    fprintf(stdout, "TEST load image correct path and format: ");
+
+    int check = load_image("../img/image.bmp");
+
+    if (check == 0 && my_images->id == 1) {
+        print_ok();
+        delete_image(1);
+        fprintf(stdout, "OK\n");
+    } else {
+        print_ko();
+        fprintf(stdout, "NOT OK\n");
+    }
+
+    SDL_Quit();
+}
+
+void test_load_image_incorrect_format() {
+    // 1 should be returned and id = 1 should not be returned
+    // on attempt to load a image with incorrect format
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+
+    fprintf(stdout, "TEST load image with incorrect format: ");
+
+    int check = load_image("../img/image.svg");
+
+    if (check ==1) {
+        print_ok();
+        fprintf(stdout, "OK\n");
+    } else {
+        print_ko();
+        fprintf(stdout, "NOT OK\n");
+    }
+
+    SDL_Quit();
+}
+
+void test_symh() {
+    // 0 should be returned
+    // on attempt to symh a image
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+
+    fprintf(stdout, "TEST symétrie horizontale: ");
+
+    load_image("../img/image.bmp");
+
+    int check = symh_image(1);
+    if (check == 0) {
+        print_ok();
+        fprintf(stdout, "OK\n");
+        delete_image(1);
+    } else {
+        print_ko();
+        fprintf(stdout, "NOT OK\n");
+    }
+
+    SDL_Quit();
+}
+
+void test_symv() {
+    // 0 should be returned
+    // on attempt to symv a image
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+
+    fprintf(stdout, "TEST symétrie verticale: ");
+
+    load_image("../img/image.bmp");
+
+    int check = symv_image(1);
+    if (check == 0) {
+        print_ok();
+        fprintf(stdout, "OK\n");
+        delete_image(1);
+    } else {
+        print_ko();
+        fprintf(stdout, "NOT OK\n");
+    }
+
+    SDL_Quit();
+}
+
+void test_rotation() {
+    // 0 should be returned
+    // on attempt to rotate a image
+
+    SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
+
+    fprintf(stdout, "TEST rotation: ");
+
+    load_image("../img/image.bmp");
+
+    int check = rotation(1);
+    if (check == 0) {
+        print_ok();
+        fprintf(stdout, "OK\n");
+        delete_image(1);
+    } else {
+        print_ko();
+        fprintf(stdout, "NOT OK\n");
+    }
+
+    SDL_Quit();
+}
