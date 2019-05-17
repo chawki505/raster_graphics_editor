@@ -255,7 +255,7 @@ void test_parser() {
     cpt += test_parser_0(buf8);
     cpt += test_parser_0(buf9);
     cpt += test_parser_1(buf10);
-    cpt += test_parser_0(buf11);
+    cpt += test_parser_1(buf11);
     cpt += test_parser_1(buf12);
     cpt += test_parser_0(buf13);
     cpt += test_parser_1(buf14);
