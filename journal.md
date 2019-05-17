@@ -104,7 +104,18 @@
 | Fonction multiwindow                             |   X |
 | correction bug load image                              |   X |
 | update project                            |   X |
-| correction other bug                            |    |
+| correction other bug                            | X  |
+
+
+## Date : 17/05/2019
+| Prévu                                                              | Fait|
+| -------------------------------------------------------------------|:---:|
+| correction all bug                            |   X |
+| add test unitaire                            |  X  |
+| write rapport                            |  X  |
+| check depot git                            |  X  |
+
+
 
 
 
